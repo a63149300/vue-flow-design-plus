@@ -145,6 +145,7 @@
     methods: {
       allowDrop (e) {
         e.preventDefault()
+        this.mousemoveHandler(e)
       },
       drop () {
         let belongTo = this.dragInfo.belongTo
