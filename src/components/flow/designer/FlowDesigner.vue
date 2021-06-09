@@ -238,10 +238,7 @@
     yLaneSvg,
     lanePoolSvg
   } from './config/basic-icon-config.js'
-  import $ from 'jquery'
-  // import 'jquery-ui/ui/widgets/draggable'
-  // import 'jquery-ui/ui/widgets/droppable'
-  // import 'jquery-ui/ui/widgets/resizable'
+  // import $ from 'jquery'
   import html2canvas from 'html2canvas'
   import canvg from 'canvg'
   import { ZYP } from './util/ZYP.js'
@@ -279,21 +276,20 @@
     mounted () {
       // 浏览器兼容性
       this.dealCompatibility()
-      // 初始化节点选择列表
-      this.initNodeSelectArea()
       // 实例化JsPlumb
       this.initJsPlumb()
       // 初始化快捷键
       this.listenShortcut()
       // 初始化流程图
       this.initFlow()
-      // this.listenPage()
+      // 关闭提示
+      this.listenPage()
     },
     data () {
       return {
         info: {
           version: '1.0.0',
-          author: 'ZYP',
+          author: 'Zhang Ye Ping',
           gitee: 'https://gitee.com/zhangyeping/vue-flow-design-plus'
         },
         tag: {
@@ -432,35 +428,22 @@
             linkColor: flowConfig.jsPlumbInsConfig.PaintStyle.stroke,
             linkThickness: flowConfig.jsPlumbInsConfig.PaintStyle.strokeWidth
           }
-          $('#' + id).bind('contextmenu', function (e) {
+          document.querySelector('#' + id).addEventListener('contextmenu', function (e) {
             that.showLinkContextMenu(e)
             that.currentSelect = that.flowData.linkList.filter(l => l.id == id)[0]
           })
-          $('#' + id).bind('click', function (e) {
+
+          document.querySelector('#' + id).addEventListener('click', function (e) {
             let event = window.event || e
             event.stopPropagation()
             that.currentSelect = that.flowData.linkList.filter(l => l.id == id)[0]
           })
+
           if (that.flowData.status != flowConfig.flowStatus.LOADING) that.flowData.linkList.push(o)
         })
 
         that.plumb.importDefaults({
           ConnectionsDetachable: flowConfig.jsPlumbConfig.conn.isDetachable
-        })
-      },
-      // 初始化节点选择列表
-      initNodeSelectArea () {
-        $(document).ready(function () {
-          $('.node-item').draggable({
-            opacity: flowConfig.defaultStyle.dragOpacity,
-            helper: 'clone',
-            cursorAt: {
-              top: 16,
-              left: 60
-            },
-            containment: 'window',
-            revert: 'invalid'
-          })
         })
       },
       // 初始化快捷键
@@ -538,15 +521,15 @@
         }
       },
       // 关闭提示
-      // listenPage () {
-      //   window.onbeforeunload = function (e) {
-      //     e = e || window.event
-      //     if (e) {
-      //       e.returnValue = '关闭提示'
-      //     }
-      //     return '关闭提示'
-      //   }
-      // },
+      listenPage () {
+        window.onbeforeunload = function (e) {
+          e = e || window.event
+          if (e) {
+            e.returnValue = '关闭提示'
+          }
+          return '关闭提示'
+        }
+      },
       // 初始化流程图
       initFlow () {
         if (this.flowData.status === flowConfig.flowStatus.CREATE) {
@@ -717,10 +700,12 @@
         if (!that.checkFlow()) return
 
         let $Container = that.$refs.flowArea.$el.children[0],
-          svgElems = $($Container).find('svg[id^="link-"]'),
+          svgElems = $Container.querySelectorAll('svg[id^="link-"]'),
           removeArr = []
 
-        svgElems.each(function (index, svgElem) {
+        console.log(svgElems)
+
+        svgElems.forEach(function (svgElem, index) {
           let linkCanvas = document.createElement('canvas')
           let canvasId = 'linkCanvas-' + ZYP.getId()
           linkCanvas.id = canvasId
@@ -733,7 +718,7 @@
             linkCanvas.style.left += svgElem.style.left
             linkCanvas.style.top += svgElem.style.top
           }
-          $($Container).append(linkCanvas)
+          $Container.appendChild(linkCanvas)
         })
 
         let canvasSize = that.computeCanvasSize()
@@ -749,7 +734,8 @@
           logging: false,
           onclone: function (args) {
             removeArr.forEach(function (id, index) {
-              $('#' + id).remove()
+              let currentNode = document.querySelector('#' + id)
+              currentNode.parentNode.removeChild(currentNode)
             })
           }
         }).then(canvas => {
@@ -845,8 +831,8 @@
 
         event.preventDefault()
         event.stopPropagation()
-        $('.vue-contextmenuName-flow-menu').css('display', 'none')
-        $('.vue-contextmenuName-node-menu').css('display', 'none')
+        document.querySelector('.vue-contextmenuName-flow-menu').style.display = 'none'
+        document.querySelector('.vue-contextmenuName-node-menu').style.display = 'none'
         let x = event.clientX
         let y = event.clientY
         this.linkContextMenuData.axis = { x, y }
