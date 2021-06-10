@@ -70,10 +70,6 @@
 
 <script>
   import { flowConfig } from '../config/args-config.js'
-  import $ from 'jquery'
-  // import 'jquery-ui/ui/widgets/draggable'
-  // import 'jquery-ui/ui/widgets/droppable'
-  // import 'jquery-ui/ui/widgets/resizable'
   import { ZYP } from '../util/ZYP.js'
   import FlowNode from './FlowNode'
 
@@ -81,9 +77,6 @@
     props: ['browserType', 'flowData', 'plumb', 'select', 'selectGroup', 'currentTool', 'dragInfo'],
     components: {
       FlowNode
-    },
-    mounted () {
-      this.initFlowArea()
     },
     data () {
       return {
@@ -161,39 +154,6 @@
           }
           // 增加节点
           this.addNewNode(node)
-        })
-      },
-      // 初始化画布
-      initFlowArea () {
-        const that = this
-        that.ctx = document.getElementById('flowContainer').parentNode
-        $('.flow-container').droppable({
-          accept: function (t) {
-            if (t[0].className.indexOf('node-item') != -1) {
-              let event = window.event || 'firefox'
-              if (that.ctx.contains(event.srcElement) || event == 'firefox') {
-                return true
-              }
-            }
-            return false
-          },
-          hoverClass: 'flow-container-active',
-          drop: function (event, ui) {
-            let belongTo = ui.draggable.attr('belongTo')
-            let type = ui.draggable.attr('type')
-
-            // 复位拖拽工具
-            that.$emit('selectTool', 'drag')
-
-            that.$emit('findNodeConfig', belongTo, type, node => {
-              if (!node) {
-                that.$message.error('未知的节点类型！')
-                return
-              }
-              // 增加节点
-              that.addNewNode(node)
-            })
-          }
         })
       },
       // 画布鼠标按下
@@ -348,8 +308,8 @@
         let event = window.event || e
 
         event.preventDefault()
-        $('.vue-contextmenuName-node-menu').css('display', 'none')
-        $('.vue-contextmenuName-link-menu').css('display', 'none')
+        document.querySelector('.vue-contextmenuName-node-menu').style.display = 'none'
+        document.querySelector('.vue-contextmenuName-link-menu').style.display = 'none'
         this.selectContainer()
         let x = event.clientX
         let y = event.clientY
@@ -360,8 +320,8 @@
         let event = window.event || e
 
         event.preventDefault()
-        $('.vue-contextmenuName-flow-menu').css('display', 'none')
-        $('.vue-contextmenuName-link-menu').css('display', 'none')
+        document.querySelector('.vue-contextmenuName-flow-menu').style.display = 'none'
+        document.querySelector('.vue-contextmenuName-link-menu').style.display = 'none'
         let x = event.clientX
         let y = event.clientY
         this.nodeContextMenuData.axis = { x, y }
@@ -696,8 +656,8 @@
 
         let nodeList = that.flowData.nodeList
         that.currentSelectGroup.forEach(function (node, index) {
-          let l = parseInt($('#' + node.id).css('left'))
-          let t = parseInt($('#' + node.id).css('top'))
+          let l = parseInt(document.querySelector('#' + node.id).style.left)
+          let t = parseInt(document.querySelector('#' + node.id).style.top)
           let f = nodeList.filter(n => n.id == node.id)[0]
           f.x = l
           f.y = t
@@ -756,13 +716,13 @@
         this.currentSelect = val
         // 清除连接线焦点
         if (this.tempLinkId !== '') {
-          $('#' + this.tempLinkId).removeClass('link-active')
+          document.querySelector('#' + this.tempLinkId).classList.remove('link-active')
           this.tempLinkId = ''
         }
         // 设置连接线焦点
         if (this.currentSelect.type === 'link') {
           this.tempLinkId = this.currentSelect.id
-          $('#' + this.currentSelect.id).addClass('link-active')
+          document.querySelector('#' + this.currentSelect.id).classList.add('link-active')
         }
       },
       currentSelect: {
