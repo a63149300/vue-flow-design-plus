@@ -40,8 +40,7 @@
               <div class="node-item"
                    draggable="true"
                    @dragstart="dragNode(commonNode.type, 'commonNodes')"
-                   :type="commonNode.type"
-                   belongTo="commonNodes">
+              >
                 <i :is="commonNode.icon"
                    class="node-img"/>
                 <span>{{ commonNode.nodeName }}</span>
@@ -60,8 +59,9 @@
             <a-list-item v-for="(highNode, index) in field.highNodes"
                          :key="index">
               <div class="node-item"
-                   :type="highNode.type"
-                   belongTo="highNodes">
+                   draggable="true"
+                   @dragstart="dragNode(highNode.type, 'highNodes')"
+              >
                 <i :is="highNode.icon"
                    class="node-img"/>
                 <span>{{ highNode.nodeName }}</span>
@@ -79,8 +79,9 @@
             <a-list-item v-for="(laneNode, index) in field.laneNodes"
                          :key="index">
               <div class="node-item"
-                   :type="laneNode.type"
-                   belongTo="laneNodes">
+                   draggable="true"
+                   @dragstart="dragNode(laneNode.type, 'laneNodes')"
+              >
                 <i :is="laneNode.icon"
                    class="node-img"/>
                 <span>{{ laneNode.nodeName }}</span>
@@ -238,7 +239,6 @@
     yLaneSvg,
     lanePoolSvg
   } from './config/basic-icon-config.js'
-  // import $ from 'jquery'
   import html2canvas from 'html2canvas'
   import canvg from 'canvg'
   import { ZYP } from './util/ZYP.js'

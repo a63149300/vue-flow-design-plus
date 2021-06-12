@@ -19,8 +19,6 @@
     "canvas": "^2.6.0",
     "canvg": "^2.0.0",
     "html2canvas": "^1.0.0-rc.3",
-    "jquery": "^3.4.1",
-    "jquery-ui": "^1.12.1",
     "jsdom": "^13.2.0",
     "jsplumb": "^2.11.0",
     "node-sass": "^4.12.0",
@@ -30,7 +28,6 @@
     "vue-contextmenu": "^1.5.9",
     "vue-json-viewer": "^2.2.1",
     "vue-router": "^3.0.1",
-    "vuedraggable": "^2.24.3",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
