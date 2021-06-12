@@ -128,11 +128,8 @@
 
 <script>
   import jsplumb from 'jsplumb'
+  import { Resizable } from '../../../../../static/resizable/resizable'
   import { flowConfig } from '../config/args-config.js'
-  import $ from 'jquery'
-  import 'jquery-ui/ui/widgets/draggable'
-  import 'jquery-ui/ui/widgets/droppable'
-  import 'jquery-ui/ui/widgets/resizable'
 
   export default {
     props: ['select', 'selectGroup', 'node', 'plumb', 'currentTool'],
@@ -145,7 +142,7 @@
     data () {
       return {
         currentSelect: this.select,
-        currentSelectGroup: this.selectGroup
+        currentSelectGroup: this.selectGroup,
       }
     },
     methods: {
@@ -182,18 +179,19 @@
           }
         })
 
-        if (that.node.type == 'x-lane' || that.node.type == 'y-lane') {
-          $('#' + that.node.id).resizable({
-            minHeight: 200,
-            minWidth: 200,
-            maxHeight: 2000,
-            maxWidth: 2000,
-            ghost: true,
-            autoHide: true,
-            stop: function (event, ui) {
-              that.node.height = ui.size.height
-              that.node.width = ui.size.width
+        if (that.node.type === 'x-lane' || that.node.type === 'y-lane') {
+          let node = document.querySelector('#' + that.node.id)
+          new Resizable(node,{
+            handles: ['e', 'w', 'n', 's', 'nw', 'ne', 'sw', 'se'],
+            initSize: {
+              maxWidth: 500,
+              maxHeight: 500,
+              minWidth: 200,
+              minHeight: 200,
             }
+          }, () => {
+            that.node.height = Math.ceil(parseInt(node.style.height))
+            that.node.width = Math.ceil(parseInt(node.style.width))
           })
         }
         that.currentSelect = that.node
