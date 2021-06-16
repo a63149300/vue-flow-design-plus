@@ -241,7 +241,6 @@
   import FlowAttr from './modules/FlowAttr'
   import SettingModal from './modules/SettingModal'
   import ShortcutModal from './modules/ShortcutModal'
-  import UsingDocModal from './modules/UsingDocModal'
   import TestModal from './modules/TestModal'
 
   export default {
@@ -255,7 +254,6 @@
       FlowAttr,
       SettingModal,
       ShortcutModal,
-      UsingDocModal,
       TestModal,
       StartIcon: { template: startSvg },
       EndIcon: { template: endSvg },
