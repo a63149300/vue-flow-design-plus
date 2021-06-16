@@ -549,43 +549,43 @@
 
         arr.push(Object.assign({}, that.currentSelect))
 
+        that.flowData.status = flowConfig.flowStatus.LOADING
+
         arr.forEach(function (c, index) {
           let conns = that.getConnectionsByNodeId(c.id)
-          console.log(conns)
           conns.forEach(function (conn, index) {
-            linkList.splice(linkList.findIndex(link => (link.sourceId == conn.sourceId || link.targetId == conn.targetId)), 1)
+            linkList.splice(linkList.findIndex(link => (link.sourceId === conn.sourceId && link.targetId === conn.targetId)), 1)
           })
           that.plumb.deleteEveryEndpoint()
           let inx = nodeList.findIndex(node => node.id == c.id)
           nodeList.splice(inx, 1)
-          that.$nextTick(() => {
-            linkList.forEach(function (link, index) {
-              let conn = that.plumb.connect({
-                source: link.sourceId,
-                target: link.targetId,
-                anchor: flowConfig.jsPlumbConfig.anchor.default,
-                connector: [
-                  link.cls.linkType,
-                  {
-                    gap: 5,
-                    cornerRadius: 8,
-                    alwaysRespectStubs: true
-                  }
-                ],
-                paintStyle: {
-                  stroke: link.cls.linkColor,
-                  strokeWidth: link.cls.linkThickness
+          linkList.forEach(function (link, index) {
+            let conn = that.plumb.connect({
+              source: link.sourceId,
+              target: link.targetId,
+              anchor: flowConfig.jsPlumbConfig.anchor.default,
+              connector: [
+                link.cls.linkType,
+                {
+                  gap: 5,
+                  cornerRadius: 8,
+                  alwaysRespectStubs: true
                 }
-              })
-              if (link.label != '') {
-                conn.setLabel({
-                  label: link.label,
-                  cssClass: 'linkLabel'
-                })
+              ],
+              paintStyle: {
+                stroke: link.cls.linkColor,
+                strokeWidth: link.cls.linkThickness
               }
             })
+            if (link.label != '') {
+              conn.setLabel({
+                label: link.label,
+                cssClass: 'linkLabel'
+              })
+            }
           })
         })
+        that.flowData.status = flowConfig.flowStatus.CREATE
         that.selectContainer()
       },
       // 增加画布节点
