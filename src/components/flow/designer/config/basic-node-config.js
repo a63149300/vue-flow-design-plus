@@ -23,54 +23,54 @@ export const tools = [
 
 export const commonNodes = [
 	{
-		type: 'start', 
-		nodeName: '开始', 
-		icon: 'StartIcon'
+		type: 'start',
+		nodeName: '开始',
+		icon: 'play-circle'
 	},
 	{
-		type: 'end', 
-		nodeName: '结束', 
-		icon: 'EndIcon'
+		type: 'end',
+		nodeName: '结束',
+		icon: 'stop'
 	},
 	{
-		type: 'common', 
-		nodeName: '人工节点', 
-		icon: 'CommonIcon'
+		type: 'common',
+		nodeName: '人工节点',
+		icon: 'user'
 	},
 	{
-		type: 'freedom', 
-		nodeName: '自动节点', 
-		icon: 'FreedomIcon'
+		type: 'freedom',
+		nodeName: '自动节点',
+		icon: 'sync'
 	},
 	{
-		type: 'gateway', 
-		nodeName: '网关', 
-		icon: 'GatewayIcon'
+		type: 'gateway',
+		nodeName: '网关',
+		icon: 'gateway'
 	},
 	{
-		type: 'event', 
-		nodeName: '事件节点', 
-		icon: 'EventIcon'
+		type: 'event',
+		nodeName: '事件',
+		icon: 'select'
 	}
 ];
 
 export const highNodes = [
 	{
-		type: 'child-flow', 
-		nodeName: '子流程', 
-		icon: 'ChildFlowIcon'
+		type: 'child-flow',
+		nodeName: '子流程',
+		icon: 'apartment'
 	}
 ];
 
 export const laneNodes = [
 	{
-		type: 'x-lane', 
-		nodeName: '横向泳道', 
-		icon: 'XLaneIcon'
+		type: 'x-lane',
+		nodeName: '横向泳道',
+		icon: 'column-width'
 	},
 	{
-		type: 'y-lane', 
-		nodeName: '纵向泳道', 
-		icon: 'YLaneIcon'
+		type: 'y-lane',
+		nodeName: '纵向泳道',
+		icon: 'column-height'
 	}
 ];
