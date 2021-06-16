@@ -612,9 +612,9 @@
         newNode.y = y - 25
         if (newNode.type == 'x-lane') {
           newNode.height = 200
-          newNode.width = 600
+          newNode.width = 500
         } else if (newNode.type == 'y-lane') {
-          newNode.height = 600
+          newNode.height = 500
           newNode.width = 200
         }
         that.flowData.nodeList.push(newNode)

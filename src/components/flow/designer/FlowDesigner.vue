@@ -41,9 +41,8 @@
                    draggable="true"
                    @dragstart="dragNode(commonNode.type, 'commonNodes')"
               >
-                <i :is="commonNode.icon"
-                   class="node-img"/>
-                <span>{{ commonNode.nodeName }}</span>
+                <a-icon :type="commonNode.icon" />
+                {{ commonNode.nodeName }}
               </div>
             </a-list-item>
           </a-list>
@@ -62,8 +61,7 @@
                    draggable="true"
                    @dragstart="dragNode(highNode.type, 'highNodes')"
               >
-                <i :is="highNode.icon"
-                   class="node-img"/>
+                <a-icon :type="highNode.icon" />
                 <span>{{ highNode.nodeName }}</span>
               </div>
             </a-list-item>
@@ -82,8 +80,7 @@
                    draggable="true"
                    @dragstart="dragNode(laneNode.type, 'laneNodes')"
               >
-                <i :is="laneNode.icon"
-                   class="node-img"/>
+                <a-icon :type="laneNode.icon" />
                 <span>{{ laneNode.nodeName }}</span>
               </div>
             </a-list-item>
@@ -212,9 +209,7 @@
       cancelText="取消"
       @ok="downLoadFlowPicture"
       @cancel="cancelDownLoadFlowPicture">
-      <div align="center">
-        <img :src="flowPicture.url"/>
-      </div>
+      <img :src="flowPicture.url" style="width: 100%"/>
     </a-modal>
     <setting-modal ref="settingModal"></setting-modal>
     <shortcut-modal ref="shortcutModal"></shortcut-modal>

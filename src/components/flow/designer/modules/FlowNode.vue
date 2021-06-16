@@ -90,7 +90,7 @@
     																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
-    <a-icon type="api"
+    <a-icon type="apartment"
             class="node-icon"/>
     {{ node.nodeName }}
   </div>
@@ -184,8 +184,8 @@
           new Resizable(node,{
             handles: ['e', 'w', 'n', 's', 'nw', 'ne', 'sw', 'se'],
             initSize: {
-              maxWidth: 500,
-              maxHeight: 500,
+              maxWidth: 1000,
+              maxHeight: 1000,
               minWidth: 200,
               minHeight: 200,
             }

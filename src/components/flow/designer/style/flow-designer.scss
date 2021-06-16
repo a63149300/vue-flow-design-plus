@@ -87,6 +87,10 @@ $primary-color: #409EFF;
     color: $primary-color;
     outline: 1px dashed $primary-color;
   }
+
+  i {
+    margin-right: 5px;
+  }
 }
 
 .ant-list-grid .ant-list-item {
