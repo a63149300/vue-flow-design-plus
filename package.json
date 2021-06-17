@@ -1,7 +1,7 @@
 {
-  "name": "vue-flow-chart",
+  "name": "vue-flow-design-plus",
   "version": "1.0.0",
-  "description": "vue flow designer",
+  "description": "vue flow designer plus",
   "author": "619054243@qq.com",
   "private": false,
   "scripts": {

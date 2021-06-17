@@ -1,6 +1,6 @@
 import { flowConfig } from '../config/args-config.js'
 
-export let ZYP = {
+export let AMS = {
 	seqNo: 1,
 	consoleLog: function(strArr) {
 		let log = '';
