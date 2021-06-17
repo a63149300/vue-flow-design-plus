@@ -236,7 +236,7 @@
   } from './config/basic-icon-config.js'
   import html2canvas from 'html2canvas'
   import canvg from 'canvg'
-  import { ZYP } from './util/ZYP.js'
+  import { AMS } from './util/AMS.js'
   import FlowArea from './modules/FlowArea'
   import FlowAttr from './modules/FlowAttr'
   import SettingModal from './modules/SettingModal'
@@ -282,7 +282,7 @@
       return {
         info: {
           version: '1.0.0',
-          author: 'Zhang Ye Ping',
+          author: '前端爱码士',
           gitee: 'https://gitee.com/zhangyeping/vue-flow-design-plus'
         },
         tag: {
@@ -403,7 +403,7 @@
           console.log(connObj)
           let o = {}, id, label
           if (that.flowData.status == flowConfig.flowStatus.CREATE || that.flowData.status == flowConfig.flowStatus.MODIFY) {
-            id = 'link-' + ZYP.getId()
+            id = 'link-' + AMS.getId()
             label = ''
           } else if (that.flowData.status == flowConfig.flowStatus.LOADING) {
             let l = that.flowData.linkList[that.flowData.linkList.length - 1]
@@ -526,7 +526,7 @@
       // 初始化流程图
       initFlow () {
         if (this.flowData.status === flowConfig.flowStatus.CREATE) {
-          this.flowData.attr.id = 'flow-' + ZYP.getId()
+          this.flowData.attr.id = 'flow-' + AMS.getId()
         } else {
           this.loadFlow()
         }
@@ -676,10 +676,9 @@
       },
       // 保存流程
       saveFlow () {
-        const that = this
-        let flowObj = Object.assign({}, that.flowData)
+        let flowObj = Object.assign({}, this.flowData)
 
-        if (!that.checkFlow()) return
+        if (!this.checkFlow()) return
         flowObj.status = flowConfig.flowStatus.SAVE
         let d = JSON.stringify(flowObj)
         console.log(d)
@@ -700,7 +699,7 @@
 
         svgElems.forEach(function (svgElem, index) {
           let linkCanvas = document.createElement('canvas')
-          let canvasId = 'linkCanvas-' + ZYP.getId()
+          let canvasId = 'linkCanvas-' + AMS.getId()
           linkCanvas.id = canvasId
           removeArr.push(canvasId)
 
@@ -717,7 +716,7 @@
         let canvasSize = that.computeCanvasSize()
 
         let pbd = flowConfig.defaultStyle.photoBlankDistance
-        let offsetPbd = ZYP.div(pbd, 2)
+        let offsetPbd = AMS.div(pbd, 2)
 
         html2canvas($Container, {
           width: canvasSize.width + pbd,
@@ -741,7 +740,7 @@
       downLoadFlowPicture () {
         const that = this
         let alink = document.createElement('a')
-        let alinkId = 'alink-' + ZYP.getId()
+        let alinkId = 'alink-' + AMS.getId()
         alink.id = alinkId
         alink.href = that.flowPicture.url
         alink.download = '流程设计图_' + that.flowData.attr.id + '.png'
