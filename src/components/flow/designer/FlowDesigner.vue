@@ -19,7 +19,7 @@
                     v-for="(tool, index) in field.tools"
                     :key="index"
                     :icon="tool.icon"
-                    :type="currentTool.type == tool.type ? 'primary': 'default'"
+                    :type="currentTool.type === tool.type ? 'primary': 'default'"
                     @click="selectTool(tool.type)">
                   </a-button>
                 </a-button-group>
@@ -335,6 +335,7 @@
       }
     },
     methods: {
+      // 开始拖拽
       dragNode (type, belongTo) {
         this.dragInfo = {
           type,
@@ -381,32 +382,29 @@
       },
       // 实例化JsPlumb
       initJsPlumb () {
-        const that = this
+        this.plumb = jsPlumb.getInstance(flowConfig.jsPlumbInsConfig)
 
-        that.plumb = jsPlumb.getInstance(flowConfig.jsPlumbInsConfig)
-
-        that.plumb.bind('beforeDrop', function (info) {
+        this.plumb.bind('beforeDrop', info => {
           let sourceId = info.sourceId
           let targetId = info.targetId
 
           if (sourceId === targetId) return false
-          let filter = that.flowData.linkList.filter(link => (link.sourceId === sourceId && link.targetId === targetId))
+          let filter = this.flowData.linkList.filter(link => (link.sourceId === sourceId && link.targetId === targetId))
           if (filter.length > 0) {
-            that.$message.error('同方向的两节点连线只能有一条！')
+            this.$message.error('同方向的两节点连线只能有一条！')
             return false
           }
           return true
         })
 
-        that.plumb.bind('connection', function (conn, e) {
+        this.plumb.bind('connection', conn => {
           let connObj = conn.connection.canvas
-          console.log(connObj)
           let o = {}, id, label
-          if (that.flowData.status == flowConfig.flowStatus.CREATE || that.flowData.status == flowConfig.flowStatus.MODIFY) {
+          if (this.flowData.status === flowConfig.flowStatus.CREATE || this.flowData.status === flowConfig.flowStatus.MODIFY) {
             id = 'link-' + AMS.getId()
             label = ''
-          } else if (that.flowData.status == flowConfig.flowStatus.LOADING) {
-            let l = that.flowData.linkList[that.flowData.linkList.length - 1]
+          } else if (this.flowData.status === flowConfig.flowStatus.LOADING) {
+            let l = this.flowData.linkList[this.flowData.linkList.length - 1]
             id = l.id
             label = l.label
           }
@@ -421,67 +419,66 @@
             linkColor: flowConfig.jsPlumbInsConfig.PaintStyle.stroke,
             linkThickness: flowConfig.jsPlumbInsConfig.PaintStyle.strokeWidth
           }
-          document.querySelector('#' + id).addEventListener('contextmenu', function (e) {
-            that.showLinkContextMenu(e)
-            that.currentSelect = that.flowData.linkList.filter(l => l.id == id)[0]
+          document.querySelector('#' + id).addEventListener('contextmenu', e => {
+            this.showLinkContextMenu(e)
+            this.currentSelect = this.flowData.linkList.filter(l => l.id === id)[0]
           })
 
-          document.querySelector('#' + id).addEventListener('click', function (e) {
+          document.querySelector('#' + id).addEventListener('click', e => {
             let event = window.event || e
             event.stopPropagation()
-            that.currentSelect = that.flowData.linkList.filter(l => l.id == id)[0]
+            this.currentSelect = this.flowData.linkList.filter(l => l.id === id)[0]
           })
 
-          if (that.flowData.status != flowConfig.flowStatus.LOADING) that.flowData.linkList.push(o)
+          if (this.flowData.status !== flowConfig.flowStatus.LOADING) this.flowData.linkList.push(o)
         })
 
-        that.plumb.importDefaults({
+        this.plumb.importDefaults({
           ConnectionsDetachable: flowConfig.jsPlumbConfig.conn.isDetachable
         })
       },
       // 初始化快捷键
       listenShortcut () {
-        const that = this
-        document.onkeydown = function (e) {
+        document.onkeydown = e => {
           let event = window.event || e
 
           // 画布聚焦开启快捷键
-          if (!that.activeShortcut) return
+          if (!this.activeShortcut) return
           let key = event.keyCode
 
           switch (key) {
             case flowConfig.shortcut.multiple.code:
-              that.$refs.flowArea.rectangleMultiple.flag = true
+              this.$refs.flowArea.rectangleMultiple.flag = true
               break
             case flowConfig.shortcut.dragContainer.code:
-              that.$refs.flowArea.container.dragFlag = true
+              this.$refs.flowArea.container.dragFlag = true
               break
             case flowConfig.shortcut.scaleContainer.code:
-              that.$refs.flowArea.container.scaleFlag = true
+              this.$refs.flowArea.container.scaleFlag = true
               break
             case flowConfig.shortcut.dragTool.code:
-              that.selectTool('drag')
+              this.selectTool('drag')
               break
             case flowConfig.shortcut.connTool.code:
-              that.selectTool('connection')
+              this.selectTool('connection')
               break
             case flowConfig.shortcut.zoomInTool.code:
-              that.selectTool('zoom-in')
+              this.selectTool('zoom-in')
               break
             case flowConfig.shortcut.zoomOutTool.code:
-              that.selectTool('zoom-out')
+              this.selectTool('zoom-out')
               break
             case flowConfig.shortcut.leftMove.code:
-              that.moveNode('left')
+              this.moveNode('left')
               break
             case flowConfig.shortcut.upMove.code:
-              that.moveNode('up')
+              this.moveNode('up')
               break
             case flowConfig.shortcut.rightMove.code:
-              that.moveNode('right')
+              this.moveNode('right')
               break
             case flowConfig.shortcut.downMove.code:
-              that.moveNode('down')
+              this.moveNode('down')
               break
           }
 
@@ -489,27 +486,27 @@
             if (event.altKey) {
               switch (key) {
                 case flowConfig.shortcut.settingModal.code:
-                  that.setting()
+                  this.setting()
                   break
                 case flowConfig.shortcut.testModal.code:
-                  that.openTest()
+                  this.openTest()
                   break
               }
             }
           }
         }
         // 拖拽、缩放、多选快捷键复位
-        document.onkeyup = function (e) {
+        document.onkeyup = e => {
           let event = window.event || e
 
           let key = event.keyCode
           if (key === flowConfig.shortcut.dragContainer.code) {
-            that.$refs.flowArea.container.dragFlag = false
+            this.$refs.flowArea.container.dragFlag = false
           } else if (key === flowConfig.shortcut.scaleContainer.code) {
             event.preventDefault()
-            that.$refs.flowArea.container.scaleFlag = false
+            this.$refs.flowArea.container.scaleFlag = false
           } else if (key === flowConfig.shortcut.multiple.code) {
-            that.$refs.flowArea.rectangleMultiple.flag = false
+            this.$refs.flowArea.rectangleMultiple.flag = false
           }
         }
       },
@@ -533,24 +530,22 @@
       },
       // 渲染流程
       loadFlow (json) {
-        const that = this
-
-        that.clear()
+        this.clear()
         this.$nextTick(() => {
           let loadData = JSON.parse(json)
-          that.flowData.attr = loadData.attr
-          that.flowData.config = loadData.config
-          that.flowData.status = flowConfig.flowStatus.LOADING
-          that.plumb.batch(function () {
+          this.flowData.attr = loadData.attr
+          this.flowData.config = loadData.config
+          this.flowData.status = flowConfig.flowStatus.LOADING
+          this.plumb.batch(() => {
             let nodeList = loadData.nodeList
-            nodeList.forEach(function (node, index) {
-              that.flowData.nodeList.push(node)
+            nodeList.forEach(node => {
+              this.flowData.nodeList.push(node)
             })
             let linkList = loadData.linkList
-            that.$nextTick(() => {
-              linkList.forEach(function (link, index) {
-                that.flowData.linkList.push(link)
-                let conn = that.plumb.connect({
+            this.$nextTick(() => {
+              linkList.forEach(link => {
+                this.flowData.linkList.push(link)
+                let conn = this.plumb.connect({
                   source: link.sourceId,
                   target: link.targetId,
                   anchor: flowConfig.jsPlumbConfig.anchor.default,
@@ -574,13 +569,13 @@
                   })
                 }
               })
-              that.currentSelect = {}
-              that.currentSelectGroup = []
-              that.flowData.status = flowConfig.flowStatus.MODIFY
+              this.currentSelect = {}
+              this.currentSelectGroup = []
+              this.flowData.status = flowConfig.flowStatus.MODIFY
             })
           }, true)
-          let canvasSize = that.computeCanvasSize()
-          that.$refs.flowArea.container.pos = {
+          let canvasSize = this.computeCanvasSize()
+          this.$refs.flowArea.container.pos = {
             top: -canvasSize.minY + 100,
             left: -canvasSize.minX + 100
           }
@@ -591,13 +586,13 @@
         let node = null
         switch (belongTo) {
           case 'commonNodes':
-            node = commonNodes.filter(n => n.type == type)
+            node = commonNodes.filter(n => n.type === type)
             break
           case 'highNodes':
-            node = highNodes.filter(n => n.type == type)
+            node = highNodes.filter(n => n.type === type)
             break
           case 'laneNodes':
-            node = laneNodes.filter(n => n.type == type)
+            node = laneNodes.filter(n => n.type === type)
             break
         }
         if (node && node.length >= 0) node = node[0]
@@ -625,35 +620,32 @@
       },
       // 切换为拖拽
       changeToDrag () {
-        const that = this
-        that.flowData.nodeList.forEach(function (node, index) {
-          let f = that.plumb.toggleDraggable(node.id)
+        this.flowData.nodeList.forEach(node => {
+          let f = this.plumb.toggleDraggable(node.id)
           if (!f) {
-            that.plumb.toggleDraggable(node.id)
+            this.plumb.toggleDraggable(node.id)
           }
           if (node.type !== 'x-lane' && node.type !== 'y-lane') {
-            that.plumb.unmakeSource(node.id)
-            that.plumb.unmakeTarget(node.id)
+            this.plumb.unmakeSource(node.id)
+            this.plumb.unmakeTarget(node.id)
           }
         })
       },
       // 切换为连线
       changeToConnection () {
-        const that = this
-
-        that.flowData.nodeList.forEach(function (node, index) {
-          let f = that.plumb.toggleDraggable(node.id)
+        this.flowData.nodeList.forEach(node => {
+          let f = this.plumb.toggleDraggable(node.id)
           if (f) {
-            that.plumb.toggleDraggable(node.id)
+            this.plumb.toggleDraggable(node.id)
           }
           if (node.type !== 'x-lane' && node.type !== 'y-lane') {
-            that.plumb.makeSource(node.id, flowConfig.jsPlumbConfig.makeSourceConfig)
-            that.plumb.makeTarget(node.id, flowConfig.jsPlumbConfig.makeTargetConfig)
+            this.plumb.makeSource(node.id, flowConfig.jsPlumbConfig.makeSourceConfig)
+            this.plumb.makeTarget(node.id, flowConfig.jsPlumbConfig.makeTargetConfig)
           }
         })
 
-        that.currentSelect = {}
-        that.currentSelectGroup = []
+        this.currentSelect = {}
+        this.currentSelectGroup = []
       },
       // 切换为放大工具
       changeToZoomIn () {
@@ -665,8 +657,7 @@
       },
       // 检测流程数据有效性
       checkFlow () {
-        const that = this
-        let nodeList = that.flowData.nodeList
+        let nodeList = this.flowData.nodeList
 
         if (nodeList.length <= 0) {
           this.$message.error('流程图中无任何节点！')
@@ -681,23 +672,18 @@
         if (!this.checkFlow()) return
         flowObj.status = flowConfig.flowStatus.SAVE
         let d = JSON.stringify(flowObj)
-        console.log(d)
         this.$message.success('保存流程成功！请查看控制台。')
         return d
       },
       // 生成流程图片
       exportFlowPicture () {
-        const that = this
+        if (!this.checkFlow()) return
 
-        if (!that.checkFlow()) return
-
-        let $Container = that.$refs.flowArea.$el.children[0],
+        let $Container = this.$refs.flowArea.$el.children[0],
           svgElems = $Container.querySelectorAll('svg[id^="link-"]'),
           removeArr = []
 
-        console.log(svgElems)
-
-        svgElems.forEach(function (svgElem, index) {
+        svgElems.forEach(svgElem => {
           let linkCanvas = document.createElement('canvas')
           let canvasId = 'linkCanvas-' + AMS.getId()
           linkCanvas.id = canvasId
@@ -713,7 +699,7 @@
           $Container.appendChild(linkCanvas)
         })
 
-        let canvasSize = that.computeCanvasSize()
+        let canvasSize = this.computeCanvasSize()
 
         let pbd = flowConfig.defaultStyle.photoBlankDistance
         let offsetPbd = AMS.div(pbd, 2)
@@ -724,26 +710,25 @@
           scrollX: -canvasSize.minX + offsetPbd,
           scrollY: -canvasSize.minY + offsetPbd,
           logging: false,
-          onclone: function (args) {
-            removeArr.forEach(function (id, index) {
+          onclone: () => {
+            removeArr.forEach(id => {
               let currentNode = document.querySelector('#' + id)
               currentNode.parentNode.removeChild(currentNode)
             })
           }
         }).then(canvas => {
           let dataURL = canvas.toDataURL('image/png')
-          that.flowPicture.url = dataURL
-          that.flowPicture.modalVisible = true
+          this.flowPicture.url = dataURL
+          this.flowPicture.modalVisible = true
         })
       },
       // 下载图片
       downLoadFlowPicture () {
-        const that = this
         let alink = document.createElement('a')
         let alinkId = 'alink-' + AMS.getId()
         alink.id = alinkId
-        alink.href = that.flowPicture.url
-        alink.download = '流程设计图_' + that.flowData.attr.id + '.png'
+        alink.href = this.flowPicture.url
+        alink.download = '流程设计图_' + this.flowData.attr.id + '.png'
         alink.click()
       },
       // 取消下载
@@ -753,13 +738,12 @@
       },
       // 计算流程图宽高
       computeCanvasSize () {
-        const that = this
-        let nodeList = Object.assign([], that.flowData.nodeList),
+        let nodeList = Object.assign([], this.flowData.nodeList),
           minX = nodeList[0].x,
           minY = nodeList[0].y,
           maxX = nodeList[0].x + nodeList[0].width,
           maxY = nodeList[0].y + nodeList[0].height
-        nodeList.forEach(function (node, index) {
+        nodeList.forEach(node => {
           minX = Math.min(minX, node.x)
           minY = Math.min(minY, node.y)
           maxX = Math.max(maxX, node.x + node.width)
@@ -778,15 +762,14 @@
       },
       // 清除画布
       clear () {
-        const that = this
-        that.flowData.nodeList.forEach(function (node, index) {
-          that.plumb.remove(node.id)
+        this.flowData.nodeList.forEach(node => {
+          this.plumb.remove(node.id)
         })
-        that.currentSelect = {}
-        that.currentSelectGroup = []
-        that.flowData.nodeList = []
-        that.flowData.linkList = []
-        that.flowData.remarks = []
+        this.currentSelect = {}
+        this.currentSelectGroup = []
+        this.flowData.nodeList = []
+        this.flowData.linkList = []
+        this.flowData.remarks = []
       },
       // 显示隐藏网格
       toggleShowGrid () {
@@ -815,7 +798,7 @@
       },
       // 退出流程设计器
       exit () {
-        alert('退出流程设计器...')
+        this.$message.info('退出')
       },
       // 连接线右键
       showLinkContextMenu (e) {
@@ -831,16 +814,15 @@
       },
       // 删除线
       deleteLink () {
-        const that = this
-        let sourceId = that.currentSelect.sourceId
-        let targetId = that.currentSelect.targetId
-        that.plumb.deleteConnection(that.plumb.getConnections({
+        let sourceId = this.currentSelect.sourceId
+        let targetId = this.currentSelect.targetId
+        this.plumb.deleteConnection(this.plumb.getConnections({
           source: sourceId,
           target: targetId
         })[0])
-        let linkList = that.flowData.linkList
+        let linkList = this.flowData.linkList
         linkList.splice(linkList.findIndex(link => (link.sourceId === sourceId && link.targetId === targetId)), 1)
-        that.currentSelect = {}
+        this.currentSelect = {}
       },
       // 设置快捷键失效
       loseShortcut () {
@@ -852,16 +834,12 @@
       },
       // 测试
       openTest () {
-        const that = this
-
-        let flowObj = Object.assign({}, that.flowData)
-        that.$refs.testModal.flowData = flowObj
-        that.$refs.testModal.testVisible = true
+        let flowObj = Object.assign({}, this.flowData)
+        this.$refs.testModal.flowData = flowObj
+        this.$refs.testModal.testVisible = true
       },
       // 键盘移动节点
       moveNode (type) {
-        const that = this
-
         let m = flowConfig.defaultStyle.movePx, isX = true
         switch (type) {
           case 'left':
@@ -877,22 +855,22 @@
             isX = false
         }
 
-        if (that.currentSelectGroup.length > 0) {
-          that.currentSelectGroup.forEach(function (node, index) {
+        if (this.currentSelectGroup.length > 0) {
+          this.currentSelectGroup.forEach(node => {
             if (isX) {
               node.x += m
             } else {
               node.y += m
             }
           })
-          that.plumb.repaintEverything()
-        } else if (that.currentSelect.id) {
+          this.plumb.repaintEverything()
+        } else if (this.currentSelect.id) {
           if (isX) {
-            that.currentSelect.x += m
+            this.currentSelect.x += m
           } else {
-            that.currentSelect.y += m
+            this.currentSelect.y += m
           }
-          that.plumb.repaintEverything()
+          this.plumb.repaintEverything()
         }
       }
     }
