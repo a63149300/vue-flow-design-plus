@@ -11,7 +11,16 @@
 - 将jquery换成原生写法
 - 修改that为this写法，改写箭头函数
 - 注解添加
+- 持续优化
 - ...
+
+#### 操作命令
+
+* 安装项目node_modules包：yarn
+
+* 启动项目：yarn start
+
+* 构建项目dist文件夹资源：npm run build
 
 
 #### 效果演示
