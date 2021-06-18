@@ -22,7 +22,7 @@
 					<a-icon type="profile"/>
 					节点属性
 				</span>
-        <template v-if="currentSelect.type == 'start'">
+        <template v-if="currentSelect.type === 'start'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -44,7 +44,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-if="currentSelect.type == 'end'">
+        <template v-if="currentSelect.type === 'end'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -66,7 +66,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-if="currentSelect.type == 'common'">
+        <template v-if="currentSelect.type === 'common'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -88,7 +88,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-else-if="currentSelect.type == 'freedom'">
+        <template v-else-if="currentSelect.type === 'freedom'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -110,7 +110,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-else-if="currentSelect.type == 'event'">
+        <template v-else-if="currentSelect.type === 'event'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -132,7 +132,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-else-if="currentSelect.type == 'gateway'">
+        <template v-else-if="currentSelect.type === 'gateway'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -154,7 +154,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-else-if="currentSelect.type == 'child-flow'">
+        <template v-else-if="currentSelect.type === 'child-flow'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -176,7 +176,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-else-if="currentSelect.type == 'x-lane' || currentSelect.type == 'y-lane'">
+        <template v-else-if="currentSelect.type === 'x-lane' || currentSelect.type === 'y-lane'">
           <a-form layout="horizontal">
             <a-form-item label="类型"
                          :label-col="formItemLayout.labelCol"
@@ -253,15 +253,14 @@
         this.currentSelect.nodeName = e.target.value
       },
       linkLabelChange (e) {
-        const that = this
         let label = e.target.value
 
-        that.currentSelect.label = label
-        let conn = that.plumb.getConnections({
-          source: that.currentSelect.sourceId,
-          target: that.currentSelect.targetId
+        this.currentSelect.label = label
+        let conn = this.plumb.getConnections({
+          source: this.currentSelect.sourceId,
+          target: this.currentSelect.targetId
         })[0]
-        if (label != '') {
+        if (label !== '') {
           conn.setLabel({
             label: label,
             cssClass: 'linkLabel'
@@ -275,7 +274,7 @@
     watch: {
       select (val) {
         this.currentSelect = val
-        if (this.currentSelect.type == 'link') {
+        if (this.currentSelect.type === 'link') {
           this.activeKey = 'link-attr'
         } else if (!this.currentSelect.type) {
           this.activeKey = 'flow-attr'
