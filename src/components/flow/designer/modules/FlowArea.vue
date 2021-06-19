@@ -22,8 +22,8 @@
          @DOMMouseScroll="scaleContainer"
          @contextmenu="showContainerContextMenu">
       <flow-node
-        v-for="(node, index) in flowData.nodeList"
-        :key="index"
+        v-for="node in flowData.nodeList"
+        :key="node.id"
         :node="node"
         :plumb="plumb"
         :select.sync="currentSelect"
@@ -158,57 +158,53 @@
       },
       // 画布鼠标按下
       mousedownHandler (e) {
-        const that = this
-
         let event = window.event || e
 
-        if (event.button == 0) {
-          if (that.container.dragFlag) {
-            that.mouse.tempPos = that.mouse.position
-            that.container.draging = true
+        if (event.button === 0) {
+          if (this.container.dragFlag) {
+            this.mouse.tempPos = this.mouse.position
+            this.container.draging = true
           }
 
-          that.currentSelectGroup = []
-          if (that.rectangleMultiple.flag) {
-            that.mouse.tempPos = that.mouse.position
-            that.rectangleMultiple.multipling = true
+          this.currentSelectGroup = []
+          if (this.rectangleMultiple.flag) {
+            this.mouse.tempPos = this.mouse.position
+            this.rectangleMultiple.multipling = true
           }
         }
       },
       // 画布鼠标移动
       mousemoveHandler (e) {
-        const that = this
-
         let event = window.event || e
 
-        if (event.target.id == 'flowContainer') {
-          that.mouse.position = {
+        if (event.target.id === 'flowContainer') {
+          this.mouse.position = {
             x: event.offsetX,
             y: event.offsetY
           }
         } else {
           let cn = event.target.className
           let tn = event.target.tagName
-          if (cn != 'lane-text' && cn != 'lane-text-div' && tn != 'svg' && tn != 'path' && tn != 'I') {
-            that.mouse.position.x = event.target.offsetLeft + event.offsetX
-            that.mouse.position.y = event.target.offsetTop + event.offsetY
+          if (cn !== 'lane-text' && cn !== 'lane-text-div' && tn !== 'svg' && tn !== 'path' && tn !== 'I') {
+            this.mouse.position.x = event.target.offsetLeft + event.offsetX
+            this.mouse.position.y = event.target.offsetTop + event.offsetY
           }
         }
-        if (that.container.draging) {
-          let nTop = that.container.pos.top + (that.mouse.position.y - that.mouse.tempPos.y)
-          let nLeft = that.container.pos.left + (that.mouse.position.x - that.mouse.tempPos.x)
+        if (this.container.draging) {
+          let nTop = this.container.pos.top + (this.mouse.position.y - this.mouse.tempPos.y)
+          let nLeft = this.container.pos.left + (this.mouse.position.x - this.mouse.tempPos.x)
           if (nTop >= 0) nTop = 0
           if (nLeft >= 0) nLeft = 0
-          that.container.pos = {
+          this.container.pos = {
             top: nTop,
             left: nLeft
           }
         }
-        if (that.rectangleMultiple.multipling) {
-          let h = that.mouse.position.y - that.mouse.tempPos.y
-          let w = that.mouse.position.x - that.mouse.tempPos.x
-          let t = that.mouse.tempPos.y
-          let l = that.mouse.tempPos.x
+        if (this.rectangleMultiple.multipling) {
+          let h = this.mouse.position.y - this.mouse.tempPos.y
+          let w = this.mouse.position.x - this.mouse.tempPos.x
+          let t = this.mouse.tempPos.y
+          let l = this.mouse.tempPos.x
           if (h >= 0 && w < 0) {
             w = -w
             l -= w
@@ -221,86 +217,78 @@
             t -= h
             l -= w
           }
-          that.rectangleMultiple.height = h
-          that.rectangleMultiple.width = w
-          that.rectangleMultiple.position.top = t
-          that.rectangleMultiple.position.left = l
+          this.rectangleMultiple.height = h
+          this.rectangleMultiple.width = w
+          this.rectangleMultiple.position.top = t
+          this.rectangleMultiple.position.left = l
         }
       },
       // 画布鼠标点击松开
       mouseupHandler () {
-        const that = this
-
-        if (that.container.draging) that.container.draging = false
-        if (that.rectangleMultiple.multipling) {
+        if (this.container.draging) this.container.draging = false
+        if (this.rectangleMultiple.multipling) {
           // 鼠标划框内的节点
-          that.judgeSelectedNode()
-          that.rectangleMultiple.multipling = false
-          that.rectangleMultiple.width = 0
-          that.rectangleMultiple.height = 0
+          this.judgeSelectedNode()
+          this.rectangleMultiple.multipling = false
+          this.rectangleMultiple.width = 0
+          this.rectangleMultiple.height = 0
         }
       },
       // 鼠标划框内的节点
       judgeSelectedNode () {
-        const that = this
+        let ay = this.rectangleMultiple.position.top
+        let ax = this.rectangleMultiple.position.left
+        let by = ay + this.rectangleMultiple.height
+        let bx = ax + this.rectangleMultiple.width
 
-        let ay = that.rectangleMultiple.position.top
-        let ax = that.rectangleMultiple.position.left
-        let by = ay + that.rectangleMultiple.height
-        let bx = ax + that.rectangleMultiple.width
-
-        let nodeList = that.flowData.nodeList
-        nodeList.forEach(function (node, index) {
+        let nodeList = this.flowData.nodeList
+        nodeList.forEach(node => {
           if (node.y >= ay && node.x >= ax && node.y <= by && node.x <= bx) {
-            that.plumb.addToDragSelection(node.id)
-            that.currentSelectGroup.push(node)
+            this.plumb.addToDragSelection(node.id)
+            this.currentSelectGroup.push(node)
           }
         })
       },
       // 画布鼠标滚轴
       scaleContainer (e) {
-        const that = this
-
         let event = window.event || e
 
-        if (that.container.scaleFlag) {
-          if (that.browserType == 2) {
+        if (this.container.scaleFlag) {
+          if (this.browserType === 2) {
             if (event.detail < 0) {
-              that.enlargeContainer()
+              this.enlargeContainer()
             } else {
-              that.narrowContainer()
+              this.narrowContainer()
             }
           } else {
             if (event.deltaY < 0) {
-              that.enlargeContainer()
-            } else if (that.container.scale) {
-              that.narrowContainer()
+              this.enlargeContainer()
+            } else if (this.container.scale) {
+              this.narrowContainer()
             }
           }
         }
       },
       // 画布放大
       enlargeContainer () {
-        const that = this
-        that.container.scaleOrigin.x = that.mouse.position.x
-        that.container.scaleOrigin.y = that.mouse.position.y
-        let newScale = AMS.add(that.container.scale, flowConfig.defaultStyle.containerScale.onceEnlarge)
+        this.container.scaleOrigin.x = this.mouse.position.x
+        this.container.scaleOrigin.y = this.mouse.position.y
+        let newScale = AMS.add(this.container.scale, flowConfig.defaultStyle.containerScale.onceEnlarge)
         if (newScale <= flowConfig.defaultStyle.containerScale.max) {
-          that.container.scale = newScale
-          that.container.scaleShow = AMS.mul(that.container.scale, 100)
-          that.plumb.setZoom(that.container.scale)
+          this.container.scale = newScale
+          this.container.scaleShow = AMS.mul(this.container.scale, 100)
+          this.plumb.setZoom(this.container.scale)
         }
       },
       // 画布缩小
       narrowContainer () {
-        const that = this
-        that.container.scaleOrigin.x = that.mouse.position.x
-        that.container.scaleOrigin.y = that.mouse.position.y
-        let newScale = AMS.sub(that.container.scale, flowConfig.defaultStyle.containerScale.onceNarrow)
+        this.container.scaleOrigin.x = this.mouse.position.x
+        this.container.scaleOrigin.y = this.mouse.position.y
+        let newScale = AMS.sub(this.container.scale, flowConfig.defaultStyle.containerScale.onceNarrow)
         if (newScale >= flowConfig.defaultStyle.containerScale.min) {
-          that.container.scale = newScale
-          that.container.scaleShow = AMS.mul(that.container.scale, 100)
-          that.plumb.setZoom(that.container.scale)
+          this.container.scale = newScale
+          this.container.scaleShow = AMS.mul(this.container.scale, 100)
+          this.plumb.setZoom(this.container.scale)
         }
       },
       // 画布右健
@@ -328,32 +316,28 @@
       },
       // 流程图信息
       flowInfo () {
-        const that = this
-
-        let nodeList = that.flowData.nodeList
-        let linkList = that.flowData.linkList
-        alert('当前流程图中有 ' + nodeList.length + ' 个节点，有 ' + linkList.length + ' 条连线。')
+        let nodeList = this.flowData.nodeList
+        let linkList = this.flowData.linkList
+        this.$message.info('当前流程图中有 ' + nodeList.length + ' 个节点，有 ' + linkList.length + ' 条连线。')
       },
       // 粘贴
       paste () {
-        const that = this
         let dis = 0
-        that.clipboard.forEach(function (node, index) {
+        this.clipboard.forEach(node => {
           let newNode = Object.assign({}, node)
           newNode.id = newNode.type + '-' + AMS.getId()
-          let nodePos = that.computeNodePos(that.mouse.position.x + dis, that.mouse.position.y + dis)
+          let nodePos = this.computeNodePos(this.mouse.position.x + dis, this.mouse.position.y + dis)
           newNode.x = nodePos.x
           newNode.y = nodePos.y
           dis += 20
-          that.flowData.nodeList.push(newNode)
+          this.flowData.nodeList.push(newNode)
         })
       },
       // 全选
       selectAll () {
-        const that = this
-        that.flowData.nodeList.forEach(function (node, index) {
-          that.plumb.addToDragSelection(node.id)
-          that.currentSelectGroup.push(node)
+        this.flowData.nodeList.forEach(node => {
+          this.plumb.addToDragSelection(node.id)
+          this.currentSelectGroup.push(node)
         })
       },
       // 保存流程
@@ -370,19 +354,17 @@
       },
       // 垂直左对齐
       verticaLeft () {
-        const that = this
-
-        if (!that.checkAlign()) return
-        let nodeList = that.flowData.nodeList
-        let selectGroup = that.currentSelectGroup
+        if (!this.checkAlign()) return
+        let nodeList = this.flowData.nodeList
+        let selectGroup = this.currentSelectGroup
         let baseX = selectGroup[0].x
         let baseY = selectGroup[0].y
         for (let i = 1; i < selectGroup.length; i++) {
           baseY = baseY + selectGroup[i - 1].height + flowConfig.defaultStyle.alignSpacing.vertical
-          let f = nodeList.filter(n => n.id == selectGroup[i].id)[0]
+          let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
           f.ty = baseY
-          that.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
+          this.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
             duration: flowConfig.defaultStyle.alignDuration,
             complete: function () {
               f.x = f.tx
@@ -393,21 +375,19 @@
       },
       // 垂直居中
       verticalCenter () {
-        const that = this
-
-        if (!that.checkAlign()) return
-        let nodeList = that.flowData.nodeList
-        let selectGroup = that.currentSelectGroup
+        if (!this.checkAlign()) return
+        let nodeList = this.flowData.nodeList
+        let selectGroup = this.currentSelectGroup
         let baseX = selectGroup[0].x
         let baseY = selectGroup[0].y
         let firstX = baseX
         for (let i = 1; i < selectGroup.length; i++) {
           baseY = baseY + selectGroup[i - 1].height + flowConfig.defaultStyle.alignSpacing.vertical
           baseX = firstX + AMS.div(selectGroup[0].width, 2) - AMS.div(selectGroup[i].width, 2)
-          let f = nodeList.filter(n => n.id == selectGroup[i].id)[0]
+          let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
           f.ty = baseY
-          that.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
+          this.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
             duration: flowConfig.defaultStyle.alignDuration,
             complete: function () {
               f.x = f.tx
@@ -418,21 +398,19 @@
       },
       // 垂直右对齐
       verticalRight () {
-        const that = this
-
-        if (!that.checkAlign()) return
-        let nodeList = that.flowData.nodeList
-        let selectGroup = that.currentSelectGroup
+        if (!this.checkAlign()) return
+        let nodeList = this.flowData.nodeList
+        let selectGroup = this.currentSelectGroup
         let baseX = selectGroup[0].x
         let baseY = selectGroup[0].y
         let firstX = baseX
         for (let i = 1; i < selectGroup.length; i++) {
           baseY = baseY + selectGroup[i - 1].height + flowConfig.defaultStyle.alignSpacing.vertical
           baseX = firstX + selectGroup[0].width - selectGroup[i].width
-          let f = nodeList.filter(n => n.id == selectGroup[i].id)[0]
+          let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
           f.ty = baseY
-          that.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
+          this.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
             duration: flowConfig.defaultStyle.alignDuration,
             complete: function () {
               f.x = f.tx
@@ -443,19 +421,17 @@
       },
       // 水平上对齐
       levelUp () {
-        const that = this
-
-        if (!that.checkAlign()) return
-        let nodeList = that.flowData.nodeList
-        let selectGroup = that.currentSelectGroup
+        if (!this.checkAlign()) return
+        let nodeList = this.flowData.nodeList
+        let selectGroup = this.currentSelectGroup
         let baseX = selectGroup[0].x
         let baseY = selectGroup[0].y
         for (let i = 1; i < selectGroup.length; i++) {
           baseX = baseX + selectGroup[i - 1].width + flowConfig.defaultStyle.alignSpacing.level
-          let f = nodeList.filter(n => n.id == selectGroup[i].id)[0]
+          let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
           f.ty = baseY
-          that.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
+          this.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
             duration: flowConfig.defaultStyle.alignDuration,
             complete: function () {
               f.x = f.tx
@@ -466,21 +442,19 @@
       },
       // 水平居中
       levelCenter () {
-        const that = this
-
-        if (!that.checkAlign()) return
-        let nodeList = that.flowData.nodeList
-        let selectGroup = that.currentSelectGroup
+        if (!this.checkAlign()) return
+        let nodeList = this.flowData.nodeList
+        let selectGroup = this.currentSelectGroup
         let baseX = selectGroup[0].x
         let baseY = selectGroup[0].y
         let firstY = baseY
         for (let i = 1; i < selectGroup.length; i++) {
           baseY = firstY + AMS.div(selectGroup[0].height, 2) - AMS.div(selectGroup[i].height, 2)
           baseX = baseX + selectGroup[i - 1].width + flowConfig.defaultStyle.alignSpacing.level
-          let f = nodeList.filter(n => n.id == selectGroup[i].id)[0]
+          let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
           f.ty = baseY
-          that.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
+          this.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
             duration: flowConfig.defaultStyle.alignDuration,
             complete: function () {
               f.x = f.tx
@@ -491,21 +465,19 @@
       },
       // 水平下对齐
       levelDown () {
-        const that = this
-
-        if (!that.checkAlign()) return
-        let nodeList = that.flowData.nodeList
-        let selectGroup = that.currentSelectGroup
+        if (!this.checkAlign()) return
+        let nodeList = this.flowData.nodeList
+        let selectGroup = this.currentSelectGroup
         let baseX = selectGroup[0].x
         let baseY = selectGroup[0].y
         let firstY = baseY
         for (let i = 1; i < selectGroup.length; i++) {
           baseY = firstY + selectGroup[0].height - selectGroup[i].height
           baseX = baseX + selectGroup[i - 1].width + flowConfig.defaultStyle.alignSpacing.level
-          let f = nodeList.filter(n => n.id == selectGroup[i].id)[0]
+          let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
           f.ty = baseY
-          that.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
+          this.plumb.animate(selectGroup[i].id, { top: baseY, left: baseX }, {
             duration: flowConfig.defaultStyle.alignDuration,
             complete: function () {
               f.x = f.tx
@@ -515,52 +487,47 @@
         }
       },
       addRemark () {
-        const that = this
-        alert('添加备注(待完善)...')
+        this.$message.info('添加备注(待完善)...')
       },
       // 复制节点
       copyNode () {
-        const that = this
-
-        that.clipboard = []
-        if (that.currentSelectGroup.length > 0) {
-          that.clipboard = Object.assign([], that.currentSelectGroup)
-        } else if (that.currentSelect.id) {
-          that.clipboard.push(that.currentSelect)
+        this.clipboard = []
+        if (this.currentSelectGroup.length > 0) {
+          this.clipboard = Object.assign([], this.currentSelectGroup)
+        } else if (this.currentSelect.id) {
+          this.clipboard.push(this.currentSelect)
         }
       },
       // 查询删除节点关联的连接线
       getConnectionsByNodeId (nodeId) {
-        const that = this
-        let conns1 = that.plumb.getConnections({
+        let conns1 = this.plumb.getConnections({
           source: nodeId
         })
-        let conns2 = that.plumb.getConnections({
+        let conns2 = this.plumb.getConnections({
           target: nodeId
         })
         return conns1.concat(conns2)
       },
       // 删除节点
       deleteNode () {
-        const that = this
-        let nodeList = that.flowData.nodeList
-        let linkList = that.flowData.linkList
+        let nodeList = this.flowData.nodeList
+        let linkList = this.flowData.linkList
         let arr = []
 
-        arr.push(Object.assign({}, that.currentSelect))
+        arr.push(Object.assign({}, this.currentSelect))
 
-        that.flowData.status = flowConfig.flowStatus.LOADING
+        this.flowData.status = flowConfig.flowStatus.LOADING
 
-        arr.forEach(function (c, index) {
-          let conns = that.getConnectionsByNodeId(c.id)
-          conns.forEach(function (conn, index) {
+        arr.forEach(c => {
+          let conns = this.getConnectionsByNodeId(c.id)
+          conns.forEach(conn => {
             linkList.splice(linkList.findIndex(link => (link.sourceId === conn.sourceId && link.targetId === conn.targetId)), 1)
           })
-          that.plumb.deleteEveryEndpoint()
-          let inx = nodeList.findIndex(node => node.id == c.id)
+          this.plumb.deleteEveryEndpoint()
+          let inx = nodeList.findIndex(node => node.id === c.id)
           nodeList.splice(inx, 1)
-          linkList.forEach(function (link, index) {
-            let conn = that.plumb.connect({
+          linkList.forEach(link => {
+            let conn = this.plumb.connect({
               source: link.sourceId,
               target: link.targetId,
               anchor: flowConfig.jsPlumbConfig.anchor.default,
@@ -585,24 +552,22 @@
             }
           })
         })
-        that.flowData.status = flowConfig.flowStatus.CREATE
-        that.selectContainer()
+        this.flowData.status = flowConfig.flowStatus.CREATE
+        this.selectContainer()
       },
       // 增加画布节点
       addNewNode (node) {
-        const that = this
-
-        let x = that.mouse.position.x
-        let y = that.mouse.position.y
-        let nodePos = that.computeNodePos(x, y)
+        let x = this.mouse.position.x
+        let y = this.mouse.position.y
+        let nodePos = this.computeNodePos(x, y)
         x = nodePos.x
         y = nodePos.y
 
         let newNode = Object.assign({}, node)
         newNode.id = newNode.type + '-' + AMS.getId()
         newNode.height = 50
-        if (newNode.type == 'start' || newNode.type == 'end' ||
-          newNode.type == 'event' || newNode.type == 'gateway') {
+        if (newNode.type === 'start' || newNode.type === 'end' ||
+          newNode.type === 'event' || newNode.type === 'gateway') {
           newNode.x = x - 25
           newNode.width = 50
         } else {
@@ -610,14 +575,14 @@
           newNode.width = 120
         }
         newNode.y = y - 25
-        if (newNode.type == 'x-lane') {
+        if (newNode.type === 'x-lane') {
           newNode.height = 200
           newNode.width = 500
-        } else if (newNode.type == 'y-lane') {
+        } else if (newNode.type === 'y-lane') {
           newNode.height = 500
           newNode.width = 200
         }
-        that.flowData.nodeList.push(newNode)
+        this.flowData.nodeList.push(newNode)
       },
       // x, y取整计算
       computeNodePos (x, y) {
@@ -652,27 +617,23 @@
       },
       // 更新组节点信息
       updateNodePos () {
-        const that = this
-
-        let nodeList = that.flowData.nodeList
-        that.currentSelectGroup.forEach(function (node, index) {
+        let nodeList = this.flowData.nodeList
+        this.currentSelectGroup.forEach(node => {
           let l = parseInt(document.querySelector('#' + node.id).style.left)
           let t = parseInt(document.querySelector('#' + node.id).style.top)
-          let f = nodeList.filter(n => n.id == node.id)[0]
+          let f = nodeList.filter(n => n.id === node.id)[0]
           f.x = l
           f.y = t
         })
       },
       // 计算辅助线
       alignForLine (e) {
-        const that = this
-
-        if (that.selectGroup.length > 1) return
-        if (that.container.auxiliaryLine.controlFnTimesFlag) {
+        if (this.selectGroup.length > 1) return
+        if (this.container.auxiliaryLine.controlFnTimesFlag) {
           let elId = e.el.id
-          let nodeList = that.flowData.nodeList
-          nodeList.forEach(function (node, index) {
-            if (elId != node.id) {
+          let nodeList = this.flowData.nodeList
+          nodeList.forEach(node => {
+            if (elId !== node.id) {
               let dis = flowConfig.defaultStyle.showAuxiliaryLineDistance,
                 elPos = e.pos,
                 elH = e.el.offsetHeight,
@@ -680,26 +641,26 @@
                 disX = elPos[0] - node.x,
                 disY = elPos[1] - node.y
               if ((disX >= -dis && disX <= dis) || ((disX + elW) >= -dis && (disX + elW) <= dis)) {
-                that.container.auxiliaryLine.isShowYLine = true
-                that.auxiliaryLinePos.x = node.x + that.container.pos.left
+                this.container.auxiliaryLine.isShowYLine = true
+                this.auxiliaryLinePos.x = node.x + this.container.pos.left
                 let nodeMidPointX = node.x + (node.width / 2)
-                if (nodeMidPointX == (elPos[0] + (elW / 2))) {
-                  that.auxiliaryLinePos.x = nodeMidPointX + that.container.pos.left
+                if (nodeMidPointX === (elPos[0] + (elW / 2))) {
+                  this.auxiliaryLinePos.x = nodeMidPointX + this.container.pos.left
                 }
               }
               if ((disY >= -dis && disY <= dis) || ((disY + elH) >= -dis && (disY + elH) <= dis)) {
-                that.container.auxiliaryLine.isShowXLine = true
-                that.auxiliaryLinePos.y = node.y + that.container.pos.top
+                this.container.auxiliaryLine.isShowXLine = true
+                this.auxiliaryLinePos.y = node.y + this.container.pos.top
                 let nodeMidPointY = node.y + (node.height / 2)
-                if (nodeMidPointY == (elPos[1] + (elH / 2))) {
-                  that.auxiliaryLinePos.y = nodeMidPointY + that.container.pos.left
+                if (nodeMidPointY === (elPos[1] + (elH / 2))) {
+                  this.auxiliaryLinePos.y = nodeMidPointY + this.container.pos.left
                 }
               }
             }
           })
-          that.container.auxiliaryLine.controlFnTimesFlag = false
-          setTimeout(function () {
-            that.container.auxiliaryLine.controlFnTimesFlag = true
+          this.container.auxiliaryLine.controlFnTimesFlag = false
+          setTimeout(() => {
+            this.container.auxiliaryLine.controlFnTimesFlag = true
           }, 200)
         }
       },
