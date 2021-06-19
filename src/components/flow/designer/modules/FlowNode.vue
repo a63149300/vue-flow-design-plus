@@ -1,38 +1,38 @@
 <template>
-  <div v-if="node.type == 'start'"
+  <div v-if="node.type === 'start'"
        :id="node.id"
        class="common-circle-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px',
-    	cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
-    																								(currentTool.type == 'zoom-in' ? 'zoom-in' :
-    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    	cursor: currentTool.type === 'drag' ? 'move' : (currentTool.type === 'connection' ? 'crosshair' :
+    																								(currentTool.type === 'zoom-in' ? 'zoom-in' :
+    																								(currentTool.type === 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
     {{ node.nodeName }}
   </div>
 
-  <div v-else-if="node.type == 'end'"
+  <div v-else-if="node.type === 'end'"
        :id="node.id"
        class="common-circle-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px',
-    	cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
-    																								(currentTool.type == 'zoom-in' ? 'zoom-in' :
-    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    	cursor: currentTool.type === 'drag' ? 'move' : (currentTool.type === 'connection' ? 'crosshair' :
+    																								(currentTool.type === 'zoom-in' ? 'zoom-in' :
+    																								(currentTool.type === 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
     {{ node.nodeName }}
   </div>
 
-  <div v-else-if="node.type == 'common'"
+  <div v-else-if="node.type === 'common'"
        :id="node.id"
        class="common-rectangle-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px',
-    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
-    																								(currentTool.type == 'zoom-in' ? 'zoom-in' :
-    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    		cursor: currentTool.type === 'drag' ? 'move' : (currentTool.type === 'connection' ? 'crosshair' :
+    																								(currentTool.type === 'zoom-in' ? 'zoom-in' :
+    																								(currentTool.type === 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
     <a-icon type="user"
@@ -40,14 +40,14 @@
     {{ node.nodeName }}
   </div>
 
-  <div v-else-if="node.type == 'freedom'"
+  <div v-else-if="node.type === 'freedom'"
        :id="node.id"
        class="common-rectangle-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px',
-    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
-    																								(currentTool.type == 'zoom-in' ? 'zoom-in' :
-    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    		cursor: currentTool.type === 'drag' ? 'move' : (currentTool.type === 'connection' ? 'crosshair' :
+    																								(currentTool.type === 'zoom-in' ? 'zoom-in' :
+    																								(currentTool.type === 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
     <a-icon type="sync"
@@ -55,39 +55,39 @@
     {{ node.nodeName }}
   </div>
 
-  <div v-else-if="node.type == 'event'"
+  <div v-else-if="node.type === 'event'"
        :id="node.id"
        class="common-circle-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px',
-    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
-    																								(currentTool.type == 'zoom-in' ? 'zoom-in' :
-    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    		cursor: currentTool.type === 'drag' ? 'move' : (currentTool.type === 'connection' ? 'crosshair' :
+    																								(currentTool.type === 'zoom-in' ? 'zoom-in' :
+    																								(currentTool.type === 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
     {{ node.nodeName }}
   </div>
 
-  <div v-else-if="node.type == 'gateway'"
+  <div v-else-if="node.type === 'gateway'"
        :id="node.id"
        class="common-diamond-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px',
-    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
-    																								(currentTool.type == 'zoom' ? 'zoom-in' :
-    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    		cursor: currentTool.type === 'drag' ? 'move' : (currentTool.type === 'connection' ? 'crosshair' :
+    																								(currentTool.type === 'zoom' ? 'zoom-in' :
+    																								(currentTool.type === 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
   </div>
 
-  <div v-else-if="node.type == 'child-flow'"
+  <div v-else-if="node.type === 'child-flow'"
        :id="node.id"
        class="common-rectangle-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px',
-    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
-    																								(currentTool.type == 'zoom-in' ? 'zoom-in' :
-    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    		cursor: currentTool.type === 'drag' ? 'move' : (currentTool.type === 'connection' ? 'crosshair' :
+    																								(currentTool.type === 'zoom-in' ? 'zoom-in' :
+    																								(currentTool.type === 'zoom-out' ? 'zoom-out' : 'default'))) }"
        @click.stop="selectNode"
        @contextmenu.stop="showNodeContextMenu">
     <a-icon type="apartment"
@@ -95,28 +95,28 @@
     {{ node.nodeName }}
   </div>
 
-  <div v-else-if="node.type == 'x-lane'"
+  <div v-else-if="node.type === 'x-lane'"
        :id="node.id"
        class="common-x-lane-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px', height: node.height + 'px', width: node.width + 'px',
-    		cursor: currentTool.type == 'zoom-in' ? 'zoom-in' : (currentTool.type == 'zoom-out' ? 'zoom-out' : 'default') }">
+    		cursor: currentTool.type === 'zoom-in' ? 'zoom-in' : (currentTool.type === 'zoom-out' ? 'zoom-out' : 'default') }">
     <div class="lane-text-div"
-         :style="{ cursor: currentTool.type == 'drag' ? 'move' : 'default' }"
+         :style="{ cursor: currentTool.type === 'drag' ? 'move' : 'default' }"
          @click.stop="selectNode"
          @contextmenu.stop="showNodeContextMenu">
       <span class="lane-text">{{ node.nodeName }}</span>
     </div>
   </div>
 
-  <div v-else-if="node.type == 'y-lane'"
+  <div v-else-if="node.type === 'y-lane'"
        :id="node.id"
        class="common-y-lane-node"
        :class="{ active: isActive() }"
        :style="{ top: node.y + 'px', left: node.x + 'px', height: node.height + 'px', width: node.width + 'px',
-    		cursor: currentTool.type == 'zoom-in' ? 'zoom-in' : (currentTool.type == 'zoom-out' ? 'zoom-out' : 'default') }">
+    		cursor: currentTool.type === 'zoom-in' ? 'zoom-in' : (currentTool.type === 'zoom-out' ? 'zoom-out' : 'default') }">
     <div class="lane-text-div"
-         :style="{ cursor: currentTool.type == 'drag' ? 'move' : 'default' }"
+         :style="{ cursor: currentTool.type === 'drag' ? 'move' : 'default' }"
          @click.stop="selectNode"
          @contextmenu.stop="showNodeContextMenu">
       <span class="lane-text">{{ node.nodeName }}</span>
@@ -148,39 +148,37 @@
     methods: {
       // 初始节点拖拽
       registerNode () {
-        const that = this
-
-        that.plumb.draggable(that.node.id, {
+        this.plumb.draggable(this.node.id, {
           containment: 'parent',
-          handle: function (e, el) {
+          handle: (e, el) => {
             // 判断节点类型
-            var possibles = el.parentNode.querySelectorAll('.common-circle-node,.common-rectangle-node,.common-diamond-node,.lane-text-div')
-            for (var i = 0; i < possibles.length; i++) {
-              if (possibles[i] === el || e.target.className == 'lane-text') return true
+            let possibles = el.parentNode.querySelectorAll('.common-circle-node,.common-rectangle-node,.common-diamond-node,.lane-text-div')
+            for (let i = 0; i < possibles.length; i++) {
+              if (possibles[i] === el || e.target.className === 'lane-text') return true
             }
             return false
           },
           grid: flowConfig.defaultStyle.alignGridPX,
-          drag: function (e) {
+          drag: e => {
             if (flowConfig.defaultStyle.isOpenAuxiliaryLine) {
-              that.$emit('alignForLine', e)
+              this.$emit('alignForLine', e)
             }
           },
-          stop: function (e) {
-            that.node.x = e.pos[0]
-            that.node.y = e.pos[1]
+          stop: e => {
+            this.node.x = e.pos[0]
+            this.node.y = e.pos[1]
             // 是否为组
-            if (that.currentSelectGroup.length > 1) {
+            if (this.currentSelectGroup.length > 1) {
               // 更新组节点信息
-              that.$emit('updateNodePos')
+              this.$emit('updateNodePos')
             }
             // 隐藏辅助线
-            that.$emit('hideAlignLine')
+            this.$emit('hideAlignLine')
           }
         })
 
-        if (that.node.type === 'x-lane' || that.node.type === 'y-lane') {
-          let node = document.querySelector('#' + that.node.id)
+        if (this.node.type === 'x-lane' || this.node.type === 'y-lane') {
+          let node = document.querySelector('#' + this.node.id)
           new Resizable(node,{
             handles: ['e', 'w', 'n', 's', 'nw', 'ne', 'sw', 'se'],
             initSize: {
@@ -190,25 +188,24 @@
               minHeight: 200,
             }
           }, () => {
-            that.node.height = Math.ceil(parseInt(node.style.height))
-            that.node.width = Math.ceil(parseInt(node.style.width))
+            this.node.height = Math.ceil(parseInt(node.style.height))
+            this.node.width = Math.ceil(parseInt(node.style.width))
           })
         }
-        that.currentSelect = that.node
-        that.currentSelectGroup = []
+        this.currentSelect = this.node
+        this.currentSelectGroup = []
       },
       // 点击节点
       selectNode () {
-        const that = this
-        that.currentSelect = this.node
-        that.$emit('isMultiple', flag => {
+        this.currentSelect = this.node
+        this.$emit('isMultiple', flag => {
           if (!flag) {
-            that.currentSelectGroup = []
+            this.currentSelectGroup = []
           } else {
-            let f = that.currentSelectGroup.filter(s => s.id == that.node.id)
+            let f = this.currentSelectGroup.filter(s => s.id === this.node.id)
             if (f.length <= 0) {
-              that.plumb.addToDragSelection(that.node.id)
-              that.currentSelectGroup.push(that.node)
+              this.plumb.addToDragSelection(this.node.id)
+              this.currentSelectGroup.push(this.node)
             }
           }
         })
@@ -220,9 +217,8 @@
       },
       // 节点是否激活
       isActive () {
-        const that = this
-        if (that.currentSelect.id === that.node.id) return true
-        let f = that.currentSelectGroup.filter(n => n.id === that.node.id)
+        if (this.currentSelect.id === this.node.id) return true
+        let f = this.currentSelectGroup.filter(n => n.id === this.node.id)
         if (f.length > 0) return true
         return false
       }
