@@ -126,9 +126,8 @@
     },
     methods: {
       init () {
-        const that = this
-        that.$nextTick(() => {
-          that.settingForm.setFieldsValue({
+        this.$nextTick(() => {
+          this.settingForm.setFieldsValue({
             movePx: flowConfig.defaultStyle.movePx,
             linkType: flowConfig.jsPlumbInsConfig.Connector[0],
             linkThickness: flowConfig.jsPlumbInsConfig.PaintStyle.strokeWidth,
