@@ -16,8 +16,8 @@
               <a-list-item>
                 <a-button-group>
                   <a-button
-                    v-for="(tool, index) in field.tools"
-                    :key="index"
+                    v-for="tool in field.tools"
+                    :key="tool.type"
                     :icon="tool.icon"
                     :type="currentTool.type === tool.type ? 'primary': 'default'"
                     @click="selectTool(tool.type)">
@@ -35,8 +35,8 @@
           <a-list
             :grid="{ gutter: 8, column: 2 }"
             v-show="tag.commonNodeShow">
-            <a-list-item v-for="(commonNode, index) in field.commonNodes"
-                         :key="index">
+            <a-list-item v-for="commonNode in field.commonNodes"
+                         :key="commonNode.type">
               <div class="node-item"
                    draggable="true"
                    @dragstart="dragNode(commonNode.type, 'commonNodes')"
@@ -55,8 +55,8 @@
           <a-list
             :grid="{ gutter: 8, column: 2 }"
             v-show="tag.highNodeShow">
-            <a-list-item v-for="(highNode, index) in field.highNodes"
-                         :key="index">
+            <a-list-item v-for="highNode in field.highNodes"
+                         :key="highNode.type">
               <div class="node-item"
                    draggable="true"
                    @dragstart="dragNode(highNode.type, 'highNodes')"
@@ -74,8 +74,8 @@
           <a-list
             :grid="{ gutter: 8, column: 2 }"
             v-show="tag.laneNodeShow">
-            <a-list-item v-for="(laneNode, index) in field.laneNodes"
-                         :key="index">
+            <a-list-item v-for="laneNode in field.laneNodes"
+                         :key="laneNode.type">
               <div class="node-item"
                    draggable="true"
                    @dragstart="dragNode(laneNode.type, 'laneNodes')"
