@@ -43,12 +43,10 @@
     },
     methods: {
       open () {
-        const that = this
-
-        that.modalVisible = true
+        this.modalVisible = true
         let obj = Object.assign({}, flowConfig.shortcut)
         for (let k in obj) {
-          that.dataSource.push(obj[k])
+          this.dataSource.push(obj[k])
         }
       },
       close () {
