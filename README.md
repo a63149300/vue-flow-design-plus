@@ -1,4 +1,5 @@
-
+#### 在线演示
+[点击预览](http://47.106.144.239:8081/)
 
 #### 介绍
 - VUE FLOW DESIGN PLUS流程设计器，基于Vue + Ant Design Vue + JSPlumb，该组件目的是为了使用在Vue项目中，它前身是[VFD流程设计器](https://github.com/ZFSNYJ/VFD)。
