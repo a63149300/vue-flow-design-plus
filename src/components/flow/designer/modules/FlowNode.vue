@@ -89,7 +89,7 @@
 
 <script>
   import jsplumb from 'jsplumb'
-  import { Resizable } from '../../../../../static/resizable/resizable'
+  import { Resizable } from 'resizable-dom'
   import { flowConfig } from '../config/args-config.js'
 
   export default {
