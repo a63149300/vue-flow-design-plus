@@ -22,6 +22,7 @@
     "jsdom": "^13.2.0",
     "jsplumb": "^2.11.0",
     "node-sass": "^4.12.0",
+    "resizable-dom": "^1.0.2",
     "sass-loader": "^7.1.0",
     "vcolorpicker": "^0.1.8",
     "vue": "^2.5.2",
