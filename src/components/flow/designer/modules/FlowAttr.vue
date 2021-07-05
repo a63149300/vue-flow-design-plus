@@ -254,18 +254,30 @@
       },
       linkLabelChange (e) {
         let label = e.target.value
-
         this.currentSelect.label = label
         let conn = this.plumb.getConnections({
           source: this.currentSelect.sourceId,
           target: this.currentSelect.targetId
         })[0]
+        let link_id = conn.canvas.id
+        let labelHandle = e => {
+          let event = window.event || e
+          event.stopPropagation()
+          this.currentSelect = this.flowData.linkList.filter(l => l.id === link_id)[0]
+        }
+
         if (label !== '') {
           conn.setLabel({
             label: label,
-            cssClass: 'linkLabel'
+            cssClass: `linkLabel ${link_id}`
           })
+          // 添加label点击事件
+          document.querySelector('.' + link_id).addEventListener('click', labelHandle)
+
         } else {
+          // 移除label点击事件
+          document.querySelector('.' + link_id).removeEventListener('click', labelHandle)
+
           let labelOverlay = conn.getLabelOverlay()
           if (labelOverlay) conn.removeOverlay(labelOverlay.id)
         }
