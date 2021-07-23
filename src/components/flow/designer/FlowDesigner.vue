@@ -562,11 +562,24 @@
                     strokeWidth: link.cls.linkThickness
                   }
                 })
+                let link_id = conn.canvas.id
+                let labelHandle = e => {
+                  let event = window.event || e
+                  event.stopPropagation()
+                  this.currentSelect = this.flowData.linkList.filter(l => l.id === link_id)[0]
+                }
+
                 if (link.label !== '') {
                   conn.setLabel({
                     label: link.label,
-                    cssClass: 'linkLabel'
+                    cssClass: `linkLabel ${link_id}`
                   })
+
+                  // 添加label点击事件
+                  document.querySelector('.' + link_id).addEventListener('click', labelHandle)
+                } else {
+                  // 移除label点击事件
+                  document.querySelector('.' + link_id).removeEventListener('click', labelHandle)
                 }
               })
               this.currentSelect = {}
