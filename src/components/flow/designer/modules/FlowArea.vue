@@ -522,47 +522,13 @@
           let conns = this.getConnectionsByNodeId(c.id)
           conns.forEach(conn => {
             linkList.splice(linkList.findIndex(link => (link.sourceId === conn.sourceId && link.targetId === conn.targetId)), 1)
+            this.plumb.deleteConnection(this.plumb.getConnections({
+              source: conn.sourceId,
+              target: conn.targetId
+            })[0])
           })
-          this.plumb.deleteEveryEndpoint()
           let inx = nodeList.findIndex(node => node.id === c.id)
           nodeList.splice(inx, 1)
-          linkList.forEach(link => {
-            let conn = this.plumb.connect({
-              source: link.sourceId,
-              target: link.targetId,
-              anchor: flowConfig.jsPlumbConfig.anchor.default,
-              connector: [
-                link.cls.linkType,
-                {
-                  gap: 5,
-                  cornerRadius: 8,
-                  alwaysRespectStubs: true
-                }
-              ],
-              paintStyle: {
-                stroke: link.cls.linkColor,
-                strokeWidth: link.cls.linkThickness
-              }
-            })
-            let link_id = conn.canvas.id
-            let labelHandle = e => {
-              let event = window.event || e
-              event.stopPropagation()
-              this.currentSelect = this.flowData.linkList.filter(l => l.id === link_id)[0]
-            }
-            if (link.label !== '') {
-              conn.setLabel({
-                label: link.label,
-                cssClass: `linkLabel ${link_id}`
-              })
-
-              // 添加label点击事件
-              document.querySelector('.' + link_id).addEventListener('click', labelHandle)
-            } else {
-              // 移除label点击事件
-              document.querySelector('.' + link_id).removeEventListener('click', labelHandle)
-            }
-          })
         })
         this.flowData.status = flowConfig.flowStatus.CREATE
         this.selectContainer()
