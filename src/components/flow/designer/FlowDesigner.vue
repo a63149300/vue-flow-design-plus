@@ -578,8 +578,10 @@
                   // 添加label点击事件
                   document.querySelector('.' + link_id).addEventListener('click', labelHandle)
                 } else {
-                  // 移除label点击事件
-                  document.querySelector('.' + link_id).removeEventListener('click', labelHandle)
+                  if (document.querySelector('.' + link_id)) {
+                    // 移除label点击事件
+                    document.querySelector('.' + link_id).removeEventListener('click', labelHandle)
+                  }
                 }
               })
               this.currentSelect = {}
