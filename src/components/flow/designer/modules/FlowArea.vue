@@ -13,7 +13,7 @@
     <div id="flowContainer"
          class="flow-container"
          :class="{ grid: flowData.config.showGrid, zoomIn: currentTool.type === 'zoom-in', zoomOut: currentTool.type === 'zoom-out', canScale: container.scaleFlag, canDrag: container.dragFlag, canMultiple: rectangleMultiple.flag }"
-         :style="{ top: container.pos.top + 'px', left: container.pos.left + 'px', transform: 'scale(' + container.scale + ')', transformOrigin: container.scaleOrigin.x + 'px ' + container.scaleOrigin.y + 'px' }"
+         :style="gridStyle"
          @click.stop="containerHandler"
          @mousedown="mousedownHandler"
          @mousemove="mousemoveHandler"
@@ -85,8 +85,8 @@
         currentSelectGroup: this.selectGroup,
         container: {
           pos: {
-            top: -3000,
-            left: -3000
+            top: -2500,
+            left: -2500
           },
           dragFlag: false,
           draging: false,
@@ -132,7 +132,17 @@
         // 当前聚焦的连接线ID
         tempLinkId: '',
         // 剪切板内容
-        clipboard: []
+        clipboard: [],
+      }
+    },
+    computed: {
+      gridStyle () {
+        return ({
+          top: `${this.container.pos.top}px`,
+          left: `${this.container.pos.left}px`,
+          transform: `scale(${this.container.scale})`,
+          transformOrigin: `${this.container.scaleOrigin.x}px ${this.container.scaleOrigin.y}px`
+        })
       }
     },
     methods: {

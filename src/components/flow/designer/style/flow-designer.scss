@@ -19,7 +19,10 @@ $primary-color: #409EFF;
   height: 36px;
   line-height: 36px;
   border-bottom: 2px solid #e4e7ed;
-  text-align: right;
+  padding: 0 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .header-option-button {
