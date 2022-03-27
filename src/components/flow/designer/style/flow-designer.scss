@@ -1,13 +1,20 @@
 $primary-color: #409EFF;
 
 .container {
-  border: 2px solid #e4e7ed;
   height: 100%;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+
+  .ant-list-item {
+    margin-bottom: 8px!important;
+  }
+
+  .ant-list {
+    padding-left: 6px;
+  }
 }
 
 .select-area {
@@ -74,27 +81,18 @@ $primary-color: #409EFF;
 .node-item {
   background: #f4f6fc;
   height: 32px;
+  width: 32px;
   line-height: 32px;
-  margin: 5px;
-  padding-left: 8px;
   text-align: left;
   cursor: move;
-  min-width: 120px;
   display: flex;
   align-items: center;
+  justify-content: center;
 
   &:hover {
     color: $primary-color;
     outline: 1px dashed $primary-color;
   }
-
-  i {
-    margin-right: 5px;
-  }
-}
-
-.ant-list-grid .ant-list-item {
-  margin-bottom: 8px;
 }
 
 .linkLabel {

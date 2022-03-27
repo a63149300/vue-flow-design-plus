@@ -2,30 +2,28 @@
   <div style="height: 100%;">
     <a-layout class="container">
       <a-layout-sider
-        width="300"
+        width="84"
         theme="light"
         class="select-area">
         <a-row>
           <a-checkable-tag v-model="tag.toolShow"
                            class="tag">工具
           </a-checkable-tag>
-          <div style="text-align: center">
-            <a-list
-              :grid="{ gutter: 8, column: 1 }"
-              v-show="tag.toolShow">
-              <a-list-item>
-                <a-button-group>
-                  <a-button
-                    v-for="tool in field.tools"
-                    :key="tool.type"
-                    :icon="tool.icon"
-                    :type="currentTool.type === tool.type ? 'primary': 'default'"
-                    @click="selectTool(tool.type)">
-                  </a-button>
-                </a-button-group>
-              </a-list-item>
-            </a-list>
-          </div>
+          <a-list
+            :grid="{ gutter: 8, column: 2 }"
+            v-show="tag.toolShow">
+            <a-list-item v-for="tool in field.tools"
+                         :key="tool.type">
+              <a-tooltip :title="tool.name"
+                         placement="top">
+                <a-button
+                  :icon="tool.icon"
+                  :type="currentTool.type === tool.type ? 'primary': 'default'"
+                  @click="selectTool(tool.type)">
+                </a-button>
+              </a-tooltip>
+            </a-list-item>
+          </a-list>
         </a-row>
         <a-row>
           <a-checkable-tag v-model="tag.commonNodeShow"
@@ -37,13 +35,14 @@
             v-show="tag.commonNodeShow">
             <a-list-item v-for="commonNode in field.commonNodes"
                          :key="commonNode.type">
-              <div class="node-item"
-                   draggable="true"
-                   @dragstart="dragNode(commonNode.type, 'commonNodes')"
-              >
-                <a-icon :type="commonNode.icon" />
-                {{ commonNode.nodeName }}
-              </div>
+              <a-tooltip :title="commonNode.nodeName"
+                         placement="top">
+                <div class="node-item"
+                     draggable="true"
+                     @dragstart="dragNode(commonNode.type, 'commonNodes')">
+                  <a-icon :type="commonNode.icon" />
+                </div>
+              </a-tooltip>
             </a-list-item>
           </a-list>
 
@@ -57,13 +56,14 @@
             v-show="tag.highNodeShow">
             <a-list-item v-for="highNode in field.highNodes"
                          :key="highNode.type">
-              <div class="node-item"
-                   draggable="true"
-                   @dragstart="dragNode(highNode.type, 'highNodes')"
-              >
-                <a-icon :type="highNode.icon" />
-                <span>{{ highNode.nodeName }}</span>
-              </div>
+              <a-tooltip :title="highNode.nodeName"
+                         placement="top">
+                <div class="node-item"
+                     draggable="true"
+                     @dragstart="dragNode(highNode.type, 'highNodes')">
+                  <a-icon :type="highNode.icon" />
+                </div>
+              </a-tooltip>
             </a-list-item>
           </a-list>
         </a-row>
@@ -76,13 +76,14 @@
             v-show="tag.laneNodeShow">
             <a-list-item v-for="laneNode in field.laneNodes"
                          :key="laneNode.type">
-              <div class="node-item"
-                   draggable="true"
-                   @dragstart="dragNode(laneNode.type, 'laneNodes')"
-              >
-                <a-icon :type="laneNode.icon" />
-                <span>{{ laneNode.nodeName }}</span>
-              </div>
+              <a-tooltip :title="laneNode.nodeName"
+                         placement="top">
+                <div class="node-item"
+                     draggable="true"
+                     @dragstart="dragNode(laneNode.type, 'laneNodes')">
+                  <a-icon :type="laneNode.icon" />
+                </div>
+              </a-tooltip>
             </a-list-item>
           </a-list>
         </a-row>
@@ -189,7 +190,7 @@
         </a-layout-footer>
       </a-layout>
       <a-layout-sider
-        width="350"
+        width="300"
         theme="light"
         class="attr-area"
         @mousedown.stop="loseShortcut">
