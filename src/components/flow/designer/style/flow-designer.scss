@@ -1,4 +1,4 @@
-$primary-color: #409EFF;
+$primary-color: #0960bd;
 
 .container {
   height: 100%;
@@ -18,17 +18,20 @@ $primary-color: #409EFF;
 }
 
 .select-area {
-  background-color: #222;
+  background-color: #001529;
   position: relative;
   z-index: 10000;
   box-shadow: 3px 0 10px #999;
   .tab {
-    background-color: $primary-color;
+    background-color: #002752;
+    border-top: 1px dashed $primary-color;
+    border-bottom: 1px dashed $primary-color;
+    border-left: 2px solid $primary-color;
     text-align: center;
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 12px;
     height: 26px;
-    line-height: 26px;
+    line-height: 22px;
     color: #fff;
   }
   .ant-row {
@@ -78,28 +81,10 @@ $primary-color: #409EFF;
   margin: 6px;
 }
 
-.tool-item {
-  background: #f4f6fc;
-  height: 32px;
-  line-height: 32px;
-  margin: 5px;
-  padding-left: 8px;
-  text-align: center;
-  cursor: pointer;
-
-  &:hover {
-    background: #d2d3d6;
-  }
-
-  &.active {
-    background: black;
-  }
-}
-
 .node-item {
-  background: #fff;
   height: 32px;
   width: 32px;
+  color: #fff;
   border-radius: 5px;
   line-height: 32px;
   text-align: left;
