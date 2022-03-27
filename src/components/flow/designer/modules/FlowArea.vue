@@ -85,8 +85,8 @@
         currentSelectGroup: this.selectGroup,
         container: {
           pos: {
-            top: -2500,
-            left: -2500
+            top: -4000,
+            left: -4000
           },
           dragFlag: false,
           draging: false,

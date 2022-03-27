@@ -12,18 +12,14 @@ $active-color: #409EFF;
 }
 
 .flow-container {
-    width: 1000%;
-    height: 1000%;
+    width: 10000px;
+    height: 10000px;
     position: relative;
     transition: transform 0.5s ease 0s,transform-origin 0.5s ease 0s;
 
     &.grid {
-        background-image: -webkit-linear-gradient(90deg, rgba(235, 235, 235, 1) 5%, rgba(0, 0, 0, 0) 5%);
-        background-image: -moz-linear-gradient(90deg, rgba(235, 235, 235, 1) 5%, rgba(0, 0, 0, 0) 5%);
-        background-image: -o-linear-gradient(90deg, rgba(235, 235, 235, 1) 5%, rgba(0, 0, 0, 0) 5%);
-        background-image: -webkit-gradient(linear, 0 100%, 0 0, color-stop(0.05, rgba(235, 235, 235, 1)), color-stop(0.05, rgba(0, 0, 0, 0)));
-        background-image: linear-gradient(90deg, rgba(235, 235, 235, 1) 5%, rgba(0, 0, 0, 0) 5%),linear-gradient(rgba(235, 235, 235, 1) 5%, rgba(0, 0, 0, 0) 5%);
-        background-size: 1rem 1rem;
+      background: url("~@/assets/images/grid-bg.jpg") repeat left top;
+      background-size: 60px 60px;
     }
 
     &.zoomIn {
@@ -33,13 +29,13 @@ $active-color: #409EFF;
         cursor: zoom-out;
     }
     &.canScale {
-        cursor: url(../assets/search.png), default;
+        cursor: url(~@/assets/images/search.png), default;
     }
     &.canDrag {
         cursor: grab;
     }
     &.canMultiple {
-        cursor: url(../assets/multip-pointer.png), default;
+        cursor: url(~@/assets/images/multip-pointer.png), default;
     }
 }
 

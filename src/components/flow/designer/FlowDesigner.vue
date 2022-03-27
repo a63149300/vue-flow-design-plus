@@ -2,41 +2,18 @@
   <div style="height: 100%;">
     <a-layout class="container">
       <a-layout-sider
-        width="84"
+        width="44"
         theme="light"
         class="select-area">
         <a-row>
-          <a-checkable-tag v-model="tag.toolShow"
-                           class="tag">工具
-          </a-checkable-tag>
-          <a-list
-            :grid="{ gutter: 8, column: 2 }"
-            v-show="tag.toolShow">
-            <a-list-item v-for="tool in field.tools"
-                         :key="tool.type">
-              <a-tooltip :title="tool.name"
-                         placement="top">
-                <a-button
-                  :icon="tool.icon"
-                  :type="currentTool.type === tool.type ? 'primary': 'default'"
-                  @click="selectTool(tool.type)">
-                </a-button>
-              </a-tooltip>
-            </a-list-item>
-          </a-list>
-        </a-row>
-        <a-row>
-          <a-checkable-tag v-model="tag.commonNodeShow"
-                           class="tag">基础节点
-          </a-checkable-tag>
+          <div class="tab">基础</div>
 
           <a-list
-            :grid="{ gutter: 8, column: 2 }"
-            v-show="tag.commonNodeShow">
+            :grid="{ gutter: 0, column: 1 }">
             <a-list-item v-for="commonNode in field.commonNodes"
                          :key="commonNode.type">
               <a-tooltip :title="commonNode.nodeName"
-                         placement="top">
+                         placement="right">
                 <div class="node-item"
                      draggable="true"
                      @dragstart="dragNode(commonNode.type, 'commonNodes')">
@@ -48,16 +25,13 @@
 
         </a-row>
         <a-row>
-          <a-checkable-tag v-model="tag.highNodeShow"
-                           class="tag">高级节点
-          </a-checkable-tag>
+          <div class="tab">高级</div>
           <a-list
-            :grid="{ gutter: 8, column: 2 }"
-            v-show="tag.highNodeShow">
+            :grid="{ gutter: 0, column: 1 }">
             <a-list-item v-for="highNode in field.highNodes"
                          :key="highNode.type">
               <a-tooltip :title="highNode.nodeName"
-                         placement="top">
+                         placement="right">
                 <div class="node-item"
                      draggable="true"
                      @dragstart="dragNode(highNode.type, 'highNodes')">
@@ -68,16 +42,13 @@
           </a-list>
         </a-row>
         <a-row>
-          <a-checkable-tag v-model="tag.laneNodeShow"
-                           class="tag">泳道节点
-          </a-checkable-tag>
+          <div class="tab">泳道</div>
           <a-list
-            :grid="{ gutter: 8, column: 2 }"
-            v-show="tag.laneNodeShow">
+            :grid="{ gutter: 0, column: 1 }">
             <a-list-item v-for="laneNode in field.laneNodes"
                          :key="laneNode.type">
               <a-tooltip :title="laneNode.nodeName"
-                         placement="top">
+                         placement="right">
                 <div class="node-item"
                      draggable="true"
                      @dragstart="dragNode(laneNode.type, 'laneNodes')">
@@ -90,80 +61,96 @@
       </a-layout-sider>
       <a-layout>
         <a-layout-header class="header-option">
-          <a-tooltip title="保存流程"
-                     placement="bottom">
-            <a-button @click="saveFlow"
-                      class="header-option-button"
-                      size="small"
-                      icon="save"></a-button>
-          </a-tooltip>
-          <a-tooltip title="生成流程图片"
-                     placement="bottom">
-            <a-button @click="exportFlowPicture"
-                      class="header-option-button"
-                      size="small"
-                      icon="picture"></a-button>
-          </a-tooltip>
-          <a-popconfirm title="确认要重新绘制吗？"
-                        placement="bottom"
-                        okText="确认"
-                        cancelText="取消"
-                        @confirm="clear">
-            <a-tooltip title="重新绘制"
+          <div class="header-option__tools">
+            <span v-for="tool in field.tools"
+                         :key="tool.type">
+              <a-tooltip :title="tool.name"
+                         placement="right">
+                <a-button
+                  :icon="tool.icon"
+                  size="small"
+                  :type="currentTool.type === tool.type ? 'primary': 'default'"
+                  @click="selectTool(tool.type)">
+                </a-button>
+              </a-tooltip>
+            </span>
+          </div>
+          <div class="header-option__buttons">
+            <a-tooltip title="保存流程"
                        placement="bottom">
-              <a-button class="header-option-button"
+              <a-button @click="saveFlow"
+                        class="header-option-button"
                         size="small"
-                        icon="delete"></a-button>
+                        icon="save"></a-button>
             </a-tooltip>
-          </a-popconfirm>
-          <a-tooltip :title="flowData.config.showGridText"
-                     placement="bottom">
-            <a-button
-              @click="toggleShowGrid"
-              class="header-option-button"
-              size="small"
-              :icon="flowData.config.showGridIcon">
-            </a-button>
-          </a-tooltip>
-          <a-tooltip title="设置"
-                     placement="bottom">
-            <a-button @click="setting"
-                      class="header-option-button"
-                      size="small"
-                      icon="setting"></a-button>
-          </a-tooltip>
-          <a-tooltip title="测试"
-                     placement="bottom">
-            <a-button @click="openTest"
-                      class="header-option-button"
-                      size="small"
-                      icon="tool"></a-button>
-          </a-tooltip>
-          <a-popconfirm
-            title="请选择帮助项："
-            placement="bottom"
-            okType="default"
-            okText="快捷键大全"
-            cancelText="使用文档"
-            @confirm="shortcutHelper"
-            @cancel="usingDoc">
-            <a-icon slot="icon"
-                    type="question-circle-o"
-                    style="color: red"/>
-            <a-tooltip title="帮助"
+            <a-tooltip title="生成流程图片"
                        placement="bottom">
-              <a-button class="header-option-button"
+              <a-button @click="exportFlowPicture"
+                        class="header-option-button"
                         size="small"
-                        icon="book"></a-button>
+                        icon="picture"></a-button>
             </a-tooltip>
-          </a-popconfirm>
-          <a-tooltip title="退出"
-                     placement="bottom">
-            <a-button @click="exit"
-                      class="header-option-button"
-                      size="small"
-                      icon="logout"></a-button>
-          </a-tooltip>
+            <a-popconfirm title="确认要重新绘制吗？"
+                          placement="bottom"
+                          okText="确认"
+                          cancelText="取消"
+                          @confirm="clear">
+              <a-tooltip title="重新绘制"
+                         placement="bottom">
+                <a-button class="header-option-button"
+                          size="small"
+                          icon="delete"></a-button>
+              </a-tooltip>
+            </a-popconfirm>
+            <a-tooltip :title="flowData.config.showGridText"
+                       placement="bottom">
+              <a-button
+                @click="toggleShowGrid"
+                class="header-option-button"
+                size="small"
+                :icon="flowData.config.showGridIcon">
+              </a-button>
+            </a-tooltip>
+            <a-tooltip title="设置"
+                       placement="bottom">
+              <a-button @click="setting"
+                        class="header-option-button"
+                        size="small"
+                        icon="setting"></a-button>
+            </a-tooltip>
+            <a-tooltip title="测试"
+                       placement="bottom">
+              <a-button @click="openTest"
+                        class="header-option-button"
+                        size="small"
+                        icon="tool"></a-button>
+            </a-tooltip>
+            <a-popconfirm
+              title="请选择帮助项："
+              placement="bottom"
+              okType="default"
+              okText="快捷键大全"
+              cancelText="使用文档"
+              @confirm="shortcutHelper"
+              @cancel="usingDoc">
+              <a-icon slot="icon"
+                      type="question-circle-o"
+                      style="color: red"/>
+              <a-tooltip title="帮助"
+                         placement="bottom">
+                <a-button class="header-option-button"
+                          size="small"
+                          icon="book"></a-button>
+              </a-tooltip>
+            </a-popconfirm>
+            <a-tooltip title="退出"
+                       placement="bottom">
+              <a-button @click="exit"
+                        class="header-option-button"
+                        size="small"
+                        icon="logout"></a-button>
+            </a-tooltip>
+          </div>
         </a-layout-header>
         <a-layout-content class="content">
           <flow-area
@@ -190,7 +177,7 @@
         </a-layout-footer>
       </a-layout>
       <a-layout-sider
-        width="300"
+        width="250"
         theme="light"
         class="attr-area"
         @mousedown.stop="loseShortcut">
@@ -285,12 +272,6 @@
           version: '1.0.0',
           author: '前端爱码士',
           gitee: 'https://gitee.com/zhangyeping/vue-flow-design-plus'
-        },
-        tag: {
-          toolShow: true,
-          commonNodeShow: true,
-          highNodeShow: true,
-          laneNodeShow: true
         },
         browserType: 3,
         plumb: {},

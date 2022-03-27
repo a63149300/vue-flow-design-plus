@@ -18,18 +18,40 @@ $primary-color: #409EFF;
 }
 
 .select-area {
-  border-right: 1px solid #e4e7ed;
+  background-color: #222;
+  position: relative;
+  z-index: 10000;
+  box-shadow: 3px 0 10px #999;
+  .tab {
+    background-color: $primary-color;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    height: 26px;
+    line-height: 26px;
+    color: #fff;
+  }
+  .ant-row {
+    padding-bottom: 10px;
+  }
 }
 
 .header-option {
-  background: white;
+  background: #fff;
   height: 36px;
   line-height: 36px;
-  border-bottom: 2px solid #e4e7ed;
   padding: 0 10px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  box-shadow: 0 3px 5px #ddd;
+  position: relative;
+  z-index: 1000;
+  &__tools {
+    span {
+      margin-right: 6px;
+    }
+  }
 }
 
 .header-option-button {
@@ -40,7 +62,7 @@ $primary-color: #409EFF;
 .content {
   background: #fafafa;
   height: 100%;
-  border: 2px dashed rgba(170, 170, 170, 0.7);
+  border: 1px dashed rgba(170, 170, 170, 0.7);
 }
 
 .ant-layout-footer {
@@ -50,10 +72,6 @@ $primary-color: #409EFF;
 .foot {
   height: auto;
   text-align: center;
-}
-
-.attr-area {
-  border-left: 1px solid #e4e7ed;
 }
 
 .tag {
@@ -79,9 +97,10 @@ $primary-color: #409EFF;
 }
 
 .node-item {
-  background: #f4f6fc;
+  background: #fff;
   height: 32px;
   width: 32px;
+  border-radius: 5px;
   line-height: 32px;
   text-align: left;
   cursor: move;
