@@ -3,6 +3,7 @@
     <a-drawer
       title="设置"
       placement="left"
+      :zIndex="10001"
       :width="600"
       :visible="settingVisible"
       @close="close">
@@ -189,7 +190,7 @@
 
 <style>
   .m-colorPicker .box {
-    z-index: 9999 !important;
+    z-index: 10002 !important;
     width: 220px !important;
   }
 
