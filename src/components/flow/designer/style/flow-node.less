@@ -1,6 +1,6 @@
-$common-node-bg: #f4f6fc;
-$common-node-bg-hover: #f4f6fcb0;
-$common-node-active: #409EFF;
+@common-node-bg: #f4f6fc;
+@common-node-bg-hover: #f4f6fcb0;
+@common-node-active: #409EFF;
 
 .common-circle-node {
   position: absolute;
@@ -10,16 +10,16 @@ $common-node-active: #409EFF;
   text-align: center;
   border: 1px solid #777;
   border-radius: 50%;
-  background-color: $common-node-bg;
+  background-color: @common-node-bg;
   white-space: nowrap;
 
   &:hover {
-    background-color: $common-node-bg-hover;
+    background-color: @common-node-bg-hover;
     z-index: 2;
   }
 
   &.active {
-    outline: 2px dashed $common-node-active;
+    outline: 2px dashed @common-node-active;
     outline-offset: 0px;
   }
 
@@ -42,16 +42,16 @@ $common-node-active: #409EFF;
   text-align: center;
   border: 1px solid #777;
   border-radius: 5px;
-  background-color: $common-node-bg;
+  background-color: @common-node-bg;
   white-space: nowrap;
 
   &:hover {
-    background-color: $common-node-bg-hover;
+    background-color: @common-node-bg-hover;
     z-index: 2;
   }
 
   &.active {
-    outline: 2px dashed $common-node-active;
+    outline: 2px dashed @common-node-active;
     outline-offset: 0px;
   }
 }
@@ -64,7 +64,7 @@ $common-node-active: #409EFF;
   text-align: center;
   border: 1px solid #777;
   border-radius: 3px;
-  background-color: $common-node-bg;
+  background-color: @common-node-bg;
   transform: rotate(45deg);
   white-space: nowrap;
 
@@ -79,12 +79,12 @@ $common-node-active: #409EFF;
   }
 
   &:hover {
-    background-color: $common-node-bg-hover;
+    background-color: @common-node-bg-hover;
     z-index: 2;
   }
 
   &.active {
-    outline: 2px dashed $common-node-active;
+    outline: 2px dashed @common-node-active;
     outline-offset: 0px;
   }
 }
@@ -97,7 +97,7 @@ $common-node-active: #409EFF;
   z-index: -1;
 
   &.active {
-    outline: 2px dashed $common-node-active;
+    outline: 2px dashed @common-node-active;
     outline-offset: 0px;
   }
 
@@ -107,7 +107,7 @@ $common-node-active: #409EFF;
     position: absolute;
     display: table;
     border-right: 1px solid #777;
-    background-color: $common-node-bg;
+    background-color: @common-node-bg;
 
     &:hover {
       z-index: 2;
@@ -130,7 +130,7 @@ $common-node-active: #409EFF;
   z-index: -1;
 
   &.active {
-    outline: 2px dashed $common-node-active;
+    outline: 2px dashed @common-node-active;
     outline-offset: 0px;
   }
 
@@ -140,7 +140,7 @@ $common-node-active: #409EFF;
     position: absolute;
     display: table;
     border-bottom: 1px solid #777;
-    background-color: $common-node-bg;
+    background-color: @common-node-bg;
 
     &:hover {
       z-index: 2;

@@ -694,6 +694,6 @@
   }
 </script>
 
-<style lang="scss">
-  @import '../style/flow-area.scss';
+<style lang="less">
+  @import '../style/flow-area.less';
 </style>

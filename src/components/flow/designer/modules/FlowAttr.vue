@@ -301,6 +301,6 @@
   }
 </script>
 
-<style lang="scss">
-  @import '../style/flow-attr.scss';
+<style lang="less">
+  @import '../style/flow-attr.less';
 </style>

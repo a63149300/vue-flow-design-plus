@@ -235,6 +235,6 @@
   }
 </script>
 
-<style lang="scss">
-  @import '../style/flow-node.scss';
+<style lang="less">
+  @import '../style/flow-node.less';
 </style>

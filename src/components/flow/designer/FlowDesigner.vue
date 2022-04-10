@@ -895,8 +895,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "./style/flow-designer.scss";
+<style lang="less">
+@import "./style/flow-designer.less";
 
 .node-img {
   width: 14px;

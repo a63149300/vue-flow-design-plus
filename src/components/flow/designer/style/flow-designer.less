@@ -1,4 +1,4 @@
-$primary-color: #0960bd;
+@primary-color: #0960bd;
 
 .container {
   height: 100%;
@@ -24,9 +24,9 @@ $primary-color: #0960bd;
   box-shadow: 3px 0 10px #999;
   .tab {
     background-color: #002752;
-    border-top: 1px dashed $primary-color;
-    border-bottom: 1px dashed $primary-color;
-    border-left: 2px solid $primary-color;
+    border-top: 1px dashed @primary-color;
+    border-bottom: 1px dashed @primary-color;
+    border-left: 2px solid @primary-color;
     text-align: center;
     margin-bottom: 10px;
     font-size: 12px;
@@ -94,8 +94,8 @@ $primary-color: #0960bd;
   justify-content: center;
 
   &:hover {
-    color: $primary-color;
-    outline: 1px dashed $primary-color;
+    color: @primary-color;
+    outline: 1px dashed @primary-color;
   }
 }
 
