@@ -195,18 +195,6 @@ import {
   laneNodes
 } from "./config/basic-node-config.js";
 import { flowConfig } from "./config/args-config.js";
-import {
-  startSvg,
-  endSvg,
-  commonSvg,
-  freedomSvg,
-  gatewaySvg,
-  eventSvg,
-  childFlowSvg,
-  xLaneSvg,
-  yLaneSvg,
-  lanePoolSvg
-} from "./config/basic-icon-config.js";
 import html2canvas from "html2canvas";
 import canvg from "canvg";
 import { AMS } from "./util/AMS.js";
@@ -229,16 +217,6 @@ export default {
     SettingModal,
     ShortcutModal,
     TestModal,
-    StartIcon: { template: startSvg },
-    EndIcon: { template: endSvg },
-    CommonIcon: { template: commonSvg },
-    FreedomIcon: { template: freedomSvg },
-    GatewayIcon: { template: gatewaySvg },
-    EventIcon: { template: eventSvg },
-    ChildFlowIcon: { template: childFlowSvg },
-    XLaneIcon: { template: xLaneSvg },
-    YLaneIcon: { template: yLaneSvg },
-    LanePoolIcon: { template: lanePoolSvg },
     NodeList
   },
   mounted() {
