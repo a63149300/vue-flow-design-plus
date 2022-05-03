@@ -166,6 +166,7 @@
         ></flow-attr>
       </a-layout-sider>
     </a-layout>
+    <!-- 生成流程图片 -->
     <a-modal
       :title="'流程设计图_' + flowData.attr.id + '.png'"
       centered
@@ -180,8 +181,11 @@
     >
       <img :src="flowPicture.url" style="width: 100%" />
     </a-modal>
+    <!-- 设置 -->
     <setting-modal ref="settingModal"></setting-modal>
+    <!-- 快捷键大全 -->
     <shortcut-modal ref="shortcutModal"></shortcut-modal>
+    <!-- 测试 -->
     <test-modal ref="testModal" @loadFlow="loadFlow"></test-modal>
   </div>
 </template>
@@ -197,13 +201,14 @@ import {
 import { flowConfig } from "./config/args-config.js";
 import html2canvas from "html2canvas";
 import canvg from "canvg";
-import { AMS } from "./util/AMS.js";
+import { AMS } from "./utils/AMS.js";
 import FlowArea from "./modules/FlowArea";
 import FlowAttr from "./modules/FlowAttr";
 import SettingModal from "./modules/SettingModal";
 import ShortcutModal from "./modules/ShortcutModal";
 import TestModal from "./modules/TestModal";
 import NodeList from "./modules/NodeList";
+import { getBrowserType } from './utils/common'
 
 export default {
   name: "vfdp",
@@ -286,39 +291,9 @@ export default {
     setDragInfo(info) {
       this.dragInfo = info;
     },
-    // 获取浏览器类型
-    getBrowserType() {
-      let userAgent = navigator.userAgent;
-      let isOpera = userAgent.indexOf("Opera") > -1;
-      if (isOpera) {
-        return 1;
-      }
-
-      if (userAgent.indexOf("Firefox") > -1) {
-        return 2;
-      }
-      if (userAgent.indexOf("Chrome") > -1) {
-        return 3;
-      }
-      if (userAgent.indexOf("Safari") > -1) {
-        return 4;
-      }
-      if (
-        userAgent.indexOf("compatible") > -1 &&
-        userAgent.indexOf("MSIE") > -1 &&
-        !isOpera
-      ) {
-        alert("IE浏览器支持性较差，推荐使用Firefox或Chrome");
-        return 5;
-      }
-      if (userAgent.indexOf("Trident") > -1) {
-        alert("Edge浏览器支持性较差，推荐使用Firefox或Chrome");
-        return 6;
-      }
-    },
     // 浏览器兼容性
     dealCompatibility() {
-      this.browserType = this.getBrowserType();
+      this.browserType = getBrowserType();
       if (this.browserType === 2) {
         flowConfig.shortcut.scaleContainer = {
           code: 16,

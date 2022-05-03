@@ -70,7 +70,7 @@
 
 <script>
   import { flowConfig } from '../config/args-config.js'
-  import { AMS } from '../util/AMS.js'
+  import { AMS } from '../utils/AMS.js'
   import FlowNode from './FlowNode'
 
   export default {
