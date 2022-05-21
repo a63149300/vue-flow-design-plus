@@ -70,7 +70,7 @@
 
 <script>
   import { flowConfig } from '../config/args-config.js'
-  import { AMS } from '../utils/AMS.js'
+  import { utils } from '../utils/common.js'
   import FlowNode from './FlowNode'
 
   export default {
@@ -95,7 +95,7 @@
           scaleOrigin: {
             x: 0, y: 0
           },
-          scaleShow: AMS.mul(flowConfig.defaultStyle.containerScale.init, 100),
+          scaleShow: utils.mul(flowConfig.defaultStyle.containerScale.init, 100),
           // 辅助线
           auxiliaryLine: {
             isOpen: flowConfig.defaultStyle.isOpenAuxiliaryLine,
@@ -283,10 +283,10 @@
       enlargeContainer () {
         this.container.scaleOrigin.x = this.mouse.position.x
         this.container.scaleOrigin.y = this.mouse.position.y
-        let newScale = AMS.add(this.container.scale, flowConfig.defaultStyle.containerScale.onceEnlarge)
+        let newScale = utils.add(this.container.scale, flowConfig.defaultStyle.containerScale.onceEnlarge)
         if (newScale <= flowConfig.defaultStyle.containerScale.max) {
           this.container.scale = newScale
-          this.container.scaleShow = AMS.mul(this.container.scale, 100)
+          this.container.scaleShow = utils.mul(this.container.scale, 100)
           this.plumb.setZoom(this.container.scale)
         }
       },
@@ -294,10 +294,10 @@
       narrowContainer () {
         this.container.scaleOrigin.x = this.mouse.position.x
         this.container.scaleOrigin.y = this.mouse.position.y
-        let newScale = AMS.sub(this.container.scale, flowConfig.defaultStyle.containerScale.onceNarrow)
+        let newScale = utils.sub(this.container.scale, flowConfig.defaultStyle.containerScale.onceNarrow)
         if (newScale >= flowConfig.defaultStyle.containerScale.min) {
           this.container.scale = newScale
-          this.container.scaleShow = AMS.mul(this.container.scale, 100)
+          this.container.scaleShow = utils.mul(this.container.scale, 100)
           this.plumb.setZoom(this.container.scale)
         }
       },
@@ -335,7 +335,7 @@
         let dis = 0
         this.clipboard.forEach(node => {
           let newNode = Object.assign({}, node)
-          newNode.id = newNode.type + '-' + AMS.getId()
+          newNode.id = newNode.type + '-' + utils.getId()
           let nodePos = this.computeNodePos(this.mouse.position.x + dis, this.mouse.position.y + dis)
           newNode.x = nodePos.x
           newNode.y = nodePos.y
@@ -393,7 +393,7 @@
         let firstX = baseX
         for (let i = 1; i < selectGroup.length; i++) {
           baseY = baseY + selectGroup[i - 1].height + flowConfig.defaultStyle.alignSpacing.vertical
-          baseX = firstX + AMS.div(selectGroup[0].width, 2) - AMS.div(selectGroup[i].width, 2)
+          baseX = firstX + utils.div(selectGroup[0].width, 2) - utils.div(selectGroup[i].width, 2)
           let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
           f.ty = baseY
@@ -459,7 +459,7 @@
         let baseY = selectGroup[0].y
         let firstY = baseY
         for (let i = 1; i < selectGroup.length; i++) {
-          baseY = firstY + AMS.div(selectGroup[0].height, 2) - AMS.div(selectGroup[i].height, 2)
+          baseY = firstY + utils.div(selectGroup[0].height, 2) - utils.div(selectGroup[i].height, 2)
           baseX = baseX + selectGroup[i - 1].width + flowConfig.defaultStyle.alignSpacing.level
           let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
           f.tx = baseX
@@ -552,7 +552,7 @@
         y = nodePos.y
 
         let newNode = Object.assign({}, node)
-        newNode.id = newNode.type + '-' + AMS.getId()
+        newNode.id = newNode.type + '-' + utils.getId()
         newNode.height = 50
         if (newNode.type === 'start' || newNode.type === 'end' ||
           newNode.type === 'event' || newNode.type === 'gateway') {

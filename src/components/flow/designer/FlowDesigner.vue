@@ -201,7 +201,7 @@ import {
 import { flowConfig } from "./config/args-config.js";
 import html2canvas from "html2canvas";
 import canvg from "canvg";
-import { AMS } from "./utils/AMS.js";
+import { utils } from "./utils/common.js";
 import FlowArea from "./modules/FlowArea";
 import FlowAttr from "./modules/FlowAttr";
 import SettingModal from "./modules/SettingModal";
@@ -330,7 +330,7 @@ export default {
           this.flowData.status === flowConfig.flowStatus.CREATE ||
           this.flowData.status === flowConfig.flowStatus.MODIFY
         ) {
-          id = "link-" + AMS.getId();
+          id = "link-" + utils.getId();
           label = "";
         } else if (this.flowData.status === flowConfig.flowStatus.LOADING) {
           let l = this.flowData.linkList[this.flowData.linkList.length - 1];
@@ -457,7 +457,7 @@ export default {
     // 初始化流程图
     initFlow() {
       if (this.flowData.status === flowConfig.flowStatus.CREATE) {
-        this.flowData.attr.id = "flow-" + AMS.getId();
+        this.flowData.attr.id = "flow-" + utils.getId();
       } else {
         this.loadFlow();
       }
@@ -646,7 +646,7 @@ export default {
 
       svgElems.forEach(svgElem => {
         let linkCanvas = document.createElement("canvas");
-        let canvasId = "linkCanvas-" + AMS.getId();
+        let canvasId = "linkCanvas-" + utils.getId();
         linkCanvas.id = canvasId;
         removeArr.push(canvasId);
 
@@ -663,7 +663,7 @@ export default {
       let canvasSize = this.computeCanvasSize();
 
       let pbd = flowConfig.defaultStyle.photoBlankDistance;
-      let offsetPbd = AMS.div(pbd, 2);
+      let offsetPbd = utils.div(pbd, 2);
 
       html2canvas($Container, {
         width: canvasSize.width + pbd,
@@ -686,7 +686,7 @@ export default {
     // 下载图片
     downLoadFlowPicture() {
       let alink = document.createElement("a");
-      let alinkId = "alink-" + AMS.getId();
+      let alinkId = "alink-" + utils.getId();
       alink.id = alinkId;
       alink.href = this.flowPicture.url;
       alink.download = "流程设计图_" + this.flowData.attr.id + ".png";
