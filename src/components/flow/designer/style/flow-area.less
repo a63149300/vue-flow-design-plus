@@ -21,13 +21,6 @@
       background: url("~@/assets/images/grid-bg.jpg") repeat left top;
       background-size: 60px 60px;
     }
-
-    &.zoomIn {
-        cursor: zoom-in;
-    }
-    &.zoomOut {
-        cursor: zoom-out;
-    }
     &.canScale {
         cursor: url(~@/assets/images/search.png), default;
     }
@@ -68,8 +61,13 @@
 
 .container-scale {
     position: absolute;
-    top: 0;
-    left: 5px;
+    top: 10px;
+    left: 10px;
+    > span {
+      display: inline-block;
+      width: 40px;
+      text-align: center;
+    }
 }
 
 .mouse-position {

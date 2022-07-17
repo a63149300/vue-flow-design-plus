@@ -55,7 +55,6 @@
          left: node.x + 'px',
          height: node.height + 'px',
          width: node.width + 'px',
-    		 cursor: currentTool.type === 'zoom-in' ? 'zoom-in' : (currentTool.type === 'zoom-out' ? 'zoom-out' : 'default')
        }">
     <div class="lane-text-div"
          :style="{cursor: setCursor(currentTool.type)}"
@@ -74,7 +73,6 @@
          left: node.x + 'px',
          height: node.height + 'px',
          width: node.width + 'px',
-    		 cursor: currentTool.type === 'zoom-in' ? 'zoom-in' : (currentTool.type === 'zoom-out' ? 'zoom-out' : 'default')
        }">
     <div class="lane-text-div"
          :style="{cursor: setCursor(currentTool.type)}"
@@ -127,10 +125,6 @@
             return 'move'
           case 'connection':
             return 'crosshair'
-          case 'zoom-in':
-            return 'zoom-in'
-          case 'zoom-out':
-            return 'zoom-out'
           default:
             return 'default'
         }

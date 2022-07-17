@@ -396,12 +396,6 @@ export default {
           case flowConfig.shortcut.connTool.code:
             this.selectTool("connection");
             break;
-          case flowConfig.shortcut.zoomInTool.code:
-            this.selectTool("zoom-in");
-            break;
-          case flowConfig.shortcut.zoomOutTool.code:
-            this.selectTool("zoom-out");
-            break;
           case flowConfig.shortcut.leftMove.code:
             this.moveNode("left");
             break;
@@ -564,12 +558,6 @@ export default {
           break;
         case "connection":
           this.changeToConnection();
-          break;
-        case "zoom-in":
-          this.changeToZoomIn();
-          break;
-        case "zoom-out":
-          this.changeToZoomOut();
           break;
       }
     },

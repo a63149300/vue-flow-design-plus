@@ -9,16 +9,6 @@ export const tools = [
 		icon: 'fork',
 		name: '连线'
 	},
-	{
-		type: 'zoom-in',
-		icon: 'zoom-in',
-		name: '放大'
-	},
-	{
-		type: 'zoom-out',
-		icon: 'zoom-out',
-		name: '缩小'
-	}
 ];
 
 export const commonNodes = [
