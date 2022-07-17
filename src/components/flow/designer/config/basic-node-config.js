@@ -28,11 +28,6 @@ export const commonNodes = [
 		icon: 'play-circle'
 	},
 	{
-		type: 'end',
-		nodeName: '结束',
-		icon: 'stop'
-	},
-	{
 		type: 'common',
 		nodeName: '人工节点',
 		icon: 'user'
@@ -51,7 +46,12 @@ export const commonNodes = [
 		type: 'event',
 		nodeName: '事件',
 		icon: 'select'
-	}
+	},
+  {
+		type: 'end',
+		nodeName: '结束',
+		icon: 'stop'
+	},
 ];
 
 export const highNodes = [
