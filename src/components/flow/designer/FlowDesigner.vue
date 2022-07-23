@@ -191,7 +191,7 @@
 </template>
 
 <script>
-import jsplumb from "jsplumb";
+import { jsPlumb } from "jsplumb";
 import {
   tools,
   commonNodes,
@@ -213,7 +213,6 @@ import { getBrowserType } from './utils/common'
 export default {
   name: "vfdp",
   components: {
-    jsplumb,
     flowConfig,
     html2canvas,
     canvg,
