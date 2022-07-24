@@ -86,15 +86,11 @@
 </template>
 
 <script>
-  import jsplumb from 'jsplumb'
   import { Resizable } from 'resizable-dom'
   import { flowConfig } from '../config/args-config.js'
 
   export default {
     props: ['select', 'selectGroup', 'node', 'plumb', 'currentTool'],
-    components: {
-      jsplumb
-    },
     mounted () {
       this.registerNode()
     },
