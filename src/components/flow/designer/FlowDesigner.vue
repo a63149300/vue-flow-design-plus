@@ -151,6 +151,12 @@
         </a-layout-content>
         <a-layout-footer class="foot">
           <span>VFDP {{ info.version }}, Powered by {{ info.author }}</span>
+          <span style="margin-left: 10px;">
+            <a-badge dot>
+              <a-icon type="notification" />
+            </a-badge>
+            <a href="https://gitee.com/zhangyeping/vue3-flow-design" target="_blank">Vue3版本开源，尝鲜体验</a>
+          </span>
         </a-layout-footer>
       </a-layout>
       <a-layout-sider

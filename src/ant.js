@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import {
   Button,
+  Badge,
   Checkbox,
   Divider,
   Drawer,
@@ -23,6 +24,7 @@ import {
 } from 'ant-design-vue'
 
 Vue.use(Button)
+Vue.use(Badge)
 Vue.use(Checkbox)
 Vue.use(Divider)
 Vue.use(Drawer)

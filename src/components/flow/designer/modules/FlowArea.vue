@@ -118,7 +118,6 @@ export default {
   },
   data() {
     return {
-      ctx: null,
       currentSelect: this.select,
       currentSelectGroup: this.selectGroup,
       container: {
