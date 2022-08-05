@@ -5,6 +5,9 @@
 - VUE FLOW DESIGN PLUS流程设计器，基于Vue + Ant Design Vue + JSPlumb，该组件目的是为了使用在Vue项目中，它前身是[VFD流程设计器](https://github.com/ZFSNYJ/VFD)。
 - Vue版本以全新的技术栈重构了代码，并在原版基础上实现了更好的操作方式，新版会作为优先版本持续迭代。
 
+#### Vue3版本开源
+- VUE3 FLOW DESIGN 流程设计器，基于 Vue3 + TypeScript + Vite + Ant Design Vue 3 + JSPlumb。[vue3-flow-design](https://gitee.com/zhangyeping/vue3-flow-design)。
+
 
 #### 优化内容
 - 解决之前VFD遗留的BUG
