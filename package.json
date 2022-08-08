@@ -24,6 +24,7 @@
     "resizable-dom": "^1.0.2",
     "vcolorpicker": "^0.1.8",
     "vue": "^2.5.2",
+    "vue-lsp": "^1.0.2",
     "vue-contextmenu": "^1.5.9",
     "vue-json-viewer": "^2.2.1",
     "vue-router": "^3.0.1",
