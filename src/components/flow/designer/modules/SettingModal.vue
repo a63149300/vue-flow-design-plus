@@ -3,7 +3,7 @@
     <a-drawer
       title="设置"
       placement="right"
-      :zIndex="10001"
+      :zIndex="1001"
       :width="600"
       :visible="settingVisible"
       @close="close">
