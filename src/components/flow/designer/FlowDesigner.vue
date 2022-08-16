@@ -99,24 +99,25 @@
                 icon="tool"
               ></a-button>
             </a-tooltip>
-            <a-popconfirm
-              title="请选择帮助项："
-              placement="bottom"
-              okType="default"
-              okText="快捷键大全"
-              cancelText="使用文档"
-              @confirm="shortcutHelper"
-              @cancel="usingDoc"
-            >
-              <a-icon slot="icon" type="question-circle-o" style="color: red" />
-              <a-tooltip title="帮助" placement="bottom">
-                <a-button
-                  class="header-option-button"
-                  size="small"
-                  icon="book"
-                ></a-button>
-              </a-tooltip>
-            </a-popconfirm>
+
+            <a-tooltip title="快捷键大全" placement="bottom">
+              <a-button
+                @click="shortcutHelper"
+                class="header-option-button"
+                size="small"
+                icon="book"
+              ></a-button>
+            </a-tooltip>
+
+            <a-tooltip title="GIT地址" placement="bottom">
+              <a-button
+                @click="goGit"
+                class="header-option-button"
+                size="small"
+                icon="github"
+              ></a-button>
+            </a-tooltip>
+
             <a-tooltip title="退出" placement="bottom">
               <a-button
                 @click="exit"
@@ -392,9 +393,6 @@ export default {
           case flowConfig.shortcut.dragContainer.code:
             this.$refs.flowArea.container.dragFlag = true;
             break;
-          case flowConfig.shortcut.scaleContainer.code:
-            this.$refs.flowArea.container.scaleFlag = true;
-            break;
           case flowConfig.shortcut.dragTool.code:
             this.selectTool("drag");
             break;
@@ -416,15 +414,13 @@ export default {
         }
 
         if (event.ctrlKey) {
-          if (event.altKey) {
-            switch (key) {
-              case flowConfig.shortcut.settingModal.code:
-                this.setting();
-                break;
-              case flowConfig.shortcut.testModal.code:
-                this.openTest();
-                break;
-            }
+          switch (key) {
+            case flowConfig.shortcut.settingModal.code:
+              this.saveFlow();
+              break;
+            case flowConfig.shortcut.testModal.code:
+              this.openTest();
+              break;
           }
         }
       };
@@ -435,9 +431,6 @@ export default {
         let key = event.keyCode;
         if (key === flowConfig.shortcut.dragContainer.code) {
           this.$refs.flowArea.container.dragFlag = false;
-        } else if (key === flowConfig.shortcut.scaleContainer.code) {
-          event.preventDefault();
-          this.$refs.flowArea.container.scaleFlag = false;
         } else if (key === flowConfig.shortcut.multiple.code) {
           this.$refs.flowArea.rectangleMultiple.flag = false;
         }
@@ -747,7 +740,7 @@ export default {
       this.$refs.shortcutModal.open();
     },
     // 使用文档
-    usingDoc() {
+    goGit() {
       window.open(this.info.gitee);
     },
     // 退出流程设计器

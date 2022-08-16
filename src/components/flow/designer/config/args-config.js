@@ -88,19 +88,14 @@ export let flowConfig = {
   },
   shortcut: {
     multiple: {
-      code: 17,
-      codeName: 'CTRL',
+      code: 16,
+      codeName: 'SHIFT',
       shortcutName: '多选'
     },
     dragContainer: {
       code: 32,
       codeName: 'SPACE',
       shortcutName: '画布拖拽'
-    },
-    scaleContainer: {
-      code: 18,
-      codeName: 'ALT(firefox下为SHIFT)',
-      shortcutName: '画布缩放'
     },
     dragTool: {
       code: 68,
@@ -111,16 +106,6 @@ export let flowConfig = {
       code: 76,
       codeName: 'L',
       shortcutName: '连线工具'
-    },
-    zoomInTool: {
-      code: 190,
-      codeName: '<',
-      shortcutName: '放大工具'
-    },
-    zoomOutTool: {
-      code: 188,
-      codeName: '>',
-      shortcutName: '缩小工具'
     },
     leftMove: {
       code: 37,
@@ -144,13 +129,13 @@ export let flowConfig = {
     },
     settingModal: {
       code: 83,
-      codeName: 'CTRL+ALT+S',
-      shortcutName: '打开设置页面'
+      codeName: 'CTRL + S',
+      shortcutName: '保存页面'
     },
     testModal: {
       code: 84,
-      codeName: 'CTRL+ALT+T',
-      shortcutName: '打开测试页面'
+      codeName: 'CTRL + T',
+      shortcutName: '测试页面'
     }
   },
   contextMenu: {

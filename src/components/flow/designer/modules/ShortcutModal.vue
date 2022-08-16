@@ -1,14 +1,14 @@
 <template>
   <a-modal
     title="快捷键大全"
-    width="60%"
+    width="600px"
     :visible="modalVisible"
-    okText="确认"
-    cancelText="取消"
-    @ok="saveSetting"
-    @cancel="cancel">
+    :footer="null"
+    @cancel="close">
     <a-table
       rowKey="code"
+      size="small"
+      :pagination="false"
       :columns="columns"
       :dataSource="dataSource">
     </a-table>
@@ -44,10 +44,8 @@
     methods: {
       open () {
         this.modalVisible = true
-        let obj = Object.assign({}, flowConfig.shortcut)
-        for (let k in obj) {
-          this.dataSource.push(obj[k])
-        }
+        this.dataSource = Object.values(flowConfig.shortcut)
+
       },
       close () {
         this.dataSource = []
@@ -56,9 +54,6 @@
       saveSetting () {
         this.close()
       },
-      cancel () {
-        this.close()
-      }
     }
   }
 </script>
