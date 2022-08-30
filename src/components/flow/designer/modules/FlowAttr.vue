@@ -1,6 +1,5 @@
 <template>
   <a-tabs size="small"
-          defaultActiveKey="flow-attr"
           :activeKey="activeKey">
     <a-tab-pane key="flow-attr">
 				<span slot="tab">
@@ -21,28 +20,7 @@
 					<a-icon type="profile"/>
 					节点属性
 				</span>
-      <template v-if="currentSelect.type === 'start'">
-        <a-form layout="vertical">
-          <a-form-item label="类型"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-tag color="purple">{{ currentSelect.type }}</a-tag>
-          </a-form-item>
-          <a-form-item label="id"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input :value="currentSelect.id"
-                     disabled/>
-          </a-form-item>
-          <a-form-item label="名称"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input placeholder="请输入节点名称"
-                     :value="currentSelect.nodeName"
-                     @change="nodeNameChange"/>
-          </a-form-item>
-        </a-form>
-      </template>
-      <template v-if="currentSelect.type === 'end'">
+      
         <a-form layout="vertical">
           <a-form-item label="类型"
                        :label-col="formItemLayout.labelCol"
@@ -63,139 +41,6 @@
                      @change="nodeNameChange"/>
           </a-form-item>
         </a-form>
-      </template>
-      <template v-if="currentSelect.type === 'common'">
-        <a-form layout="vertical">
-          <a-form-item label="类型"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-tag color="purple">{{ currentSelect.type }}</a-tag>
-          </a-form-item>
-          <a-form-item label="id"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input :value="currentSelect.id"
-                     disabled/>
-          </a-form-item>
-          <a-form-item label="名称"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input placeholder="请输入节点名称"
-                     :value="currentSelect.nodeName"
-                     @change="nodeNameChange"/>
-          </a-form-item>
-        </a-form>
-      </template>
-      <template v-else-if="currentSelect.type === 'freedom'">
-        <a-form layout="vertical">
-          <a-form-item label="类型"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-tag color="purple">{{ currentSelect.type }}</a-tag>
-          </a-form-item>
-          <a-form-item label="id"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input :value="currentSelect.id"
-                     disabled/>
-          </a-form-item>
-          <a-form-item label="名称"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input placeholder="请输入节点名称"
-                     :value="currentSelect.nodeName"
-                     @change="nodeNameChange"/>
-          </a-form-item>
-        </a-form>
-      </template>
-      <template v-else-if="currentSelect.type === 'event'">
-        <a-form layout="vertical">
-          <a-form-item label="类型"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-tag color="purple">{{ currentSelect.type }}</a-tag>
-          </a-form-item>
-          <a-form-item label="id"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input :value="currentSelect.id"
-                     disabled/>
-          </a-form-item>
-          <a-form-item label="名称"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input placeholder="请输入节点名称"
-                     :value="currentSelect.nodeName"
-                     @change="nodeNameChange"/>
-          </a-form-item>
-        </a-form>
-      </template>
-      <template v-else-if="currentSelect.type === 'gateway'">
-        <a-form layout="vertical">
-          <a-form-item label="类型"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-tag color="purple">{{ currentSelect.type }}</a-tag>
-          </a-form-item>
-          <a-form-item label="id"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input :value="currentSelect.id"
-                     disabled/>
-          </a-form-item>
-          <a-form-item label="名称"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input placeholder="请输入节点名称"
-                     :value="currentSelect.nodeName"
-                     @change="nodeNameChange"/>
-          </a-form-item>
-        </a-form>
-      </template>
-      <template v-else-if="currentSelect.type === 'child-flow'">
-        <a-form layout="vertical">
-          <a-form-item label="类型"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-tag color="purple">{{ currentSelect.type }}</a-tag>
-          </a-form-item>
-          <a-form-item label="id"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input :value="currentSelect.id"
-                     disabled/>
-          </a-form-item>
-          <a-form-item label="名称"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input placeholder="请输入节点名称"
-                     :value="currentSelect.nodeName"
-                     @change="nodeNameChange"/>
-          </a-form-item>
-        </a-form>
-      </template>
-      <template v-else-if="currentSelect.type === 'x-lane' || currentSelect.type === 'y-lane'">
-        <a-form layout="vertical">
-          <a-form-item label="类型"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-tag color="purple">{{ currentSelect.type }}</a-tag>
-          </a-form-item>
-          <a-form-item label="id"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input :value="currentSelect.id"
-                     disabled/>
-          </a-form-item>
-          <a-form-item label="名称"
-                       :label-col="formItemLayout.labelCol"
-                       :wrapper-col="formItemLayout.wrapperCol">
-            <a-input placeholder="请输入节点名称"
-                     :value="currentSelect.nodeName"
-                     @change="nodeNameChange"/>
-          </a-form-item>
-        </a-form>
-      </template>
     </a-tab-pane>
     <a-tab-pane key="link-attr">
 				<span slot="tab">
