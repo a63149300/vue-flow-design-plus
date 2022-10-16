@@ -43,14 +43,6 @@
             </span>
           </div>
           <div class="header-option__buttons">
-            <a-tooltip title="保存流程" placement="bottom">
-              <a-button
-                @click="saveFlow"
-                class="header-option-button"
-                size="small"
-                icon="save"
-              ></a-button>
-            </a-tooltip>
             <a-tooltip title="生成流程图片" placement="bottom">
               <a-button
                 @click="exportFlowPicture"
@@ -118,12 +110,12 @@
               ></a-button>
             </a-tooltip>
 
-            <a-tooltip title="退出" placement="bottom">
+            <a-tooltip title="保存流程" placement="bottom">
               <a-button
-                @click="exit"
+                @click="saveFlow"
                 class="header-option-button"
                 size="small"
-                icon="logout"
+                icon="save"
               ></a-button>
             </a-tooltip>
           </div>
@@ -245,7 +237,7 @@ export default {
   data() {
     return {
       info: {
-        version: "1.0.0",
+        version: "1.1.0",
         author: "前端爱码士",
         gitee: "https://gitee.com/zhangyeping/vue-flow-design-plus"
       },
@@ -742,10 +734,6 @@ export default {
     // 使用文档
     goGit() {
       window.open(this.info.gitee);
-    },
-    // 退出流程设计器
-    exit() {
-      this.$message.info("退出");
     },
     // 连接线右键
     showLinkContextMenu(e) {

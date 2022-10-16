@@ -67,9 +67,9 @@
       ></div>
     </div>
     <div class="container-scale">
-      <a-button icon="zoom-in" size="small" type="default" @click="enlargeContainer"></a-button>
-      <span>{{ container.scaleShow }}% </span>
       <a-button icon="zoom-out" size="small" type="default" @click="narrowContainer"></a-button>
+      <span>{{ container.scaleShow }}% </span>
+      <a-button icon="zoom-in" size="small" type="default" @click="enlargeContainer"></a-button>
     </div>
     <div class="mouse-position">
       x: {{ mouse.position.x }}, y: {{ mouse.position.y }}
