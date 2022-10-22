@@ -86,142 +86,142 @@
 </template>
 
 <script>
-  import { Resizable } from 'resizable-dom'
+import { Resizable } from 'resizable-dom'
 
-  export default {
-    props: ['select', 'selectGroup', 'node', 'plumb', 'currentTool', 'flowConfig'],
-    mounted () {
-      this.registerNode()
-    },
-    data () {
-      return {
-        currentSelect: this.select,
-        currentSelectGroup: this.selectGroup
+export default {
+  props: ['select', 'selectGroup', 'node', 'plumb', 'currentTool', 'flowConfig'],
+  mounted () {
+    this.registerNode()
+  },
+  data () {
+    return {
+      currentSelect: this.select,
+      currentSelectGroup: this.selectGroup
+    }
+  },
+  methods: {
+    // 设置ICON
+    setIcon (type) {
+      switch (type) {
+        case 'common':
+          return 'user'
+        case 'freedom':
+          return 'sync'
+        case 'child-flow':
+          return 'apartment'
+        default:
+          return 'tool'
       }
     },
-    methods: {
-      // 设置ICON
-      setIcon (type) {
-        switch (type) {
-          case 'common':
-            return 'user'
-          case 'freedom':
-            return 'sync'
-          case 'child-flow':
-            return 'apartment'
-          default:
-            return 'tool'
-        }
-      },
-      // 设置鼠标样式
-      setCursor (type) {
-        switch (type) {
-          case 'drag':
-            return 'move'
-          case 'connection':
-            return 'crosshair'
-          default:
-            return 'default'
-        }
-      },
-      // 初始节点拖拽
-      registerNode () {
-        this.plumb.draggable(this.node.id, {
-          containment: 'parent',
-          handle: (e, el) => {
-            // 判断节点类型
-            let possibles = el.parentNode.querySelectorAll('.common-circle-node,.common-rectangle-node,.common-diamond-node,.lane-text-div')
-            for (let i = 0; i < possibles.length; i++) {
-              if (possibles[i] === el || e.target.className === 'lane-text') return true
-            }
-            return false
-          },
-          grid: this.flowConfig.defaultStyle.alignGridPX,
-          drag: e => {
-            if (this.flowConfig.defaultStyle.isOpenAuxiliaryLine) {
-              this.$emit('alignForLine', e)
-            }
-          },
-          stop: e => {
-            this.node.x = e.pos[0]
-            this.node.y = e.pos[1]
-            // 是否为组
-            if (this.currentSelectGroup.length > 1) {
-              // 更新组节点信息
-              this.$emit('updateNodePos')
-            }
-            // 隐藏辅助线
-            this.$emit('hideAlignLine')
+    // 设置鼠标样式
+    setCursor (type) {
+      switch (type) {
+        case 'drag':
+          return 'move'
+        case 'connection':
+          return 'crosshair'
+        default:
+          return 'default'
+      }
+    },
+    // 初始节点拖拽
+    registerNode () {
+      this.plumb.draggable(this.node.id, {
+        containment: 'parent',
+        handle: (e, el) => {
+          // 判断节点类型
+          let possibles = el.parentNode.querySelectorAll('.common-circle-node,.common-rectangle-node,.common-diamond-node,.lane-text-div')
+          for (let i = 0; i < possibles.length; i++) {
+            if (possibles[i] === el || e.target.className === 'lane-text') return true
           }
-        })
+          return false
+        },
+        grid: this.flowConfig.defaultStyle.alignGridPX,
+        drag: e => {
+          if (this.flowConfig.defaultStyle.isOpenAuxiliaryLine) {
+            this.$emit('alignForLine', e)
+          }
+        },
+        stop: e => {
+          this.node.x = e.pos[0]
+          this.node.y = e.pos[1]
+          // 是否为组
+          if (this.currentSelectGroup.length > 1) {
+            // 更新组节点信息
+            this.$emit('updateNodePos')
+          }
+          // 隐藏辅助线
+          this.$emit('hideAlignLine')
+        }
+      })
 
-        if (this.node.type === 'x-lane' || this.node.type === 'y-lane') {
-          let node = document.querySelector('#' + this.node.id)
-          new Resizable(node, {
-            handles: ['e', 'w', 'n', 's', 'nw', 'ne', 'sw', 'se'],
-            initSize: {
-              maxWidth: 1000,
-              maxHeight: 1000,
-              minWidth: 200,
-              minHeight: 200
-            }
-          }, () => {
-            this.node.height = Math.ceil(parseInt(node.style.height))
-            this.node.width = Math.ceil(parseInt(node.style.width))
-          })
-        }
-        this.currentSelect = this.node
-        this.currentSelectGroup = []
-      },
-      // 点击节点
-      selectNode () {
-        this.currentSelect = this.node
-        this.$emit('isMultiple', flag => {
-          if (!flag) {
-            this.currentSelectGroup = []
-          } else {
-            let f = this.currentSelectGroup.filter(s => s.id === this.node.id)
-            if (f.length <= 0) {
-              this.plumb.addToDragSelection(this.node.id)
-              this.currentSelectGroup.push(this.node)
-            }
+      if (this.node.type === 'x-lane' || this.node.type === 'y-lane') {
+        let node = document.querySelector('#' + this.node.id)
+        new Resizable(node, {
+          handles: ['e', 'w', 'n', 's', 'nw', 'ne', 'sw', 'se'],
+          initSize: {
+            maxWidth: 1000,
+            maxHeight: 1000,
+            minWidth: 200,
+            minHeight: 200
           }
+        }, () => {
+          this.node.height = Math.ceil(parseInt(node.style.height))
+          this.node.width = Math.ceil(parseInt(node.style.width))
         })
-      },
-      // 节点右键
-      showNodeContextMenu (e) {
-        this.$emit('showNodeContextMenu', e)
-        this.selectNode()
-      },
-      // 节点是否激活
-      isActive () {
-        if (this.currentSelect.id === this.node.id) return true
-        let f = this.currentSelectGroup.filter(n => n.id === this.node.id)
-        if (f.length > 0) return true
-        return false
       }
+      this.currentSelect = this.node
+      this.currentSelectGroup = []
     },
-    watch: {
-      select (val) {
-        this.currentSelect = val
+    // 点击节点
+    selectNode () {
+      this.currentSelect = this.node
+      this.$emit('isMultiple', flag => {
+        if (!flag) {
+          this.currentSelectGroup = []
+        } else {
+          let f = this.currentSelectGroup.filter(s => s.id === this.node.id)
+          if (f.length <= 0) {
+            this.plumb.addToDragSelection(this.node.id)
+            this.currentSelectGroup.push(this.node)
+          }
+        }
+      })
+    },
+    // 节点右键
+    showNodeContextMenu (e) {
+      this.$emit('showNodeContextMenu', e)
+      this.selectNode()
+    },
+    // 节点是否激活
+    isActive () {
+      if (this.currentSelect.id === this.node.id) return true
+      let f = this.currentSelectGroup.filter(n => n.id === this.node.id)
+      if (f.length > 0) return true
+      return false
+    }
+  },
+  watch: {
+    select (val) {
+      this.currentSelect = val
+    },
+    currentSelect: {
+      handler (val) {
+        this.$emit('update:select', val)
       },
-      currentSelect: {
-        handler (val) {
-          this.$emit('update:select', val)
-        },
-        deep: true
+      deep: true
+    },
+    selectGroup (val) {
+      this.currentSelectGroup = val
+    },
+    currentSelectGroup: {
+      handler (val) {
+        this.$emit('update:selectGroup', val)
       },
-      selectGroup (val) {
-        this.currentSelectGroup = val
-      },
-      currentSelectGroup: {
-        handler (val) {
-          this.$emit('update:selectGroup', val)
-        },
-        deep: true
-      }
+      deep: true
     }
   }
+}
 </script>
 
 <style lang="less">

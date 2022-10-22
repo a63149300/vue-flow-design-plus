@@ -20,7 +20,7 @@
 					<a-icon type="profile"/>
 					节点属性
 				</span>
-      
+
         <a-form layout="vertical">
           <a-form-item label="类型"
                        :label-col="formItemLayout.labelCol"
@@ -78,72 +78,71 @@
 </template>
 
 <script>
-  export default {
-    props: ['plumb', 'flowData', 'select'],
-    data () {
-      return {
-        currentSelect: this.select,
-        formItemLayout: {
-          labelCol: { span: 0 },
-          wrapperCol: { span: 24 }
-        },
-        activeKey: 'flow-attr'
-      }
-    },
-    methods: {
-      nodeNameChange (e) {
-        this.currentSelect.nodeName = e.target.value
+export default {
+  props: ['plumb', 'flowData', 'select'],
+  data () {
+    return {
+      currentSelect: this.select,
+      formItemLayout: {
+        labelCol: { span: 0 },
+        wrapperCol: { span: 24 }
       },
-      linkLabelChange (e) {
-        let label = e.target.value
-        this.currentSelect.label = label
-        let conn = this.plumb.getConnections({
-          source: this.currentSelect.sourceId,
-          target: this.currentSelect.targetId
-        })[0]
-        let link_id = conn.canvas.id
-        let labelHandle = e => {
-          let event = window.event || e
-          event.stopPropagation()
-          this.currentSelect = this.flowData.linkList.filter(l => l.id === link_id)[0]
-        }
-
-        if (label !== '') {
-          conn.setLabel({
-            label: label,
-            cssClass: `linkLabel ${link_id}`
-          })
-          // 添加label点击事件
-          document.querySelector('.' + link_id).addEventListener('click', labelHandle)
-
-        } else {
-          // 移除label点击事件
-          document.querySelector('.' + link_id).removeEventListener('click', labelHandle)
-
-          let labelOverlay = conn.getLabelOverlay()
-          if (labelOverlay) conn.removeOverlay(labelOverlay.id)
-        }
-      }
+      activeKey: 'flow-attr'
+    }
+  },
+  methods: {
+    nodeNameChange (e) {
+      this.currentSelect.nodeName = e.target.value
     },
-    watch: {
-      select (val) {
-        this.currentSelect = val
-        if (this.currentSelect.type === 'link') {
-          this.activeKey = 'link-attr'
-        } else if (!this.currentSelect.type) {
-          this.activeKey = 'flow-attr'
-        } else {
-          this.activeKey = 'node-attr'
-        }
-      },
-      currentSelect: {
-        handler (val) {
-          this.$emit('update:select', val)
-        },
-        deep: true
+    linkLabelChange (e) {
+      let label = e.target.value
+      this.currentSelect.label = label
+      let conn = this.plumb.getConnections({
+        source: this.currentSelect.sourceId,
+        target: this.currentSelect.targetId
+      })[0]
+      let linkId = conn.canvas.id
+      let labelHandle = e => {
+        let event = window.event || e
+        event.stopPropagation()
+        this.currentSelect = this.flowData.linkList.filter(l => l.id === linkId)[0]
+      }
+
+      if (label !== '') {
+        conn.setLabel({
+          label: label,
+          cssClass: `linkLabel ${linkId}`
+        })
+        // 添加label点击事件
+        document.querySelector('.' + linkId).addEventListener('click', labelHandle)
+      } else {
+        // 移除label点击事件
+        document.querySelector('.' + linkId).removeEventListener('click', labelHandle)
+
+        let labelOverlay = conn.getLabelOverlay()
+        if (labelOverlay) conn.removeOverlay(labelOverlay.id)
       }
     }
+  },
+  watch: {
+    select (val) {
+      this.currentSelect = val
+      if (this.currentSelect.type === 'link') {
+        this.activeKey = 'link-attr'
+      } else if (!this.currentSelect.type) {
+        this.activeKey = 'flow-attr'
+      } else {
+        this.activeKey = 'node-attr'
+      }
+    },
+    currentSelect: {
+      handler (val) {
+        this.$emit('update:select', val)
+      },
+      deep: true
+    }
   }
+}
 </script>
 
 <style lang="less">

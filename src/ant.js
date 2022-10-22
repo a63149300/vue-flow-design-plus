@@ -20,7 +20,7 @@ import {
   Tabs,
   Tag,
   Table,
-  Tooltip,
+  Tooltip
 } from 'ant-design-vue'
 
 Vue.use(Button)
@@ -45,5 +45,3 @@ Vue.use(Table)
 Vue.use(Tooltip)
 
 Vue.prototype.$message = message
-
-

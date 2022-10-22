@@ -141,18 +141,18 @@
 </template>
 
 <script>
-import { settingConfig } from "../config/args-config.js";
-import cloneDeep from "lodash/cloneDeep";
-import { setFlowConfig } from "../utils/common.js";
+import { settingConfig } from '../config/args-config.js'
+import cloneDeep from 'lodash/cloneDeep'
+import { setFlowConfig } from '../utils/common.js'
 
 export default {
   props: {
     flowConfig: {
       type: Object,
-      default: {}
+      default: () => ({})
     }
   },
-  data() {
+  data () {
     return {
       settingVisible: false,
       formItemLayout: {
@@ -162,31 +162,31 @@ export default {
       settingForm: this.$form.createForm(this),
       config: this.flowConfig,
       settingConfig: cloneDeep(settingConfig)
-    };
+    }
   },
   methods: {
-    setDefault() {},
-    handleSubmit() {
-      this.config = setFlowConfig(this.config, this.settingConfig);
-      this.$ls.set("settingConfig", this.settingConfig);
-      this.close();
-      this.$message.success("设置成功");
+    setDefault () {},
+    handleSubmit () {
+      this.config = setFlowConfig(this.config, this.settingConfig)
+      this.$ls.set('settingConfig', this.settingConfig)
+      this.close()
+      this.$message.success('设置成功')
     },
-    open() {
-      this.settingVisible = true;
-      this.settingConfig = this.$ls.get("settingConfig") || cloneDeep(settingConfig);
+    open () {
+      this.settingVisible = true
+      this.settingConfig = this.$ls.get('settingConfig') || cloneDeep(settingConfig)
     },
-    close() {
-      this.settingVisible = false;
+    close () {
+      this.settingVisible = false
     },
-    formatOnceNarrow(v) {
-      return `${v * 100}%`;
+    formatOnceNarrow (v) {
+      return `${v * 100}%`
     },
-    formatOnceEnlarge(v) {
-      return `${v * 100}%`;
+    formatOnceEnlarge (v) {
+      return `${v * 100}%`
     }
   }
-};
+}
 </script>
 
 <style>

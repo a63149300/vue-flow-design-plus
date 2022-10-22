@@ -1,20 +1,20 @@
 export const settingConfig = {
   containerScale: {
     onceNarrow: 0.1,
-    onceEnlarge: 0.1,
+    onceEnlarge: 0.1
   },
   cls: {
     linkType: 'Flowchart',
     linkColor: '#2a2929',
-    linkThickness: 2,
+    linkThickness: 2
   },
   other: {
     isOpenAuxiliaryLine: true,
     horizontal: 100,
     vertical: 100,
-    movePx: 5,
-  },
-};
+    movePx: 5
+  }
+}
 
 export const flowConfig = {
   jsPlumbInsConfig: {
@@ -38,7 +38,7 @@ export const flowConfig = {
     ],
     PaintStyle: {
       stroke: settingConfig.cls.linkColor,
-      strokeWidth: settingConfig.cls.linkThickness,
+      strokeWidth: settingConfig.cls.linkThickness
     },
     HoverPaintStyle: {
       stroke: '#409EFF',
@@ -81,7 +81,7 @@ export const flowConfig = {
     alignGridPX: [5, 5],
     alignSpacing: {
       horizontal: settingConfig.other.horizontal,
-      vertical: settingConfig.other.vertical,
+      vertical: settingConfig.other.vertical
     },
     alignDuration: 300,
     containerScale: {
@@ -89,7 +89,7 @@ export const flowConfig = {
       min: 0.5,
       max: 3,
       onceNarrow: settingConfig.containerScale.onceNarrow,
-      onceEnlarge: settingConfig.containerScale.onceEnlarge,
+      onceEnlarge: settingConfig.containerScale.onceEnlarge
     },
     isOpenAuxiliaryLine: settingConfig.other.isOpenAuxiliaryLine,
     showAuxiliaryLineDistance: 20,

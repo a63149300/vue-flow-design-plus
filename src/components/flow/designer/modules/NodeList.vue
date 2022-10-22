@@ -15,7 +15,7 @@
 </template>
 <script>
 export default {
-  name: "NodeList",
+  name: 'NodeList',
   props: {
     nodeList: {
       type: Array,
@@ -23,18 +23,18 @@ export default {
     },
     type: {
       type: String,
-      default: ""
+      default: ''
     }
   },
   methods: {
     // 开始拖拽
-    dragNode(type, belongTo) {
-      this.$emit("setDragInfo", {
+    dragNode (type, belongTo) {
+      this.$emit('setDragInfo', {
         type,
         belongTo
-      });
+      })
     }
   }
-};
+}
 </script>
 <style scoped lang="less"></style>

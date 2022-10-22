@@ -100,24 +100,24 @@
 </template>
 
 <script>
-import { utils } from "../utils/common.js";
-import FlowNode from "./FlowNode";
+import { utils } from '../utils/common.js'
+import FlowNode from './FlowNode'
 
 export default {
   props: [
-    "browserType",
-    "flowData",
-    "plumb",
-    "select",
-    "selectGroup",
-    "currentTool",
-    "dragInfo",
-    "flowConfig",
+    'browserType',
+    'flowData',
+    'plumb',
+    'select',
+    'selectGroup',
+    'currentTool',
+    'dragInfo',
+    'flowConfig'
   ],
   components: {
     FlowNode
   },
-  data() {
+  data () {
     return {
       currentSelect: this.select,
       currentSelectGroup: this.selectGroup,
@@ -173,483 +173,483 @@ export default {
       containerContextMenuData: this.flowConfig.contextMenu.container,
       nodeContextMenuData: this.flowConfig.contextMenu.node,
       // 当前聚焦的连接线ID
-      tempLinkId: "",
+      tempLinkId: '',
       // 剪切板内容
       clipboard: []
-    };
+    }
   },
   computed: {
-    gridStyle() {
+    gridStyle () {
       return {
         top: `${this.container.pos.top}px`,
         left: `${this.container.pos.left}px`,
         transform: `scale(${this.container.scale})`,
         transformOrigin: `${this.container.scaleOrigin.x}px ${this.container.scaleOrigin.y}px`
-      };
+      }
     }
   },
   methods: {
-    allowDrop(e) {
-      e.preventDefault();
-      this.mousemoveHandler(e);
+    allowDrop (e) {
+      e.preventDefault()
+      this.mousemoveHandler(e)
     },
-    drop() {
-      let belongTo = this.dragInfo.belongTo;
-      let type = this.dragInfo.type;
+    drop () {
+      let belongTo = this.dragInfo.belongTo
+      let type = this.dragInfo.type
 
       // 复位拖拽工具
-      this.$emit("selectTool", "drag");
+      this.$emit('selectTool', 'drag')
 
-      this.$emit("findNodeConfig", belongTo, type, node => {
+      this.$emit('findNodeConfig', belongTo, type, node => {
         if (!node) {
-          this.$message.error("未知的节点类型！");
-          return;
+          this.$message.error('未知的节点类型！')
+          return
         }
         // 增加节点
-        this.addNewNode(node);
-      });
+        this.addNewNode(node)
+      })
     },
     // 画布鼠标按下
-    mousedownHandler(e) {
-      let event = window.event || e;
+    mousedownHandler (e) {
+      let event = window.event || e
 
       if (event.button === 0) {
         if (this.container.dragFlag) {
-          this.mouse.tempPos = this.mouse.position;
-          this.container.draging = true;
+          this.mouse.tempPos = this.mouse.position
+          this.container.draging = true
         }
 
-        this.currentSelectGroup = [];
+        this.currentSelectGroup = []
         if (this.rectangleMultiple.flag) {
-          this.mouse.tempPos = this.mouse.position;
-          this.rectangleMultiple.multipling = true;
+          this.mouse.tempPos = this.mouse.position
+          this.rectangleMultiple.multipling = true
         }
       }
     },
     // 画布鼠标移动
-    mousemoveHandler(e) {
-      let event = window.event || e;
+    mousemoveHandler (e) {
+      let event = window.event || e
 
-      if (event.target.id === "flowContainer") {
+      if (event.target.id === 'flowContainer') {
         this.mouse.position = {
           x: event.offsetX,
           y: event.offsetY
-        };
+        }
       } else {
-        let cn = event.target.className;
-        let tn = event.target.tagName;
+        let cn = event.target.className
+        let tn = event.target.tagName
         if (
-          cn !== "lane-text" &&
-          cn !== "lane-text-div" &&
-          tn !== "svg" &&
-          tn !== "path" &&
-          tn !== "I"
+          cn !== 'lane-text' &&
+          cn !== 'lane-text-div' &&
+          tn !== 'svg' &&
+          tn !== 'path' &&
+          tn !== 'I'
         ) {
-          this.mouse.position.x = event.target.offsetLeft + event.offsetX;
-          this.mouse.position.y = event.target.offsetTop + event.offsetY;
+          this.mouse.position.x = event.target.offsetLeft + event.offsetX
+          this.mouse.position.y = event.target.offsetTop + event.offsetY
         }
       }
       if (this.container.draging) {
         let nTop =
           this.container.pos.top +
-          (this.mouse.position.y - this.mouse.tempPos.y);
+          (this.mouse.position.y - this.mouse.tempPos.y)
         let nLeft =
           this.container.pos.left +
-          (this.mouse.position.x - this.mouse.tempPos.x);
-        if (nTop >= 0) nTop = 0;
-        if (nLeft >= 0) nLeft = 0;
+          (this.mouse.position.x - this.mouse.tempPos.x)
+        if (nTop >= 0) nTop = 0
+        if (nLeft >= 0) nLeft = 0
         this.container.pos = {
           top: nTop,
           left: nLeft
-        };
+        }
       }
       if (this.rectangleMultiple.multipling) {
-        let h = this.mouse.position.y - this.mouse.tempPos.y;
-        let w = this.mouse.position.x - this.mouse.tempPos.x;
-        let t = this.mouse.tempPos.y;
-        let l = this.mouse.tempPos.x;
+        let h = this.mouse.position.y - this.mouse.tempPos.y
+        let w = this.mouse.position.x - this.mouse.tempPos.x
+        let t = this.mouse.tempPos.y
+        let l = this.mouse.tempPos.x
         if (h >= 0 && w < 0) {
-          w = -w;
-          l -= w;
+          w = -w
+          l -= w
         } else if (h < 0 && w >= 0) {
-          h = -h;
-          t -= h;
+          h = -h
+          t -= h
         } else if (h < 0 && w < 0) {
-          h = -h;
-          w = -w;
-          t -= h;
-          l -= w;
+          h = -h
+          w = -w
+          t -= h
+          l -= w
         }
-        this.rectangleMultiple.height = h;
-        this.rectangleMultiple.width = w;
-        this.rectangleMultiple.position.top = t;
-        this.rectangleMultiple.position.left = l;
+        this.rectangleMultiple.height = h
+        this.rectangleMultiple.width = w
+        this.rectangleMultiple.position.top = t
+        this.rectangleMultiple.position.left = l
       }
     },
     // 画布鼠标点击松开
-    mouseupHandler() {
-      if (this.container.draging) this.container.draging = false;
+    mouseupHandler () {
+      if (this.container.draging) this.container.draging = false
       if (this.rectangleMultiple.multipling) {
         // 鼠标划框内的节点
-        this.judgeSelectedNode();
-        this.rectangleMultiple.multipling = false;
-        this.rectangleMultiple.width = 0;
-        this.rectangleMultiple.height = 0;
+        this.judgeSelectedNode()
+        this.rectangleMultiple.multipling = false
+        this.rectangleMultiple.width = 0
+        this.rectangleMultiple.height = 0
       }
     },
     // 鼠标划框内的节点
-    judgeSelectedNode() {
-      let ay = this.rectangleMultiple.position.top;
-      let ax = this.rectangleMultiple.position.left;
-      let by = ay + this.rectangleMultiple.height;
-      let bx = ax + this.rectangleMultiple.width;
+    judgeSelectedNode () {
+      let ay = this.rectangleMultiple.position.top
+      let ax = this.rectangleMultiple.position.left
+      let by = ay + this.rectangleMultiple.height
+      let bx = ax + this.rectangleMultiple.width
 
-      let nodeList = this.flowData.nodeList;
+      let nodeList = this.flowData.nodeList
       nodeList.forEach(node => {
         if (node.y >= ay && node.x >= ax && node.y <= by && node.x <= bx) {
-          this.plumb.addToDragSelection(node.id);
-          this.currentSelectGroup.push(node);
+          this.plumb.addToDragSelection(node.id)
+          this.currentSelectGroup.push(node)
         }
-      });
+      })
     },
     // 画布鼠标滚轴
-    scaleContainer(e) {
-      let event = window.event || e;
+    scaleContainer (e) {
+      let event = window.event || e
 
       if (this.container.scaleFlag) {
         if (this.browserType === 2) {
           if (event.detail < 0) {
-            this.enlargeContainer();
+            this.enlargeContainer()
           } else {
-            this.narrowContainer();
+            this.narrowContainer()
           }
         } else {
           if (event.deltaY < 0) {
-            this.enlargeContainer();
+            this.enlargeContainer()
           } else if (this.container.scale) {
-            this.narrowContainer();
+            this.narrowContainer()
           }
         }
       }
     },
     // 画布放大
-    enlargeContainer() {
-      this.container.scaleOrigin.x = this.mouse.position.x;
-      this.container.scaleOrigin.y = this.mouse.position.y;
+    enlargeContainer () {
+      this.container.scaleOrigin.x = this.mouse.position.x
+      this.container.scaleOrigin.y = this.mouse.position.y
       let newScale = utils.add(
         this.container.scale,
         this.flowConfig.defaultStyle.containerScale.onceEnlarge
-      );
+      )
       if (newScale <= this.flowConfig.defaultStyle.containerScale.max) {
-        this.container.scale = newScale;
-        this.container.scaleShow = utils.mul(this.container.scale, 100);
-        this.plumb.setZoom(this.container.scale);
+        this.container.scale = newScale
+        this.container.scaleShow = utils.mul(this.container.scale, 100)
+        this.plumb.setZoom(this.container.scale)
       }
     },
     // 画布缩小
-    narrowContainer() {
-      this.container.scaleOrigin.x = this.mouse.position.x;
-      this.container.scaleOrigin.y = this.mouse.position.y;
+    narrowContainer () {
+      this.container.scaleOrigin.x = this.mouse.position.x
+      this.container.scaleOrigin.y = this.mouse.position.y
       let newScale = utils.sub(
         this.container.scale,
         this.flowConfig.defaultStyle.containerScale.onceNarrow
-      );
+      )
       if (newScale >= this.flowConfig.defaultStyle.containerScale.min) {
-        this.container.scale = newScale;
-        this.container.scaleShow = utils.mul(this.container.scale, 100);
-        this.plumb.setZoom(this.container.scale);
+        this.container.scale = newScale
+        this.container.scaleShow = utils.mul(this.container.scale, 100)
+        this.plumb.setZoom(this.container.scale)
       }
     },
     // 画布右健
-    showContainerContextMenu(e) {
-      let event = window.event || e;
+    showContainerContextMenu (e) {
+      let event = window.event || e
 
-      event.preventDefault();
-      document.querySelector(".vue-contextmenuName-node-menu").style.display =
-        "none";
-      document.querySelector(".vue-contextmenuName-link-menu").style.display =
-        "none";
-      this.selectContainer();
-      let x = event.clientX;
-      let y = event.clientY;
-      this.containerContextMenuData.axis = { x, y };
+      event.preventDefault()
+      document.querySelector('.vue-contextmenuName-node-menu').style.display =
+        'none'
+      document.querySelector('.vue-contextmenuName-link-menu').style.display =
+        'none'
+      this.selectContainer()
+      let x = event.clientX
+      let y = event.clientY
+      this.containerContextMenuData.axis = { x, y }
     },
     // 节点右键
-    showNodeContextMenu(e) {
-      let event = window.event || e;
+    showNodeContextMenu (e) {
+      let event = window.event || e
 
-      event.preventDefault();
-      document.querySelector(".vue-contextmenuName-flow-menu").style.display =
-        "none";
-      document.querySelector(".vue-contextmenuName-link-menu").style.display =
-        "none";
-      let x = event.clientX;
-      let y = event.clientY;
-      this.nodeContextMenuData.axis = { x, y };
+      event.preventDefault()
+      document.querySelector('.vue-contextmenuName-flow-menu').style.display =
+        'none'
+      document.querySelector('.vue-contextmenuName-link-menu').style.display =
+        'none'
+      let x = event.clientX
+      let y = event.clientY
+      this.nodeContextMenuData.axis = { x, y }
     },
     // 流程图信息
-    flowInfo() {
-      let nodeList = this.flowData.nodeList;
-      let linkList = this.flowData.linkList;
+    flowInfo () {
+      let nodeList = this.flowData.nodeList
+      let linkList = this.flowData.linkList
       this.$message.info(
-        "当前流程图中有 " +
+        '当前流程图中有 ' +
           nodeList.length +
-          " 个节点，有 " +
+          ' 个节点，有 ' +
           linkList.length +
-          " 条连线。"
-      );
+          ' 条连线。'
+      )
     },
     // 粘贴
-    paste() {
-      let dis = 0;
+    paste () {
+      let dis = 0
       this.clipboard.forEach(node => {
-        let newNode = Object.assign({}, node);
-        newNode.id = newNode.type + "-" + utils.getId();
+        let newNode = Object.assign({}, node)
+        newNode.id = newNode.type + '-' + utils.getId()
         let nodePos = this.computeNodePos(
           this.mouse.position.x + dis,
           this.mouse.position.y + dis
-        );
-        newNode.x = nodePos.x;
-        newNode.y = nodePos.y;
-        dis += 20;
-        this.flowData.nodeList.push(newNode);
-      });
+        )
+        newNode.x = nodePos.x
+        newNode.y = nodePos.y
+        dis += 20
+        this.flowData.nodeList.push(newNode)
+      })
     },
     // 全选
-    selectAll() {
+    selectAll () {
       this.flowData.nodeList.forEach(node => {
-        this.plumb.addToDragSelection(node.id);
-        this.currentSelectGroup.push(node);
-      });
+        this.plumb.addToDragSelection(node.id)
+        this.currentSelectGroup.push(node)
+      })
     },
     // 保存流程
-    saveFlow() {
-      this.$emit("saveFlow");
+    saveFlow () {
+      this.$emit('saveFlow')
     },
     // 节点排列前校验节点数量
-    checkAlign() {
+    checkAlign () {
       if (this.currentSelectGroup.length < 2) {
-        this.$message.error("请选择至少两个节点！");
-        return false;
+        this.$message.error('请选择至少两个节点！')
+        return false
       }
-      return true;
+      return true
     },
     // 垂直左对齐
-    verticaLeft() {
-      if (!this.checkAlign()) return;
-      let nodeList = this.flowData.nodeList;
-      let selectGroup = this.currentSelectGroup;
-      let baseX = selectGroup[0].x;
-      let baseY = selectGroup[0].y;
+    verticaLeft () {
+      if (!this.checkAlign()) return
+      let nodeList = this.flowData.nodeList
+      let selectGroup = this.currentSelectGroup
+      let baseX = selectGroup[0].x
+      let baseY = selectGroup[0].y
       for (let i = 1; i < selectGroup.length; i++) {
         baseY =
           baseY +
           selectGroup[i - 1].height +
-          this.flowConfig.defaultStyle.alignSpacing.vertical;
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
-        f.tx = baseX;
-        f.ty = baseY;
+          this.flowConfig.defaultStyle.alignSpacing.vertical
+        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        f.tx = baseX
+        f.ty = baseY
         this.plumb.animate(
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
             duration: this.flowConfig.defaultStyle.alignDuration,
-            complete: function() {
-              f.x = f.tx;
-              f.y = f.ty;
+            complete: function () {
+              f.x = f.tx
+              f.y = f.ty
             }
           }
-        );
+        )
       }
     },
     // 垂直居中
-    verticalCenter() {
-      if (!this.checkAlign()) return;
-      let nodeList = this.flowData.nodeList;
-      let selectGroup = this.currentSelectGroup;
-      let baseX = selectGroup[0].x;
-      let baseY = selectGroup[0].y;
-      let firstX = baseX;
+    verticalCenter () {
+      if (!this.checkAlign()) return
+      let nodeList = this.flowData.nodeList
+      let selectGroup = this.currentSelectGroup
+      let baseX = selectGroup[0].x
+      let baseY = selectGroup[0].y
+      let firstX = baseX
       for (let i = 1; i < selectGroup.length; i++) {
         baseY =
           baseY +
           selectGroup[i - 1].height +
-          this.flowConfig.defaultStyle.alignSpacing.vertical;
+          this.flowConfig.defaultStyle.alignSpacing.vertical
         baseX =
           firstX +
           utils.div(selectGroup[0].width, 2) -
-          utils.div(selectGroup[i].width, 2);
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
-        f.tx = baseX;
-        f.ty = baseY;
+          utils.div(selectGroup[i].width, 2)
+        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        f.tx = baseX
+        f.ty = baseY
         this.plumb.animate(
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
             duration: this.flowConfig.defaultStyle.alignDuration,
-            complete: function() {
-              f.x = f.tx;
-              f.y = f.ty;
+            complete: function () {
+              f.x = f.tx
+              f.y = f.ty
             }
           }
-        );
+        )
       }
     },
     // 垂直右对齐
-    verticalRight() {
-      if (!this.checkAlign()) return;
-      let nodeList = this.flowData.nodeList;
-      let selectGroup = this.currentSelectGroup;
-      let baseX = selectGroup[0].x;
-      let baseY = selectGroup[0].y;
-      let firstX = baseX;
+    verticalRight () {
+      if (!this.checkAlign()) return
+      let nodeList = this.flowData.nodeList
+      let selectGroup = this.currentSelectGroup
+      let baseX = selectGroup[0].x
+      let baseY = selectGroup[0].y
+      let firstX = baseX
       for (let i = 1; i < selectGroup.length; i++) {
         baseY =
           baseY +
           selectGroup[i - 1].height +
-          this.flowConfig.defaultStyle.alignSpacing.vertical;
-        baseX = firstX + selectGroup[0].width - selectGroup[i].width;
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
-        f.tx = baseX;
-        f.ty = baseY;
+          this.flowConfig.defaultStyle.alignSpacing.vertical
+        baseX = firstX + selectGroup[0].width - selectGroup[i].width
+        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        f.tx = baseX
+        f.ty = baseY
         this.plumb.animate(
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
             duration: this.flowConfig.defaultStyle.alignDuration,
-            complete: function() {
-              f.x = f.tx;
-              f.y = f.ty;
+            complete: function () {
+              f.x = f.tx
+              f.y = f.ty
             }
           }
-        );
+        )
       }
     },
     // 水平上对齐
-    levelUp() {
-      if (!this.checkAlign()) return;
-      let nodeList = this.flowData.nodeList;
-      let selectGroup = this.currentSelectGroup;
-      let baseX = selectGroup[0].x;
-      let baseY = selectGroup[0].y;
+    levelUp () {
+      if (!this.checkAlign()) return
+      let nodeList = this.flowData.nodeList
+      let selectGroup = this.currentSelectGroup
+      let baseX = selectGroup[0].x
+      let baseY = selectGroup[0].y
       for (let i = 1; i < selectGroup.length; i++) {
         baseX =
           baseX +
           selectGroup[i - 1].width +
-          this.flowConfig.defaultStyle.alignSpacing.horizontal;
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
-        f.tx = baseX;
-        f.ty = baseY;
+          this.flowConfig.defaultStyle.alignSpacing.horizontal
+        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        f.tx = baseX
+        f.ty = baseY
         this.plumb.animate(
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
             duration: this.flowConfig.defaultStyle.alignDuration,
-            complete: function() {
-              f.x = f.tx;
-              f.y = f.ty;
+            complete: function () {
+              f.x = f.tx
+              f.y = f.ty
             }
           }
-        );
+        )
       }
     },
     // 水平居中
-    levelCenter() {
-      if (!this.checkAlign()) return;
-      let nodeList = this.flowData.nodeList;
-      let selectGroup = this.currentSelectGroup;
-      let baseX = selectGroup[0].x;
-      let baseY = selectGroup[0].y;
-      let firstY = baseY;
+    levelCenter () {
+      if (!this.checkAlign()) return
+      let nodeList = this.flowData.nodeList
+      let selectGroup = this.currentSelectGroup
+      let baseX = selectGroup[0].x
+      let baseY = selectGroup[0].y
+      let firstY = baseY
       for (let i = 1; i < selectGroup.length; i++) {
         baseY =
           firstY +
           utils.div(selectGroup[0].height, 2) -
-          utils.div(selectGroup[i].height, 2);
+          utils.div(selectGroup[i].height, 2)
         baseX =
           baseX +
           selectGroup[i - 1].width +
-          this.flowConfig.defaultStyle.alignSpacing.horizontal;
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
-        f.tx = baseX;
-        f.ty = baseY;
+          this.flowConfig.defaultStyle.alignSpacing.horizontal
+        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        f.tx = baseX
+        f.ty = baseY
         this.plumb.animate(
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
             duration: this.flowConfig.defaultStyle.alignDuration,
-            complete: function() {
-              f.x = f.tx;
-              f.y = f.ty;
+            complete: function () {
+              f.x = f.tx
+              f.y = f.ty
             }
           }
-        );
+        )
       }
     },
     // 水平下对齐
-    levelDown() {
-      if (!this.checkAlign()) return;
-      let nodeList = this.flowData.nodeList;
-      let selectGroup = this.currentSelectGroup;
-      let baseX = selectGroup[0].x;
-      let baseY = selectGroup[0].y;
-      let firstY = baseY;
+    levelDown () {
+      if (!this.checkAlign()) return
+      let nodeList = this.flowData.nodeList
+      let selectGroup = this.currentSelectGroup
+      let baseX = selectGroup[0].x
+      let baseY = selectGroup[0].y
+      let firstY = baseY
       for (let i = 1; i < selectGroup.length; i++) {
-        baseY = firstY + selectGroup[0].height - selectGroup[i].height;
+        baseY = firstY + selectGroup[0].height - selectGroup[i].height
         baseX =
           baseX +
           selectGroup[i - 1].width +
-          this.flowConfig.defaultStyle.alignSpacing.horizontal;
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
-        f.tx = baseX;
-        f.ty = baseY;
+          this.flowConfig.defaultStyle.alignSpacing.horizontal
+        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        f.tx = baseX
+        f.ty = baseY
         this.plumb.animate(
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
             duration: this.flowConfig.defaultStyle.alignDuration,
-            complete: function() {
-              f.x = f.tx;
-              f.y = f.ty;
+            complete: function () {
+              f.x = f.tx
+              f.y = f.ty
             }
           }
-        );
+        )
       }
     },
-    addRemark() {
-      this.$message.info("添加备注(待完善)...");
+    addRemark () {
+      this.$message.info('添加备注(待完善)...')
     },
     // 复制节点
-    copyNode() {
-      this.clipboard = [];
+    copyNode () {
+      this.clipboard = []
       if (this.currentSelectGroup.length > 0) {
-        this.clipboard = Object.assign([], this.currentSelectGroup);
+        this.clipboard = Object.assign([], this.currentSelectGroup)
       } else if (this.currentSelect.id) {
-        this.clipboard.push(this.currentSelect);
+        this.clipboard.push(this.currentSelect)
       }
     },
     // 查询删除节点关联的连接线
-    getConnectionsByNodeId(nodeId) {
+    getConnectionsByNodeId (nodeId) {
       let conns1 = this.plumb.getConnections({
         source: nodeId
-      });
+      })
       let conns2 = this.plumb.getConnections({
         target: nodeId
-      });
-      return conns1.concat(conns2);
+      })
+      return conns1.concat(conns2)
     },
     // 删除节点
-    deleteNode() {
-      let nodeList = this.flowData.nodeList;
-      let linkList = this.flowData.linkList;
-      let arr = [];
+    deleteNode () {
+      let nodeList = this.flowData.nodeList
+      let linkList = this.flowData.linkList
+      let arr = []
 
-      arr.push(Object.assign({}, this.currentSelect));
+      arr.push(Object.assign({}, this.currentSelect))
 
-      this.flowData.status = this.flowConfig.flowStatus.LOADING;
+      this.flowData.status = this.flowConfig.flowStatus.LOADING
 
       arr.forEach(c => {
-        let conns = this.getConnectionsByNodeId(c.id);
+        let conns = this.getConnectionsByNodeId(c.id)
         conns.forEach(conn => {
           linkList.splice(
             linkList.findIndex(
@@ -658,179 +658,180 @@ export default {
                 link.targetId === conn.targetId
             ),
             1
-          );
+          )
           this.plumb.deleteConnection(
             this.plumb.getConnections({
               source: conn.sourceId,
               target: conn.targetId
             })[0]
-          );
-        });
-        let inx = nodeList.findIndex(node => node.id === c.id);
-        nodeList.splice(inx, 1);
-      });
-      this.flowData.status = this.flowConfig.flowStatus.CREATE;
-      this.selectContainer();
+          )
+        })
+        let inx = nodeList.findIndex(node => node.id === c.id)
+        nodeList.splice(inx, 1)
+      })
+      this.flowData.status = this.flowConfig.flowStatus.CREATE
+      this.selectContainer()
     },
     // 增加画布节点
-    addNewNode(node) {
-      let x = this.mouse.position.x;
-      let y = this.mouse.position.y;
-      let nodePos = this.computeNodePos(x, y);
-      x = nodePos.x;
-      y = nodePos.y;
+    addNewNode (node) {
+      let x = this.mouse.position.x
+      let y = this.mouse.position.y
+      let nodePos = this.computeNodePos(x, y)
+      x = nodePos.x
+      y = nodePos.y
 
-      let newNode = Object.assign({}, node);
-      newNode.id = newNode.type + "-" + utils.getId();
-      newNode.height = 50;
+      let newNode = Object.assign({}, node)
+      newNode.id = newNode.type + '-' + utils.getId()
+      newNode.height = 50
       if (
-        newNode.type === "start" ||
-        newNode.type === "end" ||
-        newNode.type === "event" ||
-        newNode.type === "gateway"
+        newNode.type === 'start' ||
+        newNode.type === 'end' ||
+        newNode.type === 'event' ||
+        newNode.type === 'gateway'
       ) {
-        newNode.x = x - 25;
-        newNode.width = 50;
+        newNode.x = x - 25
+        newNode.width = 50
       } else {
-        newNode.x = x - 60;
-        newNode.width = 120;
+        newNode.x = x - 60
+        newNode.width = 120
       }
-      newNode.y = y - 25;
-      if (newNode.type === "x-lane") {
-        newNode.height = 200;
-        newNode.width = 500;
-      } else if (newNode.type === "y-lane") {
-        newNode.height = 500;
-        newNode.width = 200;
+      newNode.y = y - 25
+      if (newNode.type === 'x-lane') {
+        newNode.height = 200
+        newNode.width = 500
+      } else if (newNode.type === 'y-lane') {
+        newNode.height = 500
+        newNode.width = 200
       }
-      this.flowData.nodeList.push(newNode);
+      this.flowData.nodeList.push(newNode)
     },
     // x, y取整计算
-    computeNodePos(x, y) {
-      const pxx = this.flowConfig.defaultStyle.alignGridPX[0];
-      const pxy = this.flowConfig.defaultStyle.alignGridPX[1];
-      if (x % pxx) x = pxx - (x % pxx) + x;
-      if (y % pxy) y = pxy - (y % pxy) + y;
+    computeNodePos (x, y) {
+      const pxx = this.flowConfig.defaultStyle.alignGridPX[0]
+      const pxy = this.flowConfig.defaultStyle.alignGridPX[1]
+      if (x % pxx) x = pxx - (x % pxx) + x
+      if (y % pxy) y = pxy - (y % pxy) + y
       return {
         x: x,
         y: y
-      };
+      }
     },
     // 点击画布
-    containerHandler() {
-      this.selectContainer();
+    containerHandler () {
+      this.selectContainer()
     },
     // 清除面布已选内容
-    selectContainer() {
-      this.currentSelect = {};
+    selectContainer () {
+      this.currentSelect = {}
       // 开启快捷键
-      this.$emit("getShortcut");
+      this.$emit('getShortcut')
     },
     // 是否为多选行为
-    isMultiple(callback) {
-      callback(this.rectangleMultiple.flag);
+    isMultiple (callback) {
+      callback(this.rectangleMultiple.flag)
     },
     // 更新组节点信息
-    updateNodePos() {
-      let nodeList = this.flowData.nodeList;
+    updateNodePos () {
+      let nodeList = this.flowData.nodeList
       this.currentSelectGroup.forEach(node => {
-        let l = parseInt(document.querySelector("#" + node.id).style.left);
-        let t = parseInt(document.querySelector("#" + node.id).style.top);
-        let f = nodeList.filter(n => n.id === node.id)[0];
-        f.x = l;
-        f.y = t;
-      });
+        let l = parseInt(document.querySelector('#' + node.id).style.left)
+        let t = parseInt(document.querySelector('#' + node.id).style.top)
+        let f = nodeList.filter(n => n.id === node.id)[0]
+        f.x = l
+        f.y = t
+      })
     },
     // 计算辅助线
-    alignForLine(e) {
-      if (this.selectGroup.length > 1) return;
+    alignForLine (e) {
+      if (this.selectGroup.length > 1) return
       if (this.container.auxiliaryLine.controlFnTimesFlag) {
-        let elId = e.el.id;
-        let nodeList = this.flowData.nodeList;
+        let elId = e.el.id
+        let nodeList = this.flowData.nodeList
         nodeList.forEach(node => {
           if (elId !== node.id) {
-            let dis = this.flowConfig.defaultStyle.showAuxiliaryLineDistance,
-              elPos = e.pos,
-              elH = e.el.offsetHeight,
-              elW = e.el.offsetWidth,
-              disX = elPos[0] - node.x,
-              disY = elPos[1] - node.y;
+            let dis = this.flowConfig.defaultStyle.showAuxiliaryLineDistance
+            let elPos = e.pos
+            let elH = e.el.offsetHeight
+            let elW = e.el.offsetWidth
+            let disX = elPos[0] - node.x
+            let disY = elPos[1] - node.y
+
             if (
               (disX >= -dis && disX <= dis) ||
               (disX + elW >= -dis && disX + elW <= dis)
             ) {
-              this.container.auxiliaryLine.isShowYLine = true;
-              this.auxiliaryLinePos.x = node.x + this.container.pos.left;
-              let nodeMidPointX = node.x + node.width / 2;
+              this.container.auxiliaryLine.isShowYLine = true
+              this.auxiliaryLinePos.x = node.x + this.container.pos.left
+              let nodeMidPointX = node.x + node.width / 2
               if (nodeMidPointX === elPos[0] + elW / 2) {
                 this.auxiliaryLinePos.x =
-                  nodeMidPointX + this.container.pos.left;
+                  nodeMidPointX + this.container.pos.left
               }
             }
             if (
               (disY >= -dis && disY <= dis) ||
               (disY + elH >= -dis && disY + elH <= dis)
             ) {
-              this.container.auxiliaryLine.isShowXLine = true;
-              this.auxiliaryLinePos.y = node.y + this.container.pos.top;
-              let nodeMidPointY = node.y + node.height / 2;
+              this.container.auxiliaryLine.isShowXLine = true
+              this.auxiliaryLinePos.y = node.y + this.container.pos.top
+              let nodeMidPointY = node.y + node.height / 2
               if (nodeMidPointY === elPos[1] + elH / 2) {
                 this.auxiliaryLinePos.y =
-                  nodeMidPointY + this.container.pos.left;
+                  nodeMidPointY + this.container.pos.left
               }
             }
           }
-        });
-        this.container.auxiliaryLine.controlFnTimesFlag = false;
+        })
+        this.container.auxiliaryLine.controlFnTimesFlag = false
         setTimeout(() => {
-          this.container.auxiliaryLine.controlFnTimesFlag = true;
-        }, 200);
+          this.container.auxiliaryLine.controlFnTimesFlag = true
+        }, 200)
       }
     },
     // 隐藏辅助线
-    hideAlignLine() {
+    hideAlignLine () {
       if (this.container.auxiliaryLine.isOpen) {
-        this.container.auxiliaryLine.isShowXLine = false;
-        this.container.auxiliaryLine.isShowYLine = false;
+        this.container.auxiliaryLine.isShowXLine = false
+        this.container.auxiliaryLine.isShowYLine = false
       }
     }
   },
   watch: {
-    select(val) {
-      this.currentSelect = val;
+    select (val) {
+      this.currentSelect = val
       // 清除连接线焦点
-      if (this.tempLinkId !== "") {
+      if (this.tempLinkId !== '') {
         document
-          .querySelector("#" + this.tempLinkId)
-          .classList.remove("link-active");
-        this.tempLinkId = "";
+          .querySelector('#' + this.tempLinkId)
+          .classList.remove('link-active')
+        this.tempLinkId = ''
       }
       // 设置连接线焦点
-      if (this.currentSelect.type === "link") {
-        this.tempLinkId = this.currentSelect.id;
+      if (this.currentSelect.type === 'link') {
+        this.tempLinkId = this.currentSelect.id
         document
-          .querySelector("#" + this.currentSelect.id)
-          .classList.add("link-active");
+          .querySelector('#' + this.currentSelect.id)
+          .classList.add('link-active')
       }
     },
     currentSelect: {
-      handler(val) {
-        this.$emit("update:select", val);
+      handler (val) {
+        this.$emit('update:select', val)
       },
       deep: true
     },
-    selectGroup(val) {
-      this.currentSelectGroup = val;
-      if (this.currentSelectGroup.length <= 0) this.plumb.clearDragSelection();
+    selectGroup (val) {
+      this.currentSelectGroup = val
+      if (this.currentSelectGroup.length <= 0) this.plumb.clearDragSelection()
     },
     currentSelectGroup: {
-      handler(val) {
-        this.$emit("update:selectGroup", val);
+      handler (val) {
+        this.$emit('update:selectGroup', val)
       },
       deep: true
     }
   }
-};
+}
 </script>
 
 <style lang="less">

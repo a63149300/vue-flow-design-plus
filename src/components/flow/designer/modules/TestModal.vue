@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import JsonView from "vue-json-viewer";
+import JsonView from 'vue-json-viewer'
 
 export default {
   components: {
@@ -36,37 +36,37 @@ export default {
   props: {
     flowConfig: {
       type: Object,
-      default: {}
+      default: () => ({})
     }
   },
-  data() {
+  data () {
     return {
       testVisible: false,
       flowData: null,
-      flowDataJson: ""
-    };
+      flowDataJson: ''
+    }
   },
   methods: {
-    onClose() {
-      this.testVisible = false;
+    onClose () {
+      this.testVisible = false
     },
     // 编辑框
-    editFlowDataJson(e) {
-      this.flowDataJson = e.target.value;
+    editFlowDataJson (e) {
+      this.flowDataJson = e.target.value
     },
     // 暂存
-    tempSave() {
-      let tempObj = Object.assign({}, this.flowData);
-      tempObj.status = this.flowConfig.flowStatus.SAVE;
-      this.flowDataJson = JSON.stringify(tempObj);
+    tempSave () {
+      let tempObj = Object.assign({}, this.flowData)
+      tempObj.status = this.flowConfig.flowStatus.SAVE
+      this.flowDataJson = JSON.stringify(tempObj)
     },
     // 加载(暂存中的json数据)
-    onLoad() {
-      this.$emit("loadFlow", this.flowDataJson);
-      this.onClose();
+    onLoad () {
+      this.$emit('loadFlow', this.flowDataJson)
+      this.onClose()
     }
   }
-};
+}
 </script>
 
 <style></style>

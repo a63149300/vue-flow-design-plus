@@ -13,14 +13,14 @@ import Storage from 'vue-lsp'
 const options = {
   namespace: 'flow__', // key prefix
   name: 'ls', // name variable Vue.[ls] or this.[$ls],
-  storage: 'local', // storage name session, local, memory
-};
+  storage: 'local' // storage name session, local, memory
+}
 
 Vue.config.productionTip = false
 
 Vue.use(VueContextMenu)
 Vue.use(vcolorpicker)
-Vue.use(Storage, options);
+Vue.use(Storage, options)
 
 /* eslint-disable no-new */
 new Vue({
