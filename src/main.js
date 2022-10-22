@@ -8,10 +8,19 @@ import 'ant-design-vue/dist/antd.css'
 import router from './router'
 import VueContextMenu from 'vue-contextmenu'
 import vcolorpicker from 'vcolorpicker'
+import Storage from 'vue-lsp'
+
+const options = {
+  namespace: 'flow__', // key prefix
+  name: 'ls', // name variable Vue.[ls] or this.[$ls],
+  storage: 'local', // storage name session, local, memory
+};
+
 Vue.config.productionTip = false
 
 Vue.use(VueContextMenu)
 Vue.use(vcolorpicker)
+Vue.use(Storage, options);
 
 /* eslint-disable no-new */
 new Vue({

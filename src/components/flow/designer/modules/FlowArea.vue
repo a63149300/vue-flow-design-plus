@@ -44,6 +44,7 @@
         v-for="node in flowData.nodeList"
         :key="node.id"
         :node="node"
+        :flowConfig="flowConfig"
         :plumb="plumb"
         :select.sync="currentSelect"
         :selectGroup.sync="currentSelectGroup"
@@ -99,7 +100,6 @@
 </template>
 
 <script>
-import { flowConfig } from "../config/args-config.js";
 import { utils } from "../utils/common.js";
 import FlowNode from "./FlowNode";
 
@@ -111,7 +111,8 @@ export default {
     "select",
     "selectGroup",
     "currentTool",
-    "dragInfo"
+    "dragInfo",
+    "flowConfig",
   ],
   components: {
     FlowNode
@@ -127,16 +128,16 @@ export default {
         },
         dragFlag: false,
         draging: false,
-        scale: flowConfig.defaultStyle.containerScale.init,
+        scale: this.flowConfig.defaultStyle.containerScale.init,
         scaleFlag: false,
         scaleOrigin: {
           x: 0,
           y: 0
         },
-        scaleShow: utils.mul(flowConfig.defaultStyle.containerScale.init, 100),
+        scaleShow: utils.mul(this.flowConfig.defaultStyle.containerScale.init, 100),
         // 辅助线
         auxiliaryLine: {
-          isOpen: flowConfig.defaultStyle.isOpenAuxiliaryLine,
+          isOpen: this.flowConfig.defaultStyle.isOpenAuxiliaryLine,
           isShowXLine: false,
           isShowYLine: false,
           controlFnTimesFlag: true
@@ -169,8 +170,8 @@ export default {
         height: 0,
         width: 0
       },
-      containerContextMenuData: flowConfig.contextMenu.container,
-      nodeContextMenuData: flowConfig.contextMenu.node,
+      containerContextMenuData: this.flowConfig.contextMenu.container,
+      nodeContextMenuData: this.flowConfig.contextMenu.node,
       // 当前聚焦的连接线ID
       tempLinkId: "",
       // 剪切板内容
@@ -337,9 +338,9 @@ export default {
       this.container.scaleOrigin.y = this.mouse.position.y;
       let newScale = utils.add(
         this.container.scale,
-        flowConfig.defaultStyle.containerScale.onceEnlarge
+        this.flowConfig.defaultStyle.containerScale.onceEnlarge
       );
-      if (newScale <= flowConfig.defaultStyle.containerScale.max) {
+      if (newScale <= this.flowConfig.defaultStyle.containerScale.max) {
         this.container.scale = newScale;
         this.container.scaleShow = utils.mul(this.container.scale, 100);
         this.plumb.setZoom(this.container.scale);
@@ -351,9 +352,9 @@ export default {
       this.container.scaleOrigin.y = this.mouse.position.y;
       let newScale = utils.sub(
         this.container.scale,
-        flowConfig.defaultStyle.containerScale.onceNarrow
+        this.flowConfig.defaultStyle.containerScale.onceNarrow
       );
-      if (newScale >= flowConfig.defaultStyle.containerScale.min) {
+      if (newScale >= this.flowConfig.defaultStyle.containerScale.min) {
         this.container.scale = newScale;
         this.container.scaleShow = utils.mul(this.container.scale, 100);
         this.plumb.setZoom(this.container.scale);
@@ -444,7 +445,7 @@ export default {
         baseY =
           baseY +
           selectGroup[i - 1].height +
-          flowConfig.defaultStyle.alignSpacing.vertical;
+          this.flowConfig.defaultStyle.alignSpacing.vertical;
         let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
         f.tx = baseX;
         f.ty = baseY;
@@ -452,7 +453,7 @@ export default {
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
-            duration: flowConfig.defaultStyle.alignDuration,
+            duration: this.flowConfig.defaultStyle.alignDuration,
             complete: function() {
               f.x = f.tx;
               f.y = f.ty;
@@ -473,7 +474,7 @@ export default {
         baseY =
           baseY +
           selectGroup[i - 1].height +
-          flowConfig.defaultStyle.alignSpacing.vertical;
+          this.flowConfig.defaultStyle.alignSpacing.vertical;
         baseX =
           firstX +
           utils.div(selectGroup[0].width, 2) -
@@ -485,7 +486,7 @@ export default {
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
-            duration: flowConfig.defaultStyle.alignDuration,
+            duration: this.flowConfig.defaultStyle.alignDuration,
             complete: function() {
               f.x = f.tx;
               f.y = f.ty;
@@ -506,7 +507,7 @@ export default {
         baseY =
           baseY +
           selectGroup[i - 1].height +
-          flowConfig.defaultStyle.alignSpacing.vertical;
+          this.flowConfig.defaultStyle.alignSpacing.vertical;
         baseX = firstX + selectGroup[0].width - selectGroup[i].width;
         let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
         f.tx = baseX;
@@ -515,7 +516,7 @@ export default {
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
-            duration: flowConfig.defaultStyle.alignDuration,
+            duration: this.flowConfig.defaultStyle.alignDuration,
             complete: function() {
               f.x = f.tx;
               f.y = f.ty;
@@ -535,7 +536,7 @@ export default {
         baseX =
           baseX +
           selectGroup[i - 1].width +
-          flowConfig.defaultStyle.alignSpacing.level;
+          this.flowConfig.defaultStyle.alignSpacing.horizontal;
         let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
         f.tx = baseX;
         f.ty = baseY;
@@ -543,7 +544,7 @@ export default {
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
-            duration: flowConfig.defaultStyle.alignDuration,
+            duration: this.flowConfig.defaultStyle.alignDuration,
             complete: function() {
               f.x = f.tx;
               f.y = f.ty;
@@ -568,7 +569,7 @@ export default {
         baseX =
           baseX +
           selectGroup[i - 1].width +
-          flowConfig.defaultStyle.alignSpacing.level;
+          this.flowConfig.defaultStyle.alignSpacing.horizontal;
         let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
         f.tx = baseX;
         f.ty = baseY;
@@ -576,7 +577,7 @@ export default {
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
-            duration: flowConfig.defaultStyle.alignDuration,
+            duration: this.flowConfig.defaultStyle.alignDuration,
             complete: function() {
               f.x = f.tx;
               f.y = f.ty;
@@ -598,7 +599,7 @@ export default {
         baseX =
           baseX +
           selectGroup[i - 1].width +
-          flowConfig.defaultStyle.alignSpacing.level;
+          this.flowConfig.defaultStyle.alignSpacing.horizontal;
         let f = nodeList.filter(n => n.id === selectGroup[i].id)[0];
         f.tx = baseX;
         f.ty = baseY;
@@ -606,7 +607,7 @@ export default {
           selectGroup[i].id,
           { top: baseY, left: baseX },
           {
-            duration: flowConfig.defaultStyle.alignDuration,
+            duration: this.flowConfig.defaultStyle.alignDuration,
             complete: function() {
               f.x = f.tx;
               f.y = f.ty;
@@ -645,7 +646,7 @@ export default {
 
       arr.push(Object.assign({}, this.currentSelect));
 
-      this.flowData.status = flowConfig.flowStatus.LOADING;
+      this.flowData.status = this.flowConfig.flowStatus.LOADING;
 
       arr.forEach(c => {
         let conns = this.getConnectionsByNodeId(c.id);
@@ -668,7 +669,7 @@ export default {
         let inx = nodeList.findIndex(node => node.id === c.id);
         nodeList.splice(inx, 1);
       });
-      this.flowData.status = flowConfig.flowStatus.CREATE;
+      this.flowData.status = this.flowConfig.flowStatus.CREATE;
       this.selectContainer();
     },
     // 增加画布节点
@@ -706,8 +707,8 @@ export default {
     },
     // x, y取整计算
     computeNodePos(x, y) {
-      const pxx = flowConfig.defaultStyle.alignGridPX[0];
-      const pxy = flowConfig.defaultStyle.alignGridPX[1];
+      const pxx = this.flowConfig.defaultStyle.alignGridPX[0];
+      const pxy = this.flowConfig.defaultStyle.alignGridPX[1];
       if (x % pxx) x = pxx - (x % pxx) + x;
       if (y % pxy) y = pxy - (y % pxy) + y;
       return {
@@ -748,7 +749,7 @@ export default {
         let nodeList = this.flowData.nodeList;
         nodeList.forEach(node => {
           if (elId !== node.id) {
-            let dis = flowConfig.defaultStyle.showAuxiliaryLineDistance,
+            let dis = this.flowConfig.defaultStyle.showAuxiliaryLineDistance,
               elPos = e.pos,
               elH = e.el.offsetHeight,
               elW = e.el.offsetWidth,

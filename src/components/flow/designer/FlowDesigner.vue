@@ -126,6 +126,7 @@
             :dragInfo="dragInfo"
             :browserType="browserType"
             :flowData="flowData"
+            :flowConfig="flowConfig"
             :select.sync="currentSelect"
             :selectGroup.sync="currentSelectGroup"
             :plumb="plumb"
@@ -181,26 +182,27 @@
       <img :src="flowPicture.url" style="width: 100%" />
     </a-modal>
     <!-- 设置 -->
-    <setting-modal ref="settingModal"></setting-modal>
+    <setting-modal :flowConfig="flowConfig" ref="settingModal"></setting-modal>
     <!-- 快捷键大全 -->
     <shortcut-modal ref="shortcutModal"></shortcut-modal>
     <!-- 测试 -->
-    <test-modal ref="testModal" @loadFlow="loadFlow"></test-modal>
+    <test-modal :flowConfig="flowConfig" ref="testModal" @loadFlow="loadFlow"></test-modal>
   </div>
 </template>
 
 <script>
 import { jsPlumb } from "jsplumb";
+import cloneDeep from 'lodash/cloneDeep';
 import {
   tools,
   commonNodes,
   highNodes,
   laneNodes
 } from "./config/basic-node-config.js";
-import { flowConfig, shortcutKeys } from "./config/args-config.js";
+import { flowConfig as defaultFlowConfig, shortcutKeys, settingConfig } from "./config/args-config.js";
 import html2canvas from "html2canvas";
 import canvg from "canvg";
-import { utils } from "./utils/common.js";
+import { utils, setFlowConfig } from "./utils/common.js";
 import FlowArea from "./modules/FlowArea";
 import FlowAttr from "./modules/FlowAttr";
 import SettingModal from "./modules/SettingModal";
@@ -221,20 +223,9 @@ export default {
     TestModal,
     NodeList
   },
-  mounted() {
-    // 浏览器兼容性
-    this.dealCompatibility();
-    // 实例化JsPlumb
-    this.initJsPlumb();
-    // 初始化快捷键
-    this.listenShortcut();
-    // 初始化流程图
-    this.initFlow();
-    // 关闭提示
-    this.listenPage();
-  },
   data() {
     return {
+      flowConfig: cloneDeep(defaultFlowConfig),
       info: {
         version: "1.1.0",
         author: "前端爱码士",
@@ -259,7 +250,7 @@ export default {
           showGridText: "隐藏网格",
           showGridIcon: "eye"
         },
-        status: flowConfig.flowStatus.CREATE,
+        status: defaultFlowConfig.flowStatus.CREATE,
         remarks: []
       },
       currentTool: {
@@ -270,7 +261,7 @@ export default {
       currentSelect: {},
       currentSelectGroup: [],
       activeShortcut: true, // 画布聚焦开启快捷键
-      linkContextMenuData: flowConfig.contextMenu.link,
+      linkContextMenuData: defaultFlowConfig.contextMenu.link,
       flowPicture: {
         url: "",
         modalVisible: false,
@@ -283,7 +274,27 @@ export default {
       }
     };
   },
+  mounted() {
+    // 浏览器兼容性
+    this.dealCompatibility();
+    // 实例化JsPlumb
+    this.initJsPlumb();
+    // 初始化快捷键
+    this.listenShortcut();
+    // 初始画布设置
+    this.initSettingConfig();
+    // 初始化流程图
+    this.initFlow();
+  },
   methods: {
+    // 初始画布设置
+    initSettingConfig() {
+      if (!this.$ls.get('settingConfig')) {
+        this.$ls.set('settingConfig', settingConfig);
+      } else {
+        this.flowConfig = setFlowConfig(this.flowConfig, this.$ls.get('settingConfig'));
+      }
+    },
     // 设置dragInfo
     setDragInfo(info) {
       this.dragInfo = info;
@@ -301,7 +312,7 @@ export default {
     },
     // 实例化JsPlumb
     initJsPlumb() {
-      this.plumb = jsPlumb.getInstance(flowConfig.jsPlumbInsConfig);
+      this.plumb = jsPlumb.getInstance(this.flowConfig.jsPlumbInsConfig);
 
       this.plumb.bind("beforeDrop", info => {
         let sourceId = info.sourceId;
@@ -324,12 +335,12 @@ export default {
           id,
           label;
         if (
-          this.flowData.status === flowConfig.flowStatus.CREATE ||
-          this.flowData.status === flowConfig.flowStatus.MODIFY
+          this.flowData.status === this.flowConfig.flowStatus.CREATE ||
+          this.flowData.status === this.flowConfig.flowStatus.MODIFY
         ) {
           id = "link-" + utils.getId();
           label = "";
-        } else if (this.flowData.status === flowConfig.flowStatus.LOADING) {
+        } else if (this.flowData.status === this.flowConfig.flowStatus.LOADING) {
           let l = this.flowData.linkList[this.flowData.linkList.length - 1];
           id = l.id;
           label = l.label;
@@ -341,9 +352,9 @@ export default {
         o.targetId = conn.targetId;
         o.label = label;
         o.cls = {
-          linkType: flowConfig.jsPlumbInsConfig.Connector[0],
-          linkColor: flowConfig.jsPlumbInsConfig.PaintStyle.stroke,
-          linkThickness: flowConfig.jsPlumbInsConfig.PaintStyle.strokeWidth
+          linkType: this.flowConfig.jsPlumbInsConfig.Connector[0],
+          linkColor: this.flowConfig.jsPlumbInsConfig.PaintStyle.stroke,
+          linkThickness: this.flowConfig.jsPlumbInsConfig.PaintStyle.strokeWidth
         };
         document.querySelector("#" + id).addEventListener("contextmenu", e => {
           this.showLinkContextMenu(e);
@@ -360,12 +371,12 @@ export default {
           )[0];
         });
 
-        if (this.flowData.status !== flowConfig.flowStatus.LOADING)
+        if (this.flowData.status !== this.flowConfig.flowStatus.LOADING)
           this.flowData.linkList.push(o);
       });
 
       this.plumb.importDefaults({
-        ConnectionsDetachable: flowConfig.jsPlumbConfig.conn.isDetachable
+        ConnectionsDetachable: this.flowConfig.jsPlumbConfig.conn.isDetachable
       });
     },
     // 初始化快捷键
@@ -427,19 +438,9 @@ export default {
         }
       };
     },
-    // 关闭提示
-    listenPage() {
-      window.onbeforeunload = function(e) {
-        e = e || window.event;
-        if (e) {
-          e.returnValue = "关闭提示";
-        }
-        return "关闭提示";
-      };
-    },
     // 初始化流程图
     initFlow() {
-      if (this.flowData.status === flowConfig.flowStatus.CREATE) {
+      if (this.flowData.status === this.flowConfig.flowStatus.CREATE) {
         this.flowData.attr.id = "flow-" + utils.getId();
       } else {
         this.loadFlow();
@@ -452,7 +453,7 @@ export default {
         let loadData = JSON.parse(json);
         this.flowData.attr = loadData.attr;
         this.flowData.config = loadData.config;
-        this.flowData.status = flowConfig.flowStatus.LOADING;
+        this.flowData.status = this.flowConfig.flowStatus.LOADING;
         this.plumb.batch(() => {
           let nodeList = loadData.nodeList;
           nodeList.forEach(node => {
@@ -465,7 +466,7 @@ export default {
               let conn = this.plumb.connect({
                 source: link.sourceId,
                 target: link.targetId,
-                anchor: flowConfig.jsPlumbConfig.anchor.default,
+                anchor: this.flowConfig.jsPlumbConfig.anchor.default,
                 connector: [
                   link.cls.linkType,
                   {
@@ -509,7 +510,7 @@ export default {
             });
             this.currentSelect = {};
             this.currentSelectGroup = [];
-            this.flowData.status = flowConfig.flowStatus.MODIFY;
+            this.flowData.status = this.flowConfig.flowStatus.MODIFY;
           });
         }, true);
         let canvasSize = this.computeCanvasSize();
@@ -573,11 +574,11 @@ export default {
         if (node.type !== "x-lane" && node.type !== "y-lane") {
           this.plumb.makeSource(
             node.id,
-            flowConfig.jsPlumbConfig.makeSourceConfig
+            this.flowConfig.jsPlumbConfig.makeSourceConfig
           );
           this.plumb.makeTarget(
             node.id,
-            flowConfig.jsPlumbConfig.makeTargetConfig
+            this.flowConfig.jsPlumbConfig.makeTargetConfig
           );
         }
       });
@@ -608,7 +609,7 @@ export default {
       let flowObj = Object.assign({}, this.flowData);
 
       if (!this.checkFlow()) return;
-      flowObj.status = flowConfig.flowStatus.SAVE;
+      flowObj.status = this.flowConfig.flowStatus.SAVE;
       let d = JSON.stringify(flowObj);
       this.$message.success("保存流程成功！请查看控制台。");
       return d;
@@ -639,7 +640,7 @@ export default {
 
       let canvasSize = this.computeCanvasSize();
 
-      let pbd = flowConfig.defaultStyle.photoBlankDistance;
+      let pbd = this.flowConfig.defaultStyle.photoBlankDistance;
       let offsetPbd = utils.div(pbd, 2);
 
       html2canvas($Container, {
@@ -783,7 +784,7 @@ export default {
     },
     // 键盘移动节点
     moveNode(type) {
-      let m = flowConfig.defaultStyle.movePx,
+      let m = this.flowConfig.defaultStyle.movePx,
         isX = true;
       switch (type) {
         case "left":

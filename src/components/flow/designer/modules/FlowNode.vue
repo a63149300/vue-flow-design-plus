@@ -87,10 +87,9 @@
 
 <script>
   import { Resizable } from 'resizable-dom'
-  import { flowConfig } from '../config/args-config.js'
 
   export default {
-    props: ['select', 'selectGroup', 'node', 'plumb', 'currentTool'],
+    props: ['select', 'selectGroup', 'node', 'plumb', 'currentTool', 'flowConfig'],
     mounted () {
       this.registerNode()
     },
@@ -137,9 +136,9 @@
             }
             return false
           },
-          grid: flowConfig.defaultStyle.alignGridPX,
+          grid: this.flowConfig.defaultStyle.alignGridPX,
           drag: e => {
-            if (flowConfig.defaultStyle.isOpenAuxiliaryLine) {
+            if (this.flowConfig.defaultStyle.isOpenAuxiliaryLine) {
               this.$emit('alignForLine', e)
             }
           },
