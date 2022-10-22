@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { flowConfig } from '../config/args-config.js'
+  import { shortcutKeys } from '../config/args-config.js'
 
   export default {
     data () {
@@ -44,7 +44,7 @@
     methods: {
       open () {
         this.modalVisible = true
-        this.dataSource = Object.values(flowConfig.shortcut)
+        this.dataSource = Object.values(shortcutKeys)
 
       },
       close () {

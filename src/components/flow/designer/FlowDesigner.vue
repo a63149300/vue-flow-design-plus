@@ -197,7 +197,7 @@ import {
   highNodes,
   laneNodes
 } from "./config/basic-node-config.js";
-import { flowConfig } from "./config/args-config.js";
+import { flowConfig, shortcutKeys } from "./config/args-config.js";
 import html2canvas from "html2canvas";
 import canvg from "canvg";
 import { utils } from "./utils/common.js";
@@ -212,7 +212,6 @@ import { getBrowserType } from './utils/common'
 export default {
   name: "vfdp",
   components: {
-    flowConfig,
     html2canvas,
     canvg,
     FlowArea,
@@ -293,7 +292,7 @@ export default {
     dealCompatibility() {
       this.browserType = getBrowserType();
       if (this.browserType === 2) {
-        flowConfig.shortcut.scaleContainer = {
+        shortcutKeys.scaleContainer = {
           code: 16,
           codeName: "SHIFT(chrome下为ALT)",
           shortcutName: "画布缩放"
@@ -379,38 +378,38 @@ export default {
         let key = event.keyCode;
 
         switch (key) {
-          case flowConfig.shortcut.multiple.code:
+          case shortcutKeys.multiple.code:
             this.$refs.flowArea.rectangleMultiple.flag = true;
             break;
-          case flowConfig.shortcut.dragContainer.code:
+          case shortcutKeys.dragContainer.code:
             this.$refs.flowArea.container.dragFlag = true;
             break;
-          case flowConfig.shortcut.dragTool.code:
+          case shortcutKeys.dragTool.code:
             this.selectTool("drag");
             break;
-          case flowConfig.shortcut.connTool.code:
+          case shortcutKeys.connTool.code:
             this.selectTool("connection");
             break;
-          case flowConfig.shortcut.leftMove.code:
+          case shortcutKeys.leftMove.code:
             this.moveNode("left");
             break;
-          case flowConfig.shortcut.upMove.code:
+          case shortcutKeys.upMove.code:
             this.moveNode("up");
             break;
-          case flowConfig.shortcut.rightMove.code:
+          case shortcutKeys.rightMove.code:
             this.moveNode("right");
             break;
-          case flowConfig.shortcut.downMove.code:
+          case shortcutKeys.downMove.code:
             this.moveNode("down");
             break;
         }
 
         if (event.ctrlKey) {
           switch (key) {
-            case flowConfig.shortcut.settingModal.code:
+            case shortcutKeys.settingModal.code:
               this.saveFlow();
               break;
-            case flowConfig.shortcut.testModal.code:
+            case shortcutKeys.testModal.code:
               this.openTest();
               break;
           }
@@ -421,9 +420,9 @@ export default {
         let event = window.event || e;
 
         let key = event.keyCode;
-        if (key === flowConfig.shortcut.dragContainer.code) {
+        if (key === shortcutKeys.dragContainer.code) {
           this.$refs.flowArea.container.dragFlag = false;
-        } else if (key === flowConfig.shortcut.multiple.code) {
+        } else if (key === shortcutKeys.multiple.code) {
           this.$refs.flowArea.rectangleMultiple.flag = false;
         }
       };
