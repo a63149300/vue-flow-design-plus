@@ -165,7 +165,14 @@ export default {
     }
   },
   methods: {
-    setDefault () {},
+    // 恢复默认
+    setDefault () {
+      this.config = setFlowConfig(this.config, settingConfig)
+      this.$ls.set('settingConfig', settingConfig)
+      this.close()
+      this.$message.success('恢复默认成功')
+    },
+    // 设置
     handleSubmit () {
       this.config = setFlowConfig(this.config, this.settingConfig)
       this.$ls.set('settingConfig', this.settingConfig)
