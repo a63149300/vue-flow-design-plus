@@ -68,9 +68,19 @@
       ></div>
     </div>
     <div class="container-scale">
-      <a-button icon="zoom-out" size="small" type="default" @click="narrowContainer"></a-button>
+      <a-button
+        icon="zoom-out"
+        size="small"
+        type="default"
+        @click="narrowContainer"
+      ></a-button>
       <span>{{ container.scaleShow }}% </span>
-      <a-button icon="zoom-in" size="small" type="default" @click="enlargeContainer"></a-button>
+      <a-button
+        icon="zoom-in"
+        size="small"
+        type="default"
+        @click="enlargeContainer"
+      ></a-button>
     </div>
     <div class="mouse-position">
       x: {{ mouse.position.x }}, y: {{ mouse.position.y }}
@@ -134,7 +144,10 @@ export default {
           x: 0,
           y: 0
         },
-        scaleShow: utils.mul(this.flowConfig.defaultStyle.containerScale.init, 100),
+        scaleShow: utils.mul(
+          this.flowConfig.defaultStyle.containerScale.init,
+          100
+        ),
         // 辅助线
         auxiliaryLine: {
           isOpen: this.flowConfig.defaultStyle.isOpenAuxiliaryLine,
@@ -446,7 +459,7 @@ export default {
           baseY +
           selectGroup[i - 1].height +
           this.flowConfig.defaultStyle.alignSpacing.vertical
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        let f = nodeList.find(n => n.id === selectGroup[i].id)
         f.tx = baseX
         f.ty = baseY
         this.plumb.animate(
@@ -479,7 +492,7 @@ export default {
           firstX +
           utils.div(selectGroup[0].width, 2) -
           utils.div(selectGroup[i].width, 2)
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        let f = nodeList.find(n => n.id === selectGroup[i].id)
         f.tx = baseX
         f.ty = baseY
         this.plumb.animate(
@@ -509,7 +522,7 @@ export default {
           selectGroup[i - 1].height +
           this.flowConfig.defaultStyle.alignSpacing.vertical
         baseX = firstX + selectGroup[0].width - selectGroup[i].width
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        let f = nodeList.find(n => n.id === selectGroup[i].id)
         f.tx = baseX
         f.ty = baseY
         this.plumb.animate(
@@ -537,7 +550,7 @@ export default {
           baseX +
           selectGroup[i - 1].width +
           this.flowConfig.defaultStyle.alignSpacing.horizontal
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        let f = nodeList.find(n => n.id === selectGroup[i].id)
         f.tx = baseX
         f.ty = baseY
         this.plumb.animate(
@@ -570,7 +583,7 @@ export default {
           baseX +
           selectGroup[i - 1].width +
           this.flowConfig.defaultStyle.alignSpacing.horizontal
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        let f = nodeList.find(n => n.id === selectGroup[i].id)
         f.tx = baseX
         f.ty = baseY
         this.plumb.animate(
@@ -600,7 +613,7 @@ export default {
           baseX +
           selectGroup[i - 1].width +
           this.flowConfig.defaultStyle.alignSpacing.horizontal
-        let f = nodeList.filter(n => n.id === selectGroup[i].id)[0]
+        let f = nodeList.find(n => n.id === selectGroup[i].id)
         f.tx = baseX
         f.ty = baseY
         this.plumb.animate(
@@ -736,7 +749,7 @@ export default {
       this.currentSelectGroup.forEach(node => {
         let l = parseInt(document.querySelector('#' + node.id).style.left)
         let t = parseInt(document.querySelector('#' + node.id).style.top)
-        let f = nodeList.filter(n => n.id === node.id)[0]
+        let f = nodeList.find(n => n.id === node.id)
         f.x = l
         f.y = t
       })
@@ -801,17 +814,19 @@ export default {
       this.currentSelect = val
       // 清除连接线焦点
       if (this.tempLinkId !== '') {
-        document
-          .querySelector('#' + this.tempLinkId)
-          .classList.remove('link-active')
+        document.querySelector('#' + this.tempLinkId) &&
+          document
+            .querySelector('#' + this.tempLinkId)
+            .classList.remove('link-active')
         this.tempLinkId = ''
       }
       // 设置连接线焦点
       if (this.currentSelect.type === 'link') {
         this.tempLinkId = this.currentSelect.id
-        document
-          .querySelector('#' + this.currentSelect.id)
-          .classList.add('link-active')
+        document.querySelector('#' + this.currentSelect.id) &&
+          document
+            .querySelector('#' + this.currentSelect.id)
+            .classList.add('link-active')
       }
     },
     currentSelect: {

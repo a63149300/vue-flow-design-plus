@@ -105,7 +105,7 @@ export default {
       let labelHandle = e => {
         let event = window.event || e
         event.stopPropagation()
-        this.currentSelect = this.flowData.linkList.filter(l => l.id === linkId)[0]
+        this.currentSelect = this.flowData.linkList.find(l => l.id === linkId)
       }
 
       if (label !== '') {

@@ -318,10 +318,10 @@ export default {
         let targetId = info.targetId
 
         if (sourceId === targetId) return false
-        let filter = this.flowData.linkList.filter(
+        let hasMultipleLine = this.flowData.linkList.find(
           link => link.sourceId === sourceId && link.targetId === targetId
         )
-        if (filter.length > 0) {
+        if (hasMultipleLine) {
           this.$message.error('同方向的两节点连线只能有一条！')
           return false
         }
@@ -357,17 +357,17 @@ export default {
         }
         document.querySelector('#' + id).addEventListener('contextmenu', e => {
           this.showLinkContextMenu(e)
-          this.currentSelect = this.flowData.linkList.filter(
+          this.currentSelect = this.flowData.linkList.find(
             l => l.id === id
-          )[0]
+          )
         })
 
         document.querySelector('#' + id).addEventListener('click', e => {
           let event = window.event || e
           event.stopPropagation()
-          this.currentSelect = this.flowData.linkList.filter(
+          this.currentSelect = this.flowData.linkList.find(
             l => l.id === id
-          )[0]
+          )
         })
 
         if (this.flowData.status !== this.flowConfig.flowStatus.LOADING) { this.flowData.linkList.push(o) }
@@ -482,9 +482,9 @@ export default {
               let labelHandle = e => {
                 let event = window.event || e
                 event.stopPropagation()
-                this.currentSelect = this.flowData.linkList.filter(
+                this.currentSelect = this.flowData.linkList.find(
                   l => l.id === linkId
-                )[0]
+                )
               }
 
               if (link.label !== '') {
@@ -523,22 +523,21 @@ export default {
       let node = null
       switch (belongTo) {
         case 'commonNodes':
-          node = commonNodes.filter(n => n.type === type)
+          node = commonNodes.find(n => n.type === type)
           break
         case 'highNodes':
-          node = highNodes.filter(n => n.type === type)
+          node = highNodes.find(n => n.type === type)
           break
         case 'laneNodes':
-          node = laneNodes.filter(n => n.type === type)
+          node = laneNodes.find(n => n.type === type)
           break
       }
-      if (node && node.length >= 0) node = node[0]
       callback(node)
     },
     // 设置工具
     selectTool (type) {
-      let tool = tools.filter(t => t.type === type)
-      if (tool && tool.length >= 0) this.currentTool = tool[0]
+      let tool = tools.find(t => t.type === type)
+      if (tool) this.currentTool = tool
 
       switch (type) {
         case 'drag':

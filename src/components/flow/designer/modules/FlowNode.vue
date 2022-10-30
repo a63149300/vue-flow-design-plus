@@ -180,8 +180,8 @@ export default {
         if (!flag) {
           this.currentSelectGroup = []
         } else {
-          let f = this.currentSelectGroup.filter(s => s.id === this.node.id)
-          if (f.length <= 0) {
+          let f = this.currentSelectGroup.find(s => s.id === this.node.id)
+          if (!f) {
             this.plumb.addToDragSelection(this.node.id)
             this.currentSelectGroup.push(this.node)
           }
@@ -196,9 +196,7 @@ export default {
     // 节点是否激活
     isActive () {
       if (this.currentSelect.id === this.node.id) return true
-      let f = this.currentSelectGroup.filter(n => n.id === this.node.id)
-      if (f.length > 0) return true
-      return false
+      return !!this.currentSelectGroup.find(n => n.id === this.node.id)
     }
   },
   watch: {
