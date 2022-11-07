@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { shortcutKeys } from '../config/args-config.js'
+import { shortcutKeys } from '../config/shortcutKeys.js'
 
 export default {
   data () {

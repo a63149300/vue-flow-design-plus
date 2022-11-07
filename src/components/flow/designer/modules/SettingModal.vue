@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { settingConfig } from '../config/args-config.js'
+import { settingConfig } from '../config/flow.js'
 import cloneDeep from 'lodash/cloneDeep'
 import { setFlowConfig } from '../utils/common.js'
 

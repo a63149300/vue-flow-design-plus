@@ -1,5 +1,5 @@
 import { Message } from 'ant-design-vue'
-import { flowConfig } from '../config/args-config.js'
+import { flowConfig } from '../config/flow.js'
 
 // 获取浏览器类型
 export const getBrowserType = function () {

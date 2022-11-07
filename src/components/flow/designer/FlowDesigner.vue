@@ -149,7 +149,11 @@
             <a-badge dot>
               <a-icon type="notification" />
             </a-badge>
-            <a href="https://gitee.com/zhangyeping/vue3-flow-design" target="_blank">Vue3版本开源，尝鲜体验</a>
+            <a
+              href="https://gitee.com/zhangyeping/vue3-flow-design"
+              target="_blank"
+              >Vue3版本开源，尝鲜体验</a
+            >
           </span>
         </a-layout-footer>
       </a-layout>
@@ -186,20 +190,24 @@
     <!-- 快捷键大全 -->
     <shortcut-modal ref="shortcutModal"></shortcut-modal>
     <!-- 测试 -->
-    <test-modal :flowConfig="flowConfig" ref="testModal" @loadFlow="loadFlow"></test-modal>
+    <test-modal
+      :flowConfig="flowConfig"
+      ref="testModal"
+      @loadFlow="loadFlow"
+    ></test-modal>
   </div>
 </template>
 
 <script>
 import { jsPlumb } from 'jsplumb'
 import cloneDeep from 'lodash/cloneDeep'
+import { tools } from './config/tools.js'
+import { commonNodes, highNodes, laneNodes } from './config/nodes.js'
 import {
-  tools,
-  commonNodes,
-  highNodes,
-  laneNodes
-} from './config/basic-node-config.js'
-import { flowConfig as defaultFlowConfig, shortcutKeys, settingConfig } from './config/args-config.js'
+  flowConfig as defaultFlowConfig,
+  settingConfig
+} from './config/flow.js'
+import { shortcutKeys } from './config/shortcutKeys.js'
 import html2canvas from 'html2canvas'
 import canvg from 'canvg'
 import { utils, setFlowConfig, getBrowserType } from './utils/common.js'
@@ -291,7 +299,10 @@ export default {
       if (!this.$ls.get('settingConfig')) {
         this.$ls.set('settingConfig', settingConfig)
       } else {
-        this.flowConfig = setFlowConfig(this.flowConfig, this.$ls.get('settingConfig'))
+        this.flowConfig = setFlowConfig(
+          this.flowConfig,
+          this.$ls.get('settingConfig')
+        )
       }
     },
     // 设置dragInfo
@@ -339,7 +350,9 @@ export default {
         ) {
           id = 'link-' + utils.getId()
           label = ''
-        } else if (this.flowData.status === this.flowConfig.flowStatus.LOADING) {
+        } else if (
+          this.flowData.status === this.flowConfig.flowStatus.LOADING
+        ) {
           let l = this.flowData.linkList[this.flowData.linkList.length - 1]
           id = l.id
           label = l.label
@@ -357,20 +370,18 @@ export default {
         }
         document.querySelector('#' + id).addEventListener('contextmenu', e => {
           this.showLinkContextMenu(e)
-          this.currentSelect = this.flowData.linkList.find(
-            l => l.id === id
-          )
+          this.currentSelect = this.flowData.linkList.find(l => l.id === id)
         })
 
         document.querySelector('#' + id).addEventListener('click', e => {
           let event = window.event || e
           event.stopPropagation()
-          this.currentSelect = this.flowData.linkList.find(
-            l => l.id === id
-          )
+          this.currentSelect = this.flowData.linkList.find(l => l.id === id)
         })
 
-        if (this.flowData.status !== this.flowConfig.flowStatus.LOADING) { this.flowData.linkList.push(o) }
+        if (this.flowData.status !== this.flowConfig.flowStatus.LOADING) {
+          this.flowData.linkList.push(o)
+        }
       })
 
       this.plumb.importDefaults({
