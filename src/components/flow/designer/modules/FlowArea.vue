@@ -112,6 +112,7 @@
 <script>
 import { utils } from '../utils/common.js'
 import FlowNode from './FlowNode'
+import { containerMenu, nodeMenu } from '../config/contextMenu.js'
 
 export default {
   props: [
@@ -183,8 +184,8 @@ export default {
         height: 0,
         width: 0
       },
-      containerContextMenuData: this.flowConfig.contextMenu.container,
-      nodeContextMenuData: this.flowConfig.contextMenu.node,
+      containerContextMenuData: containerMenu,
+      nodeContextMenuData: nodeMenu,
       // 当前聚焦的连接线ID
       tempLinkId: '',
       // 剪切板内容

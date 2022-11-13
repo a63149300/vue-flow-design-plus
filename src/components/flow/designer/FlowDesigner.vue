@@ -208,6 +208,7 @@ import {
   settingConfig
 } from './config/flow.js'
 import { shortcutKeys } from './config/shortcutKeys.js'
+import { linkMenu } from './config/contextMenu.js'
 import html2canvas from 'html2canvas'
 import canvg from 'canvg'
 import { utils, setFlowConfig, getBrowserType } from './utils/common.js'
@@ -268,7 +269,7 @@ export default {
       currentSelect: {},
       currentSelectGroup: [],
       activeShortcut: true, // 画布聚焦开启快捷键
-      linkContextMenuData: defaultFlowConfig.contextMenu.link,
+      linkContextMenuData: linkMenu,
       flowPicture: {
         url: '',
         modalVisible: false,
