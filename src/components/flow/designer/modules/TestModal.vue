@@ -28,6 +28,7 @@
 
 <script>
 import JsonView from 'vue-json-viewer'
+import { flowStatus } from '../config/flow.js'
 
 export default {
   components: {
@@ -57,7 +58,7 @@ export default {
     // 暂存
     tempSave () {
       let tempObj = Object.assign({}, this.flowData)
-      tempObj.status = this.flowConfig.flowStatus.SAVE
+      tempObj.status = flowStatus.SAVE
       this.flowDataJson = JSON.stringify(tempObj)
     },
     // 加载(暂存中的json数据)

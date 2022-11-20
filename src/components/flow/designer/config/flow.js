@@ -95,13 +95,16 @@ export const flowConfig = {
     showAuxiliaryLineDistance: 20,
     movePx: settingConfig.other.movePx,
     photoBlankDistance: 200
-  },
-  // ID的生成类型。1.uuid uuid 2.time_stamp 时间戳 3.sequence 序列 4.time_stamp_and_sequence 时间戳加序列 5.custom 自定义
-  idType: 'uuid',
-  flowStatus: {
-    CREATE: '0',
-    SAVE: '1',
-    MODIFY: '2',
-    LOADING: '3'
   }
 }
+
+// 流程状态
+export const flowStatus = {
+  CREATE: '0',
+  SAVE: '1',
+  MODIFY: '2',
+  LOADING: '3'
+}
+
+// ID的生成类型。1.uuid uuid 2.time_stamp 时间戳 3.sequence 序列 4.time_stamp_and_sequence 时间戳加序列 5.custom 自定义
+export const idType = 'uuid'

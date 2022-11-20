@@ -113,6 +113,7 @@
 import { utils } from '../utils/common.js'
 import FlowNode from './FlowNode'
 import { containerMenu, nodeMenu } from '../config/contextMenu.js'
+import { flowStatus } from '../config/flow.js'
 
 export default {
   props: [
@@ -660,7 +661,7 @@ export default {
 
       arr.push(Object.assign({}, this.currentSelect))
 
-      this.flowData.status = this.flowConfig.flowStatus.LOADING
+      this.flowData.status = flowStatus.LOADING
 
       arr.forEach(c => {
         let conns = this.getConnectionsByNodeId(c.id)
@@ -683,7 +684,7 @@ export default {
         let inx = nodeList.findIndex(node => node.id === c.id)
         nodeList.splice(inx, 1)
       })
-      this.flowData.status = this.flowConfig.flowStatus.CREATE
+      this.flowData.status = flowStatus.CREATE
       this.selectContainer()
     },
     // 增加画布节点

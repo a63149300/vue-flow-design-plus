@@ -1,5 +1,5 @@
 import { Message } from 'ant-design-vue'
-import { flowConfig } from '../config/flow.js'
+import { idType as flowIdType } from '../config/flow.js'
 
 // 获取浏览器类型
 export const getBrowserType = function () {
@@ -42,7 +42,7 @@ export let utils = {
     console.log('%c' + log, 'color: red; font-weight: bold;')
   },
   getId: function () {
-    let idType = flowConfig.idType
+    let idType = flowIdType
     if (typeof idType === 'string') {
       if (idType === 'uuid') {
         return this.getUUID()
@@ -50,7 +50,7 @@ export let utils = {
         return this.getTimeStamp()
       }
     } else if (idType instanceof Array) {
-      if (idType[0] === 'time_stamp_and_sequence') {
+      if (idType[0] === 'sequence') {
         return this.getSequence(idType[1])
       } else if (idType[0] === 'time_stamp_and_sequence') {
         return this.getTimeStampAndSequence(idType[1])

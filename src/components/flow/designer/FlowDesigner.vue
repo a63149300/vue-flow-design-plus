@@ -205,7 +205,8 @@ import { tools } from './config/tools.js'
 import { commonNodes, highNodes, laneNodes } from './config/nodes.js'
 import {
   flowConfig as defaultFlowConfig,
-  settingConfig
+  settingConfig,
+  flowStatus
 } from './config/flow.js'
 import { shortcutKeys } from './config/shortcutKeys.js'
 import { linkMenu } from './config/contextMenu.js'
@@ -258,7 +259,7 @@ export default {
           showGridText: '隐藏网格',
           showGridIcon: 'eye'
         },
-        status: defaultFlowConfig.flowStatus.CREATE,
+        status: flowStatus.CREATE,
         remarks: []
       },
       currentTool: {
@@ -346,14 +347,12 @@ export default {
         let id
         let label
         if (
-          this.flowData.status === this.flowConfig.flowStatus.CREATE ||
-          this.flowData.status === this.flowConfig.flowStatus.MODIFY
+          this.flowData.status === flowStatus.CREATE ||
+          this.flowData.status === flowStatus.MODIFY
         ) {
           id = 'link-' + utils.getId()
           label = ''
-        } else if (
-          this.flowData.status === this.flowConfig.flowStatus.LOADING
-        ) {
+        } else if (this.flowData.status === flowStatus.LOADING) {
           let l = this.flowData.linkList[this.flowData.linkList.length - 1]
           id = l.id
           label = l.label
@@ -380,7 +379,7 @@ export default {
           this.currentSelect = this.flowData.linkList.find(l => l.id === id)
         })
 
-        if (this.flowData.status !== this.flowConfig.flowStatus.LOADING) {
+        if (this.flowData.status !== flowStatus.LOADING) {
           this.flowData.linkList.push(o)
         }
       })
@@ -450,7 +449,7 @@ export default {
     },
     // 初始化流程图
     initFlow () {
-      if (this.flowData.status === this.flowConfig.flowStatus.CREATE) {
+      if (this.flowData.status === flowStatus.CREATE) {
         this.flowData.attr.id = 'flow-' + utils.getId()
       } else {
         this.loadFlow()
@@ -463,7 +462,7 @@ export default {
         let loadData = JSON.parse(json)
         this.flowData.attr = loadData.attr
         this.flowData.config = loadData.config
-        this.flowData.status = this.flowConfig.flowStatus.LOADING
+        this.flowData.status = flowStatus.LOADING
         this.plumb.batch(() => {
           let nodeList = loadData.nodeList
           nodeList.forEach(node => {
@@ -520,7 +519,7 @@ export default {
             })
             this.currentSelect = {}
             this.currentSelectGroup = []
-            this.flowData.status = this.flowConfig.flowStatus.MODIFY
+            this.flowData.status = flowStatus.MODIFY
           })
         }, true)
         let canvasSize = this.computeCanvasSize()
@@ -618,7 +617,7 @@ export default {
       let flowObj = Object.assign({}, this.flowData)
 
       if (!this.checkFlow()) return
-      flowObj.status = this.flowConfig.flowStatus.SAVE
+      flowObj.status = flowStatus.SAVE
       let d = JSON.stringify(flowObj)
       this.$message.success('保存流程成功！请查看控制台。')
       return d
