@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import FlowDesigner from '@/components/flow/designer/FlowDesigner'
+import FlowDesign from '@/components/flow-design/Index'
 
 Vue.use(Router)
 
@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'FlowDesigner',
-      component: FlowDesigner
+      name: 'FlowDesign',
+      component: FlowDesign
     }
   ]
 })

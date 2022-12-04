@@ -1,8 +1,8 @@
 <template>
   <div
     style="width: 100%; height: 100%; overflow: hidden; position: relative;"
-    @dragover="allowDrop"
-    @drop="drop"
+    @dragover="handleDragover"
+    @drop="handleDrop"
   >
     <!--辅助线X-->
     <div
@@ -25,9 +25,6 @@
       class="flow-container"
       :class="{
         grid: flowData.config.showGrid,
-        zoomIn: currentTool.type === 'zoom-in',
-        zoomOut: currentTool.type === 'zoom-out',
-        canScale: container.scaleFlag,
         canDrag: container.dragFlag,
         canMultiple: rectangleMultiple.flag
       }"
@@ -204,11 +201,11 @@ export default {
     }
   },
   methods: {
-    allowDrop (e) {
+    handleDragover (e) {
       e.preventDefault()
       this.mousemoveHandler(e)
     },
-    drop () {
+    handleDrop () {
       let belongTo = this.dragInfo.belongTo
       let type = this.dragInfo.type
 
@@ -850,7 +847,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-@import "../style/flow-area.less";
-</style>

@@ -1,9 +1,9 @@
 {
   "name": "vue-flow-design-plus",
   "version": "1.1.0",
-  "description": "vue flow designer plus",
+  "description": "vue flow design plus",
   "author": "619054243@qq.com",
-  "private": false,
+  "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",

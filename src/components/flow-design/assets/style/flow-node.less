@@ -1,6 +1,6 @@
 @common-node-bg: #f4f6fc;
 @common-node-bg-hover: #f4f6fcb0;
-@common-node-active: #409EFF;
+@common-node-active: #409eff;
 
 .common-circle-node {
   position: absolute;
@@ -12,6 +12,7 @@
   border-radius: 50%;
   background-color: @common-node-bg;
   white-space: nowrap;
+  box-shadow: 2px 2px 5px #ddd;
 
   &:hover {
     background-color: @common-node-bg-hover;
@@ -20,16 +21,16 @@
 
   &.active {
     outline: 2px dashed @common-node-active;
-    outline-offset: 0px;
+    outline-offset: 0;
   }
 
   &.isStart {
-    background-color: #2fce2f;
+    background-color: #65cf38;
     color: #fff;
   }
 
   &.isEnd {
-    background-color: #f35753;
+    background-color: #f50;
     color: #fff;
   }
 }
@@ -44,6 +45,7 @@
   border-radius: 5px;
   background-color: @common-node-bg;
   white-space: nowrap;
+  box-shadow: 2px 2px 5px #ddd;
 
   &:hover {
     background-color: @common-node-bg-hover;
@@ -52,7 +54,7 @@
 
   &.active {
     outline: 2px dashed @common-node-active;
-    outline-offset: 0px;
+    outline-offset: 0;
   }
 }
 
@@ -68,7 +70,7 @@
   transform: rotate(45deg);
   white-space: nowrap;
 
-  &:before {
+  &::before {
     position: absolute;
     content: '网关';
     transform: rotate(-45deg);
@@ -85,20 +87,21 @@
 
   &.active {
     outline: 2px dashed @common-node-active;
-    outline-offset: 0px;
+    outline-offset: 0;
   }
 }
 
-.common-x-lane-node {
+.common-x_lane-node {
   position: absolute;
   text-align: center;
   border: 1px solid #777;
   border-radius: 2px;
   z-index: -1;
+  box-shadow: 2px 2px 5px #ddd;
 
   &.active {
     outline: 2px dashed @common-node-active;
-    outline-offset: 0px;
+    outline-offset: 0;
   }
 
   .lane-text-div {
@@ -122,16 +125,17 @@
   }
 }
 
-.common-y-lane-node {
+.common-y_lane-node {
   position: absolute;
   text-align: center;
   border: 1px solid #777;
   border-radius: 2px;
   z-index: -1;
+  box-shadow: 2px 2px 5px #ddd;
 
   &.active {
     outline: 2px dashed @common-node-active;
-    outline-offset: 0px;
+    outline-offset: 0;
   }
 
   .lane-text-div {

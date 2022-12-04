@@ -144,7 +144,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-  @import '../style/flow-attr.less';
-</style>

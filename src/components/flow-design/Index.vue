@@ -831,13 +831,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-@import "./style/flow-designer.less";
-
-.node-img {
-  width: 14px;
-  height: 14px;
-  margin-right: 10px;
-}
-</style>
