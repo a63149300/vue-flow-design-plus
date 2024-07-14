@@ -1,7 +1,7 @@
 <template>
   <a-tabs size="small"
           :activeKey="activeKey">
-    <a-tab-pane key="flow-attr">
+    <a-tab-pane key="flow-attr" v-if="activeKey === 'flow-attr'">
 				<span slot="tab">
 					<a-icon type="cluster"/>
 					流程属性
@@ -15,7 +15,8 @@
         </a-form-item>
       </a-form>
     </a-tab-pane>
-    <a-tab-pane key="node-attr">
+
+    <a-tab-pane key="node-attr" v-if="activeKey === 'node-attr'">
 				<span slot="tab">
 					<a-icon type="profile"/>
 					节点属性
@@ -42,7 +43,8 @@
           </a-form-item>
         </a-form>
     </a-tab-pane>
-    <a-tab-pane key="link-attr">
+
+    <a-tab-pane key="link-attr" v-if="activeKey === 'link-attr'">
 				<span slot="tab">
 					<a-icon type="branches"/>
 					连线属性
